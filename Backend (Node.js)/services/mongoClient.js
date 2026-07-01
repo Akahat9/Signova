@@ -1,7 +1,16 @@
+const dns = require('node:dns');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 const MONGODB_DATABASE = process.env.MONGODB_DATABASE || 'signova';
+const MONGODB_DNS_SERVERS = String(process.env.MONGODB_DNS_SERVERS || '')
+  .split(',')
+  .map((server) => server.trim())
+  .filter(Boolean);
+
+if (MONGODB_DNS_SERVERS.length > 0) {
+  dns.setServers(MONGODB_DNS_SERVERS);
+}
 
 let clientPromise = null;
 let indexesPromise = null;

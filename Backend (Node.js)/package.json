@@ -10,7 +10,7 @@
     "migrate:identities": "node scripts/migratePrivateIdentities.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": "22.x"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
