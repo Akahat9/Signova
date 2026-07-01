@@ -1,0 +1,7 @@
+# Public CPU inference image. Browser clients already extract hand landmarks,
+# so MediaPipe and the GPU-only whole-body stack are deliberately excluded.
+numpy<2.0
+pillow
+torch
+torchvision
+opencv-python-headless==4.11.0.86

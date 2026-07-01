@@ -1,0 +1,26 @@
+.git
+.env
+.env.*
+!.env.example
+.venv
+__pycache__
+*.pyc
+*.log
+
+# Training data and local model artifacts are not part of the public test image.
+Data
+Datasets
+Models/*.pt
+Models/*.pth
+Models/*.onnx
+Models/*.h5
+Models/*.keras
+Models/*.joblib
+Models/*.pkl
+Models/*.metrics.json
+Models/*_report.json
+Models/*_report.md
+
+# Local development and benchmark output.
+.signova-logs
+CALL_BENCHMARK_RESULTS

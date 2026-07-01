@@ -58,4 +58,35 @@ npx vercel --cwd "Backend (Node.js)" --prod
 Use `GET /api/platform/health` to test the deployed Node/data service. AI
 prediction endpoints also require `SIGNOVA_AI_URL` to point to a separately
 deployed Python AI service; `127.0.0.1` is not reachable from Vercel.
-# Signova
+
+## Public Translation Test on Render
+
+Deploy `ai-service` as a second Docker web service. The public test image runs
+the tracked landmark/centroid recognizer on CPU and intentionally disables the
+GPU-only RTMW dependency.
+
+Set these variables on the AI service:
+
+```text
+SIGNOVA_AI_HOST=0.0.0.0
+SIGNOVA_AI_SERVICE_TOKEN=<long random value>
+SIGNOVA_MAX_CONCURRENT_INFERENCES=1
+SIGNOVA_RTMW_ENABLED=0
+```
+
+Set the same token and the deployed AI URL on the Node API:
+
+```text
+SIGNOVA_AI_URL=https://<ai-service>.onrender.com
+SIGNOVA_AI_SERVICE_TOKEN=<same long random value>
+SIGNOVA_AI_TIMEOUT_MS=45000
+```
+
+The trained `.pt`, `.pth`, and `.onnx` files are not stored in Git. Therefore
+this public test service provides genuine but limited landmark recognition.
+Full sequence/image-model testing requires versioned model artifacts from a
+private model registry or object store.
+
+The current WebRTC UI is a local loopback preview. Real calls between different
+users require authenticated signaling plus STUN/TURN infrastructure and must
+not be described as production calling until cross-device tests pass.

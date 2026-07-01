@@ -21,7 +21,9 @@ from Models.rtmw_engine import RTMWWholeBodyEngine  # noqa: E402
 
 
 HOST = os.getenv("SIGNOVA_AI_HOST", "127.0.0.1")
-PORT = int(os.getenv("SIGNOVA_AI_PORT", "8000"))
+# Render and similar platforms assign the public listening port through PORT.
+# Keep SIGNOVA_AI_PORT as the local-development fallback.
+PORT = int(os.getenv("PORT") or os.getenv("SIGNOVA_AI_PORT", "8000"))
 ENGINE_NAME = "Signova AI Synapse Engine"
 ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv("SIGNOVA_ALLOWED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",") if origin.strip()]
 MAX_REQUEST_BYTES = int(os.getenv("SIGNOVA_MAX_REQUEST_BYTES", str(5 * 1024 * 1024)))
