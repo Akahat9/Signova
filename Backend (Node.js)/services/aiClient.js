@@ -1,5 +1,7 @@
 const AI_BASE_URL = process.env.SIGNOVA_AI_URL || 'http://127.0.0.1:8000';
-const DEFAULT_ALLOWED_ORIGINS = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3000,http://127.0.0.1:3000';
+const DEFAULT_ALLOWED_ORIGINS = process.env.NODE_ENV === 'production'
+  ? 'https://signova-6e929.web.app,https://signova-6e929.firebaseapp.com'
+  : 'http://localhost:3000,http://127.0.0.1:3000';
 const ALLOWED_ORIGINS = (process.env.SIGNOVA_ALLOWED_ORIGINS || DEFAULT_ALLOWED_ORIGINS)
   .split(',')
   .map((origin) => origin.trim())

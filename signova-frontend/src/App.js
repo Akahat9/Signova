@@ -42,7 +42,10 @@ import { conversationE2EE } from './securityCapabilities';
 const Signova3DAvatar = lazy(() => import('./Signova3DAvatar'));
 const LearnStudio = lazy(() => import('./LearnStudio'));
 
-const API_URL = process.env.REACT_APP_SIGNOVA_API_URL || (process.env.NODE_ENV === 'development' ? 'http://127.0.0.1:5000' : '');
+const API_URL = process.env.REACT_APP_SIGNOVA_API_URL
+  || (process.env.NODE_ENV === 'development'
+    ? 'http://127.0.0.1:5000'
+    : 'https://signova-tdkd.onrender.com');
 const CHAT_SIDEBAR_MIN_WIDTH = 260;
 const CHAT_SIDEBAR_MAX_WIDTH = 480;
 const CHAT_SIDEBAR_DEFAULT_WIDTH = 320;
@@ -222,7 +225,9 @@ const ACCEPT_COOLDOWN_MS = 280;
 const MIN_ACCEPT_CONFIDENCE = 0.55;
 const MIN_SIGN_STABLE_FRAMES = 3;
 const MIN_CONFIDENCE_MARGIN = 0.12;
-const REQUEST_TIMEOUT_MS = 900;
+const PREDICTION_REQUEST_TIMEOUT_MS = 45_000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 20_000;
+const COLD_START_REQUEST_TIMEOUT_MS = 65_000;
 const TEMPORAL_BUFFER_SIZE = 8;
 const ENGINE_NAME = 'Signova AI Synapse Engine';
 const SIGNOVA_SETTINGS_STORAGE_KEY = 'signova-settings-v1';
@@ -862,8 +867,13 @@ async function loadMediaPipeScripts() {
 
 async function fetchJson(path, options = {}) {
   const predictPath = path.includes('/predict');
+  const coldStartPath = path === '/api/health' || path === '/api/platform/health';
   const controller = new AbortController();
-  const timeoutMs = predictPath ? REQUEST_TIMEOUT_MS : 2500;
+  const timeoutMs = coldStartPath
+    ? COLD_START_REQUEST_TIMEOUT_MS
+    : predictPath
+      ? PREDICTION_REQUEST_TIMEOUT_MS
+      : DEFAULT_REQUEST_TIMEOUT_MS;
   const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
 
   try {
