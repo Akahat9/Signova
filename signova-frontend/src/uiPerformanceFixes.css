@@ -1,0 +1,3257 @@
+/*
+ * Final compact-layout and scrolling authority.
+ * Keep this file imported last so performance fixes do not compete with legacy patches.
+ */
+
+.conversationHistoryMode .conversationInfoHeader {
+  position: relative;
+  z-index: 100;
+  grid-template-columns: auto 44px minmax(0, 1fr) auto !important;
+  min-height: 76px !important;
+  padding: 10px 14px !important;
+  gap: 9px !important;
+  border-radius: 18px !important;
+}
+
+.conversationHistoryMode .conversationInfoHeader .avatar {
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+}
+
+.conversationHistoryMode .conversationInfoHeader > div:not(.conversationInfoHeaderActions) {
+  gap: 1px !important;
+}
+
+.conversationHistoryMode .conversationInfoHeader > div:not(.conversationInfoHeaderActions) > span {
+  font-size: 0.58rem !important;
+  letter-spacing: 0.09em !important;
+}
+
+.conversationHistoryMode .conversationInfoHeader > div:not(.conversationInfoHeaderActions) > strong {
+  font-size: clamp(1.05rem, 1.65vw, 1.45rem) !important;
+  letter-spacing: -0.025em !important;
+}
+
+.conversationHistoryMode .conversationInfoHeader > div:not(.conversationInfoHeaderActions) > small {
+  font-size: 0.68rem !important;
+}
+
+.conversationHistoryMode .conversationInfoHeaderActions {
+  gap: 5px !important;
+}
+
+.conversationHistoryMode .conversationInfoHeaderActions button {
+  min-height: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  padding: 4px 7px !important;
+  font-size: 0.68rem !important;
+}
+
+.conversationHistoryMode .conversationInfoCallButton {
+  grid-template-columns: 20px auto !important;
+  gap: 4px !important;
+}
+
+.conversationHistoryMode .conversationInfoCallButton .attachIcon3d,
+.conversationHistoryMode .conversationInfoVoiceButton .attachIcon3d,
+.conversationHistoryMode .conversationClearHistory .attachIcon3d {
+  width: 19px !important;
+  height: 19px !important;
+}
+
+.conversationHistoryMode .conversationInfoCallButton > span > strong {
+  font-size: 0.72rem !important;
+  line-height: 1 !important;
+}
+
+.conversationHistoryMode .conversationInfoCallButton small {
+  display: none !important;
+}
+
+.conversationHistoryMode .conversationInfoVoiceButton {
+  width: 34px !important;
+  min-width: 34px !important;
+  padding: 0 !important;
+}
+
+.conversationHistoryMode .conversationClearHistory {
+  padding-inline: 7px !important;
+}
+
+.conversationHistoryMode .conversationInfoStats {
+  position: relative;
+  z-index: 20;
+  grid-template-columns: 0.7fr 1.35fr 0.7fr 1fr !important;
+  padding: 6px !important;
+  gap: 5px !important;
+  border-radius: 15px !important;
+}
+
+.conversationHistoryMode .conversationInfoStats > span {
+  min-height: 48px !important;
+  padding: 7px 10px !important;
+  border-radius: 11px !important;
+}
+
+.conversationHistoryMode .conversationInfoStats strong {
+  font-size: 0.95rem !important;
+}
+
+.conversationHistoryMode .conversationInfoStats small {
+  font-size: 0.6rem !important;
+}
+
+/* Learn owns exactly one scroll surface. */
+html.signovaLearnPage,
+body.signovaLearnPage,
+body.signovaLearnPage #root,
+body.signovaLearnPage .messengerShell.learnMode {
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+body.signovaLearnPage .learnMode .signToolsPane {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-x: clip !important;
+  overflow-y: auto !important;
+  scroll-behavior: auto !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: auto !important;
+  contain: none !important;
+  transform: none !important;
+  will-change: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+body.signovaLearnPage :is(
+  .gestureLearnStudio,
+  .gestureLearnLayout,
+  .liveLearnWorkspace,
+  .learnAvatarLesson,
+  .learnInteractivePanel,
+  .gestureLoopSection,
+  .gesturePracticeGrid,
+  .gesturePracticeModes,
+  .gestureCoachScore,
+  .gestureMissionShelf,
+  .gestureRecallStrip
+) {
+  overflow: visible !important;
+  contain: none !important;
+  will-change: auto !important;
+  scroll-snap-align: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaLearnPage :is(
+  .gestureLoopSection,
+  .gesturePracticeGrid,
+  .gesturePracticeModes,
+  .gestureCoachScore,
+  .gestureMissionShelf,
+  .gestureRecallStrip
+) {
+  animation: none !important;
+  transition: none !important;
+  box-shadow: none !important;
+}
+
+body.signovaLearnPage :is(
+  .gestureLoopSection,
+  .gesturePracticeGrid,
+  .gesturePracticeModes,
+  .gestureCoachScore,
+  .gestureMissionShelf,
+  .gestureRecallStrip
+) * {
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+}
+
+body.signovaLearnPage .liveTeachingAvatar {
+  will-change: auto !important;
+  backface-visibility: hidden !important;
+}
+
+body.signovaLearnPage .gestureLearnStudio {
+  gap: 10px !important;
+  padding: 10px 12px 28px !important;
+}
+
+body.signovaLearnPage .gestureLearnTopBar {
+  min-height: 52px !important;
+  padding: 8px 12px !important;
+  border-radius: 14px !important;
+}
+
+body.signovaLearnPage .gestureLearnTopBar > div:first-child > strong {
+  font-size: clamp(1rem, 1.4vw, 1.3rem) !important;
+}
+
+body.signovaLearnPage .liveLearnWorkspace {
+  min-height: 500px !important;
+  gap: 10px !important;
+  padding: 10px !important;
+  border-radius: 18px !important;
+}
+
+body.signovaLearnPage .learnAvatarLesson {
+  grid-template-rows: auto minmax(350px, 1fr) auto !important;
+}
+
+body.signovaLearnPage .learnAvatarCanvas {
+  min-height: 350px !important;
+}
+
+body.signovaLearnPage .learnAvatarCanvas {
+  background: #eef3f7 !important;
+}
+
+.signova3DAvatarViewport {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.signova3DAvatarLoading {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: #607688;
+  font-size: 0.72rem;
+  background: #eef3f7;
+}
+
+.signova3DAvatarViewport canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+body.signovaLearnPage .learnAvatarLight {
+  inset: 12% 14% 5% !important;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.96), rgba(83, 157, 210, 0.14) 56%, transparent 74%) !important;
+}
+
+body.signovaLearnPage .learnAvatarToolbar {
+  min-height: 34px !important;
+}
+
+body.signovaLearnPage .learnAvatarToolbar > span {
+  color: #22384a !important;
+  font-size: 0.7rem !important;
+  letter-spacing: 0.04em !important;
+  text-transform: none !important;
+}
+
+body.signovaLearnPage .learnAvatarToolbar button,
+body.signovaLearnPage .learnModeTabs button {
+  min-height: 30px !important;
+  padding: 4px 9px !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  color: #42596b !important;
+  background: transparent !important;
+  font-size: 0.7rem !important;
+  font-weight: 750 !important;
+}
+
+body.signovaLearnPage .learnAvatarToolbar button:hover,
+body.signovaLearnPage .learnModeTabs button:hover {
+  background: #edf4f8 !important;
+}
+
+body.signovaLearnPage .learnModeTabs {
+  min-height: 38px !important;
+  gap: 3px !important;
+}
+
+body.signovaLearnPage .learnModeTabs .activeLearnModeTab {
+  color: #165fae !important;
+  background: #e8f2fb !important;
+}
+
+body.signovaLearnPage .learnInteractivePanel {
+  gap: 9px !important;
+}
+
+body.signovaLearnPage .learnPromptComposer label,
+body.signovaLearnPage .learnMeaningCard > span,
+body.signovaLearnPage .learnTryPanel span,
+body.signovaLearnPage .learnLiveResult span {
+  font-size: 0.62rem !important;
+  letter-spacing: 0.04em !important;
+}
+
+body.signovaLearnPage .learnMeaningCard,
+body.signovaLearnPage .learnTryPanel,
+body.signovaLearnPage .learnLiveResult {
+  padding: 10px !important;
+  border-radius: 13px !important;
+  background: #f7fafc !important;
+}
+
+body.signovaLearnPage .learnMeaningCard strong,
+body.signovaLearnPage .learnTryPanel strong,
+body.signovaLearnPage .learnLiveResult strong {
+  font-size: 0.86rem !important;
+  line-height: 1.25 !important;
+}
+
+body.signovaLearnPage .learnMeaningCard p,
+body.signovaLearnPage .learnTryPanel small,
+body.signovaLearnPage .learnLiveResult small {
+  font-size: 0.68rem !important;
+}
+
+body.signovaLearnPage .learnMovementCues > span {
+  min-height: 58px !important;
+  padding: 7px !important;
+  border-radius: 12px !important;
+}
+
+body.signovaLearnPage .learnMovementCues strong {
+  font-size: 0.75rem !important;
+}
+
+body.signovaLearnPage .learnMovementCues small {
+  font-size: 0.64rem !important;
+}
+
+body.signovaLearnPage .learnPromptComposer input,
+body.signovaLearnPage .learnPromptComposer button,
+body.signovaLearnPage .learnCameraAction {
+  min-height: 38px !important;
+  border-radius: 11px !important;
+  font-size: 0.72rem !important;
+}
+
+body.signovaLearnPage .learnPromptComposer button,
+body.signovaLearnPage .learnCameraAction {
+  color: #ffffff !important;
+  background: #176fc2 !important;
+}
+
+body.signovaPremiumDarkPage.signovaLearnPage .learnAvatarCanvas {
+  background: #141d22 !important;
+}
+
+body.signovaPremiumDarkPage.signovaLearnPage .learnAvatarToolbar > span {
+  color: #e7f0f2 !important;
+}
+
+body.signovaPremiumDarkPage.signovaLearnPage .learnAvatarToolbar button,
+body.signovaPremiumDarkPage.signovaLearnPage .learnModeTabs button {
+  color: #aebec4 !important;
+}
+
+body.signovaPremiumDarkPage.signovaLearnPage .learnModeTabs .activeLearnModeTab {
+  color: #82c8ff !important;
+  background: #172d3d !important;
+}
+
+body.signovaPremiumDarkPage.signovaLearnPage :is(.learnMeaningCard, .learnTryPanel, .learnLiveResult) {
+  background: #182126 !important;
+}
+
+@media (max-width: 760px) {
+  .conversationHistoryMode .conversationInfoHeader {
+    grid-template-columns: 32px 40px minmax(0, 1fr) !important;
+    min-height: 0 !important;
+    padding: 8px !important;
+    gap: 7px !important;
+  }
+
+  .conversationHistoryMode .conversationInfoHeaderActions {
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr) !important;
+    width: 100% !important;
+  }
+
+  .conversationHistoryMode .conversationClearHistory span {
+    font-size: 0.62rem !important;
+  }
+
+  .conversationHistoryMode .conversationInfoStats > span {
+    min-height: 56px !important;
+  }
+
+  body.signovaLearnPage .learnMode .signToolsPane {
+    padding-bottom: calc(82px + env(safe-area-inset-bottom)) !important;
+    scrollbar-width: none !important;
+  }
+
+  body.signovaLearnPage .learnMode .signToolsPane::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+  }
+
+  body.signovaLearnPage .gestureLearnStudio {
+    padding: 8px 8px calc(92px + env(safe-area-inset-bottom)) !important;
+  }
+
+  body.signovaLearnPage .liveLearnWorkspace {
+    min-height: 0 !important;
+    padding: 7px !important;
+  }
+
+  body.signovaLearnPage .learnAvatarLesson {
+    grid-template-rows: auto minmax(290px, 48dvh) auto !important;
+  }
+
+  body.signovaLearnPage .learnAvatarCanvas {
+    min-height: 290px !important;
+  }
+}
+
+/* Community group live header and richer composer. */
+.communityGroupsPage .groupFocusHero > div:nth-child(2) {
+  gap: 4px;
+}
+
+.communityGroupsPage .groupLiveActivity {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 1px 0 2px;
+}
+
+.communityGroupsPage .groupLiveActivity > i {
+  width: 8px;
+  height: 8px;
+  flex: 0 0 8px;
+  border-radius: 50%;
+  background: #12a779;
+  box-shadow: 0 0 0 4px rgba(18, 167, 121, 0.12);
+}
+
+.communityGroupsPage .groupLiveActivity > span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.communityGroupsPage .groupLiveActivity b {
+  color: #16725a;
+  font-size: 0.61rem;
+}
+
+.communityGroupsPage .groupLiveActivity small {
+  color: #778ba0 !important;
+  font-size: 0.58rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+.communityGroupsPage .groupMeetAction {
+  min-width: 78px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.groupMeetingIcon {
+  position: relative;
+  width: 17px;
+  height: 15px;
+  display: block;
+}
+
+.groupMeetingIcon > i {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  width: 11px;
+  height: 11px;
+  border: 1.7px solid currentColor;
+  border-radius: 4px;
+}
+
+.groupMeetingIcon > b {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  width: 6px;
+  height: 7px;
+  border: 1.7px solid currentColor;
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+  transform: skewY(-28deg);
+}
+
+.communityGroupsPage .groupActivityPanel {
+  grid-template-rows: minmax(0, 1fr) !important;
+}
+
+.communityGroupsPage .groupActivityList {
+  padding-top: 16px !important;
+}
+
+.communityGroupsPage .groupActivityEmpty {
+  align-self: center;
+  justify-self: center;
+  max-width: 390px;
+  margin: auto;
+  padding: 16px;
+  color: #778ba0;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.communityGroupsPage .groupActivityList audio {
+  width: min(330px, 100%);
+  height: 30px;
+  margin-top: 3px;
+}
+
+.communityGroupsPage .cleanGroupComposer {
+  position: relative;
+  grid-template-columns: 34px 34px minmax(0, 1fr) auto auto !important;
+}
+
+.communityGroupsPage :is(.groupComposerEmoji, .groupComposerVoice) {
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(126, 160, 196, 0.25);
+  border-radius: 10px;
+  padding: 0;
+  background: #fff;
+  color: #176fc2;
+  font-weight: 900;
+}
+
+.communityGroupsPage .groupComposerEmoji {
+  font-size: 1rem;
+}
+
+.communityGroupsPage .groupComposerVoice {
+  position: relative;
+  grid-template-columns: auto;
+}
+
+.communityGroupsPage .activeGroupVoice {
+  width: auto;
+  min-width: 60px;
+  grid-template-columns: 22px auto;
+  gap: 4px;
+  padding: 0 7px;
+  border-color: rgba(239, 68, 68, 0.28);
+  background: #fff1f2;
+  color: #dc2638;
+}
+
+.communityGroupsPage .groupComposerVoice > small {
+  font-size: 0.56rem;
+  font-weight: 800;
+}
+
+.groupVoiceIcon {
+  position: relative;
+  width: 15px;
+  height: 17px;
+  display: block;
+}
+
+.groupVoiceIcon > i {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  width: 7px;
+  height: 11px;
+  border: 1.7px solid currentColor;
+  border-radius: 5px;
+}
+
+.groupVoiceIcon > b {
+  position: absolute;
+  right: 1px;
+  bottom: 1px;
+  left: 1px;
+  height: 8px;
+  border: 1.7px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+.groupVoiceIcon::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 7px;
+  width: 1.7px;
+  height: 4px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+.communityGroupsPage .activeGroupVoice .groupVoiceIcon {
+  animation: groupVoicePulse 1s ease-in-out infinite;
+}
+
+.communityGroupsPage .communityGroupEmojiPicker {
+  position: absolute;
+  z-index: 150;
+  bottom: calc(100% + 7px);
+  left: 44px;
+  width: min(280px, calc(100% - 52px));
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 3px;
+  padding: 7px;
+  border: 1px solid rgba(126, 160, 196, 0.26);
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 16px 38px rgba(18, 44, 70, 0.16);
+}
+
+.communityGroupsPage .communityGroupEmojiPicker button {
+  min-width: 0;
+  min-height: 30px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 0.95rem;
+}
+
+.communityGroupsPage .communityGroupEmojiPicker button:hover {
+  background: #edf6fa;
+}
+
+.premiumDarkMode .communityGroupsPage :is(.groupComposerEmoji, .groupComposerVoice, .communityGroupEmojiPicker) {
+  background: #172731;
+  color: #b9e8f5;
+}
+
+@keyframes groupVoicePulse {
+  0%, 100% { opacity: 0.65; transform: scale(0.94); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@media (max-width: 760px) {
+  .communityGroupsPage .groupLiveActivity > span {
+    display: grid;
+    gap: 1px;
+  }
+
+  .communityGroupsPage .cleanGroupComposer {
+    grid-template-columns: 32px 32px minmax(0, 1fr) 32px !important;
+  }
+
+  .communityGroupsPage .cleanGroupComposer > .postButton {
+    display: none !important;
+  }
+
+  .communityGroupsPage :is(.groupComposerEmoji, .groupComposerVoice) {
+    width: 32px;
+    height: 32px;
+    min-height: 32px;
+  }
+
+  .communityGroupsPage .activeGroupVoice {
+    min-width: 32px;
+    padding: 0;
+  }
+
+  .communityGroupsPage .activeGroupVoice > small {
+    display: none;
+  }
+
+  .communityGroupsPage .communityGroupEmojiPicker {
+    left: 4px;
+    width: calc(100% - 8px);
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}
+
+/* Compact group creation modal: one clean surface with one internal scroll area. */
+.contactMiniOverlay:has(.groupCreateModal) {
+  padding: 12px !important;
+  background: rgba(15, 23, 42, 0.2) !important;
+  backdrop-filter: blur(6px) !important;
+}
+
+.contactMiniModal.groupCreateModal {
+  width: min(660px, calc(100vw - 24px)) !important;
+  max-height: min(82dvh, 680px) !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) !important;
+  gap: 9px !important;
+  overflow: hidden !important;
+  border-radius: 18px !important;
+  padding: 13px !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2) !important;
+}
+
+.groupCreateModal .contactMiniClose {
+  top: 9px !important;
+  right: 9px !important;
+  width: 30px !important;
+  height: 30px !important;
+  min-height: 30px !important;
+  border-radius: 9px !important;
+  font-size: 17px !important;
+  box-shadow: none !important;
+}
+
+.groupCreateModal .modalBrandHeader {
+  min-height: 48px;
+  grid-template-columns: 40px minmax(0, 1fr) !important;
+  gap: 9px !important;
+  padding: 0 38px 8px 1px !important;
+  border-bottom: 1px solid rgba(126, 160, 196, 0.18);
+}
+
+.groupCreateModal .modalBrandHeader .attachIcon3d {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.groupCreateModal .modalBrandHeader span {
+  font-size: 0.57rem !important;
+  letter-spacing: 0.07em !important;
+}
+
+.groupCreateModal .modalBrandHeader strong {
+  margin: 1px 0 0 !important;
+  font-size: 0.94rem !important;
+  line-height: 1.15 !important;
+}
+
+.groupCreateModal .modalBrandHeader small {
+  margin: 2px 0 0 !important;
+  font-size: 0.6rem !important;
+}
+
+.groupCreateModal .groupCreateForm {
+  min-height: 0;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  gap: 7px !important;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1px 3px 2px 1px;
+  scrollbar-width: thin;
+}
+
+.groupCreateModal .groupCreateForm > .signSearch,
+.groupCreateModal .groupFeatureGrid,
+.groupCreateModal .categoryComposerActions,
+.groupCreateModal .communityGroupAdvancedCreate {
+  grid-column: 1 / -1;
+}
+
+.groupCreateModal .groupCreateForm > input.signSearch,
+.groupCreateModal .settingField select {
+  min-height: 38px !important;
+  height: 38px !important;
+  border-radius: 10px !important;
+  padding: 0 10px !important;
+  font-size: 0.68rem !important;
+}
+
+.groupCreateModal .settingField {
+  gap: 4px !important;
+}
+
+.groupCreateModal .settingField > span {
+  font-size: 0.57rem !important;
+  font-weight: 800 !important;
+}
+
+.groupCreateModal .groupCreateForm textarea.signSearch {
+  min-height: 54px !important;
+  max-height: 72px !important;
+  border-radius: 10px !important;
+  padding: 9px 10px !important;
+  font-size: 0.68rem !important;
+  resize: none !important;
+}
+
+.groupCreateModal .miniFormGrid {
+  gap: 7px !important;
+}
+
+.groupCreateModal .groupFeatureGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 6px !important;
+}
+
+.groupCreateModal .groupFeatureGrid label {
+  min-height: 34px !important;
+  gap: 6px !important;
+  border-radius: 9px !important;
+  padding: 0 8px !important;
+  font-size: 0.61rem !important;
+  font-weight: 760 !important;
+}
+
+.groupCreateModal .groupFeatureGrid input {
+  width: 15px !important;
+  height: 15px !important;
+  flex: 0 0 15px;
+}
+
+.groupCreateModal .communityGroupAdvancedCreate {
+  gap: 6px !important;
+  padding-top: 1px;
+}
+
+.groupCreateModal .categoryComposerActions {
+  position: sticky;
+  bottom: -2px;
+  z-index: 2;
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 7px !important;
+  margin-top: 1px;
+  padding: 8px 0 1px !important;
+  background: rgba(255, 255, 255, 0.98);
+}
+
+.groupCreateModal .categoryComposerActions button {
+  min-height: 35px !important;
+  border-radius: 10px !important;
+  padding: 0 13px !important;
+  font-size: 0.66rem !important;
+}
+
+.premiumDarkMode .groupCreateModal .categoryComposerActions {
+  background: #1b1c1a;
+}
+
+@media (max-width: 760px) {
+  .contactMiniOverlay:has(.groupCreateModal) {
+    place-items: end center !important;
+    padding: 8px !important;
+  }
+
+  .contactMiniModal.groupCreateModal {
+    width: 100% !important;
+    max-height: calc(100dvh - 16px) !important;
+    border-radius: 18px !important;
+    padding: 11px !important;
+  }
+
+  .groupCreateModal .groupCreateForm,
+  .groupCreateModal .miniFormGrid,
+  .groupCreateModal .communityGroupAdvancedCreate {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .groupCreateModal .groupFeatureGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Community group identity, profile and stable settings sheets. */
+.communityGroupsPage .groupFocusHero {
+  min-height: 118px !important;
+  padding: 14px 16px !important;
+  background: linear-gradient(120deg, rgba(245, 251, 255, 0.96), rgba(255, 255, 255, 0.96)) !important;
+}
+
+.communityGroupsPage .groupProfileTrigger {
+  border: 0;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.communityGroupsPage .groupProfileTrigger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(23, 111, 194, 0.2) !important;
+}
+
+.communityGroupsPage .groupHeroActions {
+  align-self: center;
+}
+
+.communityGroupsPage .groupMoreAction {
+  width: 34px;
+  min-width: 34px;
+  padding: 0 !important;
+  border: 1px solid rgba(126, 160, 196, 0.24) !important;
+  background: #fff !important;
+  color: #49657f !important;
+  font-size: 1rem !important;
+}
+
+.communityGroupsPage .encryptedGroupChip {
+  color: #08745c !important;
+  background: #e4f8f0 !important;
+}
+
+.communityGroupsPage .communityGroupTool-settings,
+.communityGroupsPage .communityGroupTool-directory-settings {
+  top: 74px !important;
+  right: 12px !important;
+  bottom: auto !important;
+  left: auto !important;
+  width: min(520px, calc(100% - 24px));
+  max-height: min(70dvh, 560px);
+  overflow-y: auto;
+}
+
+.communityGroupsPage .communityGroupMiniWindow {
+  isolation: isolate;
+}
+
+.communityGroupsPage .communityGroupProfileWindow {
+  position: absolute;
+  z-index: 135;
+  top: 68px;
+  left: 14px;
+  width: min(360px, calc(100% - 28px));
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid rgba(126, 160, 196, 0.28);
+  border-radius: 17px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 22px 54px rgba(18, 44, 70, 0.2);
+  backdrop-filter: blur(20px);
+  animation: communityMiniWindowIn 170ms ease-out both;
+}
+
+.communityGroupsPage .communityGroupProfileClose {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  width: 28px;
+  height: 28px;
+  min-height: 28px;
+  border: 0;
+  border-radius: 9px;
+  background: #eef4f7;
+  color: #49657f;
+}
+
+.communityGroupsPage .groupProfileAvatar {
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 14px !important;
+  background: linear-gradient(145deg, #176fc2, #12b7ca) !important;
+  color: #fff !important;
+}
+
+.communityGroupsPage .groupProfileIdentity {
+  min-width: 0;
+  display: grid;
+  align-content: center;
+  gap: 1px;
+  padding-right: 28px;
+}
+
+.communityGroupsPage .groupProfileIdentity small {
+  color: #698097;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.communityGroupsPage .groupProfileIdentity strong {
+  overflow: hidden;
+  color: #10213d;
+  font-size: 0.9rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.communityGroupsPage .groupProfileIdentity span {
+  color: #6c8196;
+  font-size: 0.62rem;
+}
+
+.communityGroupsPage .communityGroupProfileWindow > p,
+.communityGroupsPage .groupProfileStats,
+.communityGroupsPage .groupProfileSecurity,
+.communityGroupsPage .groupProfileActions {
+  grid-column: 1 / -1;
+}
+
+.communityGroupsPage .communityGroupProfileWindow > p {
+  margin: 1px 0;
+  color: #566e85;
+  font-size: 0.67rem;
+  line-height: 1.45;
+}
+
+.communityGroupsPage .groupProfileStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.communityGroupsPage .groupProfileStats > span {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 10px;
+  background: #f2f7fa;
+}
+
+.communityGroupsPage .groupProfileStats strong {
+  overflow: hidden;
+  color: #173d63;
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.communityGroupsPage .groupProfileStats small {
+  color: #7890a4;
+  font-size: 0.55rem;
+}
+
+.communityGroupsPage .groupProfileSecurity {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 9px;
+  border-radius: 11px;
+  background: #e9f8f2;
+}
+
+.communityGroupsPage .groupProfileSecurity > b {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #ccefe1;
+  color: #08745c;
+}
+
+.communityGroupsPage .groupProfileSecurity > span {
+  display: grid;
+  gap: 2px;
+}
+
+.communityGroupsPage .groupProfileSecurity strong {
+  color: #155c4c;
+  font-size: 0.66rem;
+}
+
+.communityGroupsPage .groupProfileSecurity small {
+  color: #4f7b70;
+  font-size: 0.56rem;
+}
+
+.communityGroupsPage .groupProfileActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.communityGroupsPage .groupProfileActions button {
+  min-height: 34px;
+  border: 1px solid rgba(126, 160, 196, 0.24);
+  border-radius: 10px;
+  padding: 0 11px;
+  background: #fff;
+  color: #176fc2;
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.premiumDarkMode .communityGroupsPage .groupFocusHero,
+.premiumDarkMode .communityGroupsPage .communityGroupProfileWindow {
+  background: #111c24 !important;
+}
+
+.premiumDarkMode .communityGroupsPage :is(.groupProfileIdentity strong, .groupProfileStats strong) {
+  color: #edf6fb;
+}
+
+.premiumDarkMode .communityGroupsPage .groupProfileStats > span {
+  background: #172731;
+}
+
+.premiumDarkMode .communityGroupsPage .groupProfileSecurity {
+  background: #123128;
+}
+
+.communityGroupAdvancedCreate {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+@media (max-width: 760px) {
+  .communityGroupsPage .groupFocusHero {
+    min-height: 138px !important;
+  }
+
+  .communityGroupsPage .groupHeroActions {
+    width: 100%;
+  }
+
+  .communityGroupsPage .groupHeroActions .postButton {
+    flex: 1 1 auto;
+  }
+
+  .communityGroupsPage .communityGroupTool-settings,
+  .communityGroupsPage .communityGroupTool-directory-settings {
+    position: fixed !important;
+    top: auto !important;
+    right: 8px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    left: 8px !important;
+    width: auto !important;
+    max-height: 64dvh;
+  }
+
+  .communityGroupsPage .communityGroupProfileWindow {
+    position: fixed;
+    top: 72px;
+    right: 8px;
+    left: 8px;
+    width: auto;
+  }
+
+  .communityGroupAdvancedCreate {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* Community Groups — calm, task-focused center workspace. */
+.communityGroupsPage .communityGroupsLayout {
+  height: 100%;
+  min-height: 0;
+  grid-template-columns: 280px minmax(420px, 1fr) 230px !important;
+  gap: 10px !important;
+  padding: 10px !important;
+}
+
+.communityGroupsPage .cleanGroupWorkspace {
+  position: relative;
+  min-height: 0;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto !important;
+  align-content: stretch !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 1px solid rgba(126, 160, 196, 0.24) !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 12px 34px rgba(31, 76, 119, 0.07) !important;
+}
+
+.communityGroupsPage .cleanGroupWorkspace > .groupPurposeGrid,
+.communityGroupsPage .cleanGroupWorkspace > .groupTodayPanel {
+  display: none !important;
+}
+
+.communityGroupsPage .groupFocusHero {
+  min-height: 108px !important;
+  display: grid !important;
+  grid-template-columns: 46px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 13px 15px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(126, 160, 196, 0.2) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.communityGroupsPage .groupFocusHero .largeGroupAvatar {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 13px !important;
+  background: linear-gradient(145deg, #1675c9, #20bac8) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.communityGroupsPage .groupFocusHero > div:nth-child(2) {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.communityGroupsPage .groupFocusHero small {
+  color: #678099 !important;
+  font-size: 0.58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.communityGroupsPage .groupFocusHero strong {
+  overflow: hidden;
+  color: #10213d !important;
+  font-size: clamp(0.94rem, 1.35vw, 1.12rem) !important;
+  line-height: 1.2 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.communityGroupsPage .groupFocusHero p {
+  overflow: hidden;
+  margin: 1px 0 4px !important;
+  color: #61758c !important;
+  font-size: 0.66rem !important;
+  line-height: 1.35 !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.communityGroupsPage .groupHeroChips {
+  display: flex !important;
+  gap: 5px !important;
+  overflow: hidden;
+}
+
+.communityGroupsPage .groupHeroChips span {
+  min-height: 22px !important;
+  display: inline-flex !important;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 7px !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  background: #edf5f9 !important;
+  color: #506a83 !important;
+  font-size: 0.57rem !important;
+  font-weight: 750 !important;
+}
+
+.communityGroupsPage .groupHeroActions {
+  display: flex !important;
+  gap: 6px !important;
+}
+
+.communityGroupsPage .groupHeroActions button {
+  min-height: 34px !important;
+  border-radius: 10px !important;
+  padding: 0 11px !important;
+  font-size: 0.66rem !important;
+}
+
+.communityGroupsPage .groupActivityPanel {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.communityGroupsPage .groupActivityPanel > .communityPanelHeader {
+  min-height: 54px !important;
+  padding: 10px 15px !important;
+  border-bottom: 1px solid rgba(126, 160, 196, 0.16) !important;
+}
+
+.communityGroupsPage .groupActivityPanel .communityPanelHeader strong {
+  color: #10213d !important;
+  font-size: 0.82rem !important;
+}
+
+.communityGroupsPage .groupActivityPanel .communityPanelHeader small {
+  color: #71859b !important;
+  font-size: 0.6rem !important;
+}
+
+.communityGroupsPage .groupActivityList {
+  min-height: 0;
+  display: grid !important;
+  align-content: start;
+  gap: 8px !important;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px 13px 16px !important;
+  scrollbar-width: thin;
+}
+
+.communityGroupsPage .groupActivityList article {
+  width: min(620px, 92%);
+  min-height: 64px !important;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) !important;
+  align-items: start !important;
+  gap: 9px !important;
+  padding: 10px 11px !important;
+  border: 1px solid rgba(126, 160, 196, 0.2) !important;
+  border-radius: 13px !important;
+  background: #f7fafc !important;
+  box-shadow: none !important;
+}
+
+.communityGroupsPage .groupActivityList article > b {
+  width: 32px !important;
+  height: 32px !important;
+  display: grid;
+  place-items: center;
+  border-radius: 10px !important;
+  background: #e4f3f9 !important;
+  color: #176fc2 !important;
+  font-size: 0.7rem !important;
+}
+
+.communityGroupsPage .groupActivityList article span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.communityGroupsPage .groupActivityList article strong {
+  color: #17263c !important;
+  font-size: 0.72rem !important;
+}
+
+.communityGroupsPage .groupActivityList article p {
+  margin: 0;
+  color: #50677f;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+.communityGroupsPage .groupActivityList article small {
+  color: #8192a3 !important;
+  font-size: 0.58rem !important;
+}
+
+.communityGroupsPage .groupActivityList .memberGroupUpdate {
+  justify-self: end;
+  background: #effafd !important;
+  border-color: rgba(18, 183, 202, 0.25) !important;
+}
+
+.communityGroupsPage .cleanGroupComposer {
+  min-height: 62px;
+  display: grid !important;
+  grid-template-columns: 34px minmax(0, 1fr) auto !important;
+  align-items: center;
+  gap: 7px !important;
+  padding: 9px 12px calc(9px + env(safe-area-inset-bottom)) !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(126, 160, 196, 0.2) !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+}
+
+.communityGroupsPage .cleanGroupComposer input {
+  min-width: 0;
+  min-height: 40px !important;
+  border: 1px solid rgba(126, 160, 196, 0.25) !important;
+  border-radius: 12px !important;
+  padding: 0 12px !important;
+  background: #f4f8fb !important;
+  color: #10213d !important;
+  font-size: 0.7rem !important;
+}
+
+.communityGroupsPage .groupComposerAttach {
+  width: 34px;
+  height: 34px;
+  min-height: 34px;
+  border: 1px solid rgba(126, 160, 196, 0.25);
+  border-radius: 10px;
+  background: #fff;
+  color: #176fc2;
+  font-weight: 900;
+}
+
+.communityGroupsPage .cleanGroupComposer .postButton {
+  min-height: 38px !important;
+  border-radius: 11px !important;
+  padding: 0 13px !important;
+  font-size: 0.68rem !important;
+}
+
+.communityGroupsPage .cleanGroupComposer .postButton:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.communityGroupsPage .communityGroupMiniWindow {
+  position: absolute !important;
+  z-index: 120;
+  right: 12px;
+  bottom: 72px;
+  left: 12px;
+  margin: 0 !important;
+  border: 1px solid rgba(126, 160, 196, 0.28) !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.97) !important;
+  color: #10213d !important;
+  box-shadow: 0 20px 50px rgba(18, 44, 70, 0.18) !important;
+  backdrop-filter: blur(18px);
+}
+
+.communityGroupsPage .communityGroupMiniWindow strong {
+  color: #10213d !important;
+}
+
+.communityGroupsPage .communityGroupMiniWindow small {
+  color: #687e94 !important;
+}
+
+.communityGroupsPage .communityGroupMiniWindow input {
+  background: #f4f8fb !important;
+  color: #10213d !important;
+}
+
+.premiumDarkMode .communityGroupsPage .cleanGroupWorkspace,
+.premiumDarkMode .communityGroupsPage .cleanGroupComposer,
+.premiumDarkMode .communityGroupsPage .communityGroupMiniWindow {
+  background: #111c24 !important;
+}
+
+.premiumDarkMode .communityGroupsPage :is(.groupFocusHero strong, .groupActivityPanel .communityPanelHeader strong, .groupActivityList article strong, .communityGroupMiniWindow strong) {
+  color: #edf6fb !important;
+}
+
+.premiumDarkMode .communityGroupsPage :is(.groupActivityList article, .cleanGroupComposer input, .communityGroupMiniWindow input) {
+  background: #172731 !important;
+  color: #edf6fb !important;
+}
+
+@media (max-width: 1180px) {
+  .communityGroupsPage .communityGroupsLayout {
+    grid-template-columns: 250px minmax(390px, 1fr) !important;
+  }
+
+  .communityGroupsPage .communityGroupsSide {
+    display: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .communityGroupsPage .communityGroupsLayout {
+    height: auto !important;
+    min-height: 100% !important;
+    display: block !important;
+    padding: 7px !important;
+  }
+
+  .communityGroupsPage .groupDirectory {
+    display: grid !important;
+    gap: 6px !important;
+    margin-bottom: 7px;
+    padding: 8px !important;
+    border-radius: 14px !important;
+  }
+
+  .communityGroupsPage .groupDirectoryHeader {
+    min-height: 38px !important;
+    padding: 0 !important;
+  }
+
+  .communityGroupsPage .groupTabs {
+    display: none !important;
+  }
+
+  .communityGroupsPage .communityGroupSearch {
+    min-height: 36px !important;
+  }
+
+  .communityGroupsPage .communityGroupList {
+    display: flex !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+
+  .communityGroupsPage .communityGroupList::-webkit-scrollbar {
+    display: none;
+  }
+
+  .communityGroupsPage .communityGroupChat {
+    width: 220px !important;
+    min-width: 220px !important;
+    min-height: 58px !important;
+  }
+
+  .communityGroupsPage .cleanGroupWorkspace {
+    height: calc(var(--snv-app-height, 100dvh) - 250px) !important;
+    min-height: 430px !important;
+    border-radius: 16px !important;
+  }
+
+  .communityGroupsPage .groupFocusHero {
+    min-height: 126px !important;
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+    padding: 10px !important;
+  }
+
+  .communityGroupsPage .groupHeroActions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+
+  .communityGroupsPage .groupHeroChips span:nth-child(n + 3) {
+    display: none !important;
+  }
+
+  .communityGroupsPage .groupActivityList article {
+    width: 96%;
+  }
+
+  .communityGroupsPage .communityGroupMiniWindow {
+    right: 7px;
+    bottom: calc(66px + env(safe-area-inset-bottom));
+    left: 7px;
+  }
+}
+
+/* Signova Learn — React Three Fiber training workspace. */
+body.signovaLearnPage .learnMode .signToolsPane {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.snvLearnPage {
+  --learn-line: rgba(126, 160, 196, 0.24);
+  --learn-panel: rgba(255, 255, 255, 0.92);
+  --learn-soft: #f3f9fd;
+  --learn-blue: #176fc2;
+  --learn-cyan: #12b7ca;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  background: #f5f9fc;
+  color: #10213d;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.snvLearnHeader {
+  position: relative;
+  z-index: 10;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 9px 18px;
+  border-bottom: 1px solid var(--learn-line);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.snvLearnHeader > div:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.snvLearnHeader > div:first-child span,
+.snvCardHeader span,
+.snvPrompt label,
+.snvMeaning > span,
+.snvDetectionResult > span,
+.snvSectionTitle span {
+  color: #52708f;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.snvLearnHeader > div:first-child strong {
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  letter-spacing: -0.02em;
+}
+
+.snvLearnSelectors {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.snvLearnSelectors label {
+  min-width: 118px;
+  display: grid;
+  gap: 1px;
+  padding: 4px 9px;
+  border: 1px solid var(--learn-line);
+  border-radius: 11px;
+  background: #fff;
+}
+
+.snvLearnSelectors label span {
+  color: #71839a;
+  font-size: 0.55rem;
+  font-weight: 750;
+}
+
+.snvLearnSelectors select,
+.snvPlayback select {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #10213d;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+.snvLearnSelectors > button {
+  min-height: 39px;
+  padding: 0 12px;
+  border: 1px solid var(--learn-line);
+  border-radius: 11px;
+  background: #fff;
+  color: #164d84;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.snvLearnScroll {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(23, 111, 194, 0.42) transparent;
+  padding: 12px;
+}
+
+.snvLearnScroll::-webkit-scrollbar {
+  width: 7px;
+}
+
+.snvLearnScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.snvLearnScroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(23, 111, 194, 0.42);
+  background-clip: padding-box;
+}
+
+.snvCoachGrid {
+  display: grid;
+  grid-template-columns: minmax(360px, 0.92fr) minmax(430px, 1.08fr);
+  gap: 12px;
+}
+
+.snvAvatarCard,
+.snvInteractionCard,
+.snvPracticeGrid > article {
+  min-width: 0;
+  border: 1px solid var(--learn-line);
+  border-radius: 18px;
+  background: var(--learn-panel);
+  box-shadow: 0 10px 30px rgba(31, 76, 119, 0.06);
+}
+
+.snvAvatarCard {
+  display: grid;
+  grid-template-rows: auto minmax(310px, 52dvh) auto;
+  overflow: hidden;
+}
+
+.snvCardHeader {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--learn-line);
+}
+
+.snvCardHeader > div:first-child {
+  display: grid;
+}
+
+.snvCardHeader strong {
+  font-size: 0.88rem;
+}
+
+.snvViewSwitch,
+.snvModeTabs {
+  display: flex;
+  padding: 3px;
+  border-radius: 10px;
+  background: #edf4f8;
+}
+
+.snvViewSwitch button,
+.snvModeTabs button {
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #60758d;
+  font-size: 0.65rem;
+  font-weight: 800;
+}
+
+.snvViewSwitch button {
+  padding: 5px 8px;
+}
+
+.snvViewSwitch button.active,
+.snvModeTabs button.active {
+  background: #fff;
+  color: var(--learn-blue);
+  box-shadow: 0 3px 10px rgba(31, 76, 119, 0.1);
+}
+
+.snvAvatarStage {
+  position: relative;
+  min-height: 310px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(106, 203, 235, 0.25), transparent 34%),
+    linear-gradient(145deg, #edf7ff, #f8f6ff);
+}
+
+.snvAvatarStage .signova3DAvatarViewport,
+.snvAvatarStage canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.snvAvatarCaption {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  display: grid;
+  gap: 2px;
+  padding: 9px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 13px;
+  background: rgba(12, 34, 58, 0.82);
+  color: #fff;
+  backdrop-filter: blur(14px);
+}
+
+.snvAvatarCaption span,
+.snvAvatarCaption small {
+  color: #c6e7f8;
+  font-size: 0.62rem;
+}
+
+.snvAvatarCaption strong {
+  font-size: 0.96rem;
+}
+
+.snvPlayback {
+  min-height: 50px;
+  display: grid;
+  grid-template-columns: 32px 32px minmax(70px, 1fr) auto auto;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-top: 1px solid var(--learn-line);
+}
+
+.snvPlayback button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--learn-line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--learn-blue);
+  font-weight: 900;
+}
+
+.snvPlayback > div,
+.snvDetectionResult > div:nth-of-type(1) {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce8ef;
+}
+
+.snvPlayback > div i,
+.snvDetectionResult > div:nth-of-type(1) i {
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--learn-blue), var(--learn-cyan));
+  transition: width 220ms ease;
+}
+
+.snvPlayback > span {
+  color: #60758d;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.snvInteractionCard {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 12px;
+}
+
+.snvModeTabs {
+  width: fit-content;
+}
+
+.snvModeTabs button {
+  min-height: 34px;
+  padding: 0 13px;
+}
+
+.snvPrompt {
+  display: grid;
+  gap: 6px;
+}
+
+.snvPrompt > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px;
+}
+
+.snvPrompt input {
+  min-width: 0;
+  height: 42px;
+  border: 1px solid var(--learn-line);
+  border-radius: 12px;
+  padding: 0 12px;
+  background: var(--learn-soft);
+  color: #10213d;
+  outline: 0;
+}
+
+.snvPrompt input:focus {
+  border-color: var(--learn-cyan);
+  box-shadow: 0 0 0 3px rgba(18, 183, 202, 0.12);
+}
+
+.snvPrompt button,
+.snvDetectionResult button,
+.snvProgressCard > button {
+  border: 0;
+  border-radius: 11px;
+  padding: 0 13px;
+  background: linear-gradient(135deg, var(--learn-blue), var(--learn-cyan));
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.snvPrompt > small,
+.snvMeaning p,
+.snvDetectionResult small {
+  margin: 0;
+  color: #6b7f95;
+  font-size: 0.66rem;
+}
+
+.snvMeaning {
+  display: grid;
+  gap: 3px;
+  padding: 10px 11px;
+  border-radius: 12px;
+  background: var(--learn-soft);
+}
+
+.snvMeaning strong {
+  font-size: 0.84rem;
+}
+
+.snvMovementGuide {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.snvMovementGuide button {
+  min-width: 0;
+  min-height: 72px;
+  display: grid;
+  grid-template-columns: 25px minmax(0, 1fr);
+  align-items: start;
+  gap: 7px;
+  padding: 8px;
+  border: 1px solid var(--learn-line);
+  border-radius: 12px;
+  background: #fff;
+  color: #10213d;
+  text-align: left;
+}
+
+.snvMovementGuide button.active {
+  border-color: var(--learn-cyan);
+  background: #effbfc;
+}
+
+.snvMovementGuide b {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: #e7f3fa;
+  color: var(--learn-blue);
+  font-size: 0.67rem;
+}
+
+.snvMovementGuide button > span {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.snvMovementGuide strong {
+  font-size: 0.72rem;
+}
+
+.snvMovementGuide small {
+  overflow: hidden;
+  color: #6b7f95;
+  font-size: 0.61rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.snvCameraWorkspace {
+  display: grid;
+  grid-template-columns: minmax(190px, 0.9fr) minmax(210px, 1.1fr);
+  gap: 9px;
+}
+
+.snvCameraPreview {
+  position: relative;
+  min-height: 190px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #0f2131;
+}
+
+.snvCameraPreview video,
+.snvCameraPreview canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.snvCameraPreview canvas {
+  pointer-events: none;
+}
+
+.snvCameraPreview > button {
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  border: 0;
+  background: #10283a;
+  color: #fff;
+}
+
+.snvCameraPreview > button small {
+  color: #9fc1d5;
+  font-size: 0.65rem;
+}
+
+.snvDetectionResult {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--learn-soft);
+}
+
+.snvDetectionResult > strong {
+  font-size: 1rem;
+}
+
+.snvDetectionResult > div:last-child {
+  display: flex;
+  gap: 7px;
+}
+
+.snvDetectionResult button {
+  min-height: 34px;
+}
+
+.snvDetectionResult button:last-child {
+  border: 1px solid var(--learn-line);
+  background: #fff;
+  color: #345675;
+}
+
+.snvPracticeGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.8fr) minmax(240px, 0.8fr);
+  gap: 12px;
+  margin-top: 12px;
+  padding-bottom: 10px;
+}
+
+.snvPracticeGrid > article {
+  padding: 12px;
+}
+
+.snvSectionTitle {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 9px;
+}
+
+.snvSectionTitle strong {
+  font-size: 0.86rem;
+}
+
+.snvPracticeModes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.snvPracticeModes button,
+.snvQuizCard > button {
+  min-height: 58px;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--learn-line);
+  border-radius: 11px;
+  background: #fff;
+  color: #10213d;
+  text-align: left;
+}
+
+.snvPracticeModes button.active,
+.snvQuizCard > button.selected {
+  border-color: var(--learn-cyan);
+  background: #effbfc;
+}
+
+.snvPracticeModes strong,
+.snvQuizCard button {
+  font-size: 0.68rem;
+}
+
+.snvPracticeModes small,
+.snvQuizCard > small,
+.snvProgressCard small {
+  color: #6b7f95;
+  font-size: 0.6rem;
+}
+
+.snvQuizCard {
+  display: grid;
+  gap: 6px;
+}
+
+.snvQuizCard .snvSectionTitle {
+  margin-bottom: 3px;
+}
+
+.snvQuizCard > button {
+  min-height: 34px;
+}
+
+.snvProgressCard {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.snvProgressCard .snvSectionTitle,
+.snvProgressCard > button {
+  grid-column: 1 / -1;
+}
+
+.snvProgressCard > div:not(.snvSectionTitle) {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border-radius: 10px;
+  background: var(--learn-soft);
+  text-align: center;
+}
+
+.snvProgressCard > button {
+  min-height: 34px;
+}
+
+body.signovaPremiumDarkPage .snvLearnPage {
+  --learn-line: rgba(148, 177, 201, 0.2);
+  --learn-panel: #111c24;
+  --learn-soft: #172731;
+  background: #0b141a;
+  color: #edf6fb;
+}
+
+body.signovaPremiumDarkPage .snvLearnHeader,
+body.signovaPremiumDarkPage .snvLearnSelectors label,
+body.signovaPremiumDarkPage .snvLearnSelectors > button,
+body.signovaPremiumDarkPage .snvViewSwitch button.active,
+body.signovaPremiumDarkPage .snvModeTabs button.active,
+body.signovaPremiumDarkPage .snvMovementGuide button,
+body.signovaPremiumDarkPage .snvPlayback button,
+body.signovaPremiumDarkPage .snvPracticeModes button,
+body.signovaPremiumDarkPage .snvQuizCard > button {
+  background: #111c24;
+  color: #edf6fb;
+}
+
+body.signovaPremiumDarkPage .snvLearnSelectors select,
+body.signovaPremiumDarkPage .snvPlayback select,
+body.signovaPremiumDarkPage .snvPrompt input {
+  color: #edf6fb;
+}
+
+@media (max-width: 1050px) {
+  .snvCoachGrid {
+    grid-template-columns: minmax(300px, 0.85fr) minmax(390px, 1.15fr);
+  }
+
+  .snvPracticeGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .snvProgressCard {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .snvLearnHeader {
+    min-height: 58px;
+    padding: 7px 10px;
+  }
+
+  .snvLearnHeader > div:first-child span {
+    display: none;
+  }
+
+  .snvLearnHeader > div:first-child strong {
+    font-size: 0.9rem;
+  }
+
+  .snvLearnSelectors {
+    gap: 4px;
+  }
+
+  .snvLearnSelectors label {
+    min-width: 72px;
+    padding: 3px 6px;
+  }
+
+  .snvLearnSelectors label:nth-child(3) {
+    display: none;
+  }
+
+  .snvLearnSelectors label span,
+  .snvLearnSelectors > button {
+    display: none;
+  }
+
+  .snvLearnSelectors select {
+    font-size: 0.65rem;
+  }
+
+  .snvLearnScroll {
+    padding: 8px 8px calc(84px + env(safe-area-inset-bottom));
+  }
+
+  .snvCoachGrid,
+  .snvCameraWorkspace,
+  .snvPracticeGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .snvAvatarCard {
+    grid-template-rows: auto minmax(300px, 48dvh) auto;
+  }
+
+  .snvMovementGuide {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .snvMovementGuide button {
+    min-height: 58px;
+  }
+
+  .snvPracticeGrid {
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .snvProgressCard {
+    grid-column: auto;
+  }
+}
+
+/* Call history: match the compact chat header and keep the empty canvas useful. */
+.conversationHistoryMode .conversationInfoIdentity {
+  display: grid !important;
+  align-content: center;
+  gap: 3px !important;
+}
+
+.conversationHistoryMode .conversationInfoNameLine {
+  display: flex !important;
+  align-items: baseline;
+  gap: 8px !important;
+  min-width: 0;
+}
+
+.conversationHistoryMode .conversationInfoNameLine > strong {
+  overflow: hidden;
+  color: var(--ink) !important;
+  font-size: clamp(1rem, 1.55vw, 1.35rem) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.025em !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversationHistoryMode .conversationInfoNameLine > span {
+  overflow: hidden;
+  color: var(--muted) !important;
+  font-size: 0.69rem !important;
+  font-weight: 750 !important;
+  letter-spacing: 0 !important;
+  text-overflow: ellipsis;
+  text-transform: none !important;
+  white-space: nowrap;
+}
+
+.conversationHistoryMode .conversationInfoIdentity > small {
+  margin: 0 !important;
+  font-size: 0.66rem !important;
+}
+
+.conversationHistoryMode .conversationInfoHeaderActions {
+  display: flex !important;
+  align-items: center;
+}
+
+.conversationHistoryMode .conversationInfoHeaderActions .premiumHeaderButton {
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 11px !important;
+}
+
+.conversationHistoryMode .conversationInfoHeaderActions .minimalHeaderSvg {
+  width: 18px;
+  height: 18px;
+}
+
+.conversationInfoMenuWrap {
+  position: relative;
+  z-index: 90;
+}
+
+.conversationInfoActionMenu {
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  right: 0 !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: 5000 !important;
+  min-width: 190px;
+  max-width: min(230px, calc(100vw - 20px));
+  isolation: isolate;
+}
+
+.conversationHistoryMode .conversationInfoCall {
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 56px;
+  padding: 9px 11px;
+  border-radius: 15px;
+}
+
+.conversationHistoryMode .conversationInfoCall > div {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.conversationHistoryMode .conversationInfoCall small {
+  overflow: hidden;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversationHistoryMode .conversationInfoCall small b {
+  color: var(--accent-deep, #176fc2);
+  font-weight: 850;
+}
+
+.conversationCategoryPicker {
+  position: relative;
+  min-width: 0;
+}
+
+.conversationCategoryButton {
+  width: 100%;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--surface, #fff) 90%, #dff7fb);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.conversationCategoryButton > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  text-align: left;
+}
+
+.conversationCategoryButton small {
+  color: var(--muted);
+}
+
+.conversationCategoryButton strong {
+  overflow: hidden;
+  font-size: 0.75rem !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversationCategoryButton > b {
+  font-size: 0.9rem;
+  transition: transform 160ms ease;
+}
+
+.activeConversationCategoryButton > b {
+  transform: rotate(180deg);
+}
+
+.conversationCategoryMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 4900;
+  width: max(100%, 190px);
+  display: grid;
+  gap: 3px;
+  padding: 6px;
+  border: 1px solid color-mix(in srgb, var(--muted) 22%, transparent);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--surface, #fff) 96%, transparent);
+  box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+  backdrop-filter: blur(18px);
+}
+
+.conversationCategoryMenu button {
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  padding: 5px 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.69rem;
+  font-weight: 760;
+  text-align: left;
+}
+
+.conversationCategoryMenu button:hover,
+.conversationCategoryMenu .activeConversationCategory {
+  background: color-mix(in srgb, var(--accent, #1aaed0) 12%, transparent);
+}
+
+.conversationCategoryMenu i {
+  width: 7px;
+  height: 7px;
+  justify-self: center;
+  border: 1px solid var(--muted);
+  border-radius: 50%;
+}
+
+.conversationCategoryMenu .activeConversationCategory i {
+  border-color: var(--accent, #1aaed0);
+  background: var(--accent, #1aaed0);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #1aaed0) 16%, transparent);
+}
+
+.conversationHistoryMode .callHistoryBlankState {
+  min-height: 100% !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+.callHistoryBlankAnimation {
+  position: relative;
+  width: 86px;
+  height: 86px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 8px;
+}
+
+.callHistoryBlankAnimation .minimalHeaderSvg {
+  position: relative;
+  z-index: 2;
+  width: 31px;
+  height: 31px;
+  color: #1674c8;
+  animation: callHistoryIconFloat 2.8s ease-in-out infinite;
+}
+
+.callHistoryBlankRing,
+.callHistoryBlankWave {
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(22, 116, 200, 0.24);
+  border-radius: 50%;
+}
+
+.callHistoryBlankRing {
+  background: rgba(51, 190, 211, 0.07);
+  animation: callHistoryRingBreathe 2.8s ease-in-out infinite;
+}
+
+.callHistoryBlankWave {
+  animation: callHistoryWave 2.8s ease-out infinite;
+}
+
+.callHistoryBlankWaveTwo {
+  animation-delay: 1.4s;
+}
+
+.conversationHistoryMode .callHistoryBlankState > strong {
+  font-size: 1.15rem !important;
+}
+
+.conversationHistoryMode .callHistoryBlankState > small {
+  max-width: 340px;
+  margin: 0 auto;
+  font-size: 0.72rem;
+}
+
+.callHistoryEscapeHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.66rem;
+  font-weight: 750;
+}
+
+.callHistoryEscapeHint kbd {
+  min-width: 32px;
+  padding: 4px 7px;
+  border: 1px solid rgba(100, 116, 139, 0.28);
+  border-radius: 7px;
+  background: var(--surface, #fff);
+  box-shadow: 0 2px 0 rgba(100, 116, 139, 0.18);
+  color: var(--ink);
+  font: inherit;
+  animation: callHistoryEscTap 2.8s ease-in-out infinite;
+}
+
+@keyframes callHistoryIconFloat {
+  0%, 100% { transform: translateY(2px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes callHistoryRingBreathe {
+  0%, 100% { transform: scale(0.94); opacity: 0.68; }
+  50% { transform: scale(1.04); opacity: 1; }
+}
+
+@keyframes callHistoryWave {
+  0% { transform: scale(0.72); opacity: 0; }
+  24% { opacity: 0.45; }
+  76%, 100% { transform: scale(1.35); opacity: 0; }
+}
+
+@keyframes callHistoryEscTap {
+  0%, 72%, 100% { transform: translateY(0); box-shadow: 0 2px 0 rgba(100, 116, 139, 0.18); }
+  78%, 88% { transform: translateY(2px); box-shadow: 0 0 0 rgba(100, 116, 139, 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .callHistoryBlankAnimation *,
+  .callHistoryEscapeHint kbd {
+    animation: none !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .conversationHistoryMode .conversationInfoHeader {
+    grid-template-columns: 32px 40px minmax(0, 1fr) auto !important;
+  }
+
+  .conversationHistoryMode .conversationInfoHeaderActions {
+    grid-column: auto !important;
+    display: flex !important;
+    width: auto !important;
+  }
+
+  .conversationHistoryMode .conversationInfoHeaderActions .premiumHeaderButton {
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+  }
+
+  .conversationHistoryMode .conversationInfoNameLine {
+    display: grid !important;
+    gap: 1px !important;
+  }
+
+  .conversationHistoryMode .conversationInfoCall {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .conversationHistoryMode .conversationInfoStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .conversationInfoActionMenu {
+    position: fixed !important;
+    top: 64px !important;
+    right: 8px !important;
+    left: auto !important;
+    bottom: auto !important;
+    width: min(230px, calc(100vw - 16px)) !important;
+  }
+}
+
+/* Community Groups viewport authority: directory joins the rail, center owns the screen. */
+@media (min-width: 761px) {
+  html.signovaCommunityGroupsPage,
+  body.signovaCommunityGroupsPage,
+  body.signovaCommunityGroupsPage #root,
+  body.signovaCommunityGroupsPage .messengerShell.communityMode {
+    height: var(--snv-app-height, 100dvh) !important;
+    min-height: 0 !important;
+    max-height: var(--snv-app-height, 100dvh) !important;
+    overflow: hidden !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityMode .signToolsPane {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupsPage {
+    width: 100%;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    width: 100%;
+    height: 100% !important;
+    min-height: 0 !important;
+    grid-template-columns: 330px minmax(440px, 1fr) 240px !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 0 10px 0 0 !important;
+  }
+
+  body.signovaCommunityGroupsPage .groupDirectory {
+    width: 330px !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    display: grid !important;
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    align-content: stretch !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 12px !important;
+    border-top: 0 !important;
+    border-bottom: 0 !important;
+    border-left: 0 !important;
+    border-radius: 0 18px 18px 0 !important;
+    box-shadow: 8px 0 24px rgba(31, 76, 119, 0.06) !important;
+  }
+
+  body.signovaCommunityGroupsPage .groupDirectoryHeader {
+    min-height: 44px !important;
+    padding: 0 2px !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupList {
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    padding-right: 3px;
+  }
+
+  body.signovaCommunityGroupsPage .cleanGroupWorkspace {
+    height: calc(100% - 20px) !important;
+    min-height: 0 !important;
+    align-self: center;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupsSide {
+    height: calc(100% - 20px) !important;
+    min-height: 0 !important;
+    align-self: center;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+  }
+}
+
+.communityGroupsPage .groupComposerAttach {
+  display: grid;
+  place-items: center;
+  padding: 0 !important;
+}
+
+.groupComposerAttachIcon {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  display: block;
+  transform: rotate(-8deg);
+}
+
+.groupComposerAttachIcon i {
+  position: absolute;
+  display: block;
+  border: 1.7px solid currentColor;
+  border-radius: 5px;
+}
+
+.groupComposerAttachIcon i:first-child {
+  inset: 2px 5px 2px 4px;
+  border-top-color: transparent;
+  transform: rotate(38deg);
+}
+
+.groupComposerAttachIcon i:last-child {
+  width: 7px;
+  height: 11px;
+  right: 1px;
+  bottom: 0;
+  border-left-color: transparent;
+  transform: rotate(38deg);
+}
+
+.communityGroupsPage .importantGroupAttachments {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.communityGroupsPage .importantGroupAttachments button {
+  min-height: 46px !important;
+  border-radius: 11px !important;
+  background: #f1f7fa !important;
+  color: #174f83 !important;
+}
+
+.premiumDarkMode .communityGroupsPage .importantGroupAttachments button {
+  background: #172731 !important;
+  color: #8dd9f1 !important;
+}
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    grid-template-columns: 310px minmax(390px, 1fr) !important;
+  }
+
+  body.signovaCommunityGroupsPage .groupDirectory {
+    width: 310px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .communityGroupsPage .importantGroupAttachments {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Direct group directory: no nested list card or redundant right rail. */
+body.signovaCommunityGroupsPage .communityGroupsLayout {
+  grid-template-columns: 330px minmax(0, 1fr) !important;
+}
+
+body.signovaCommunityGroupsPage .groupDirectory {
+  display: flex !important;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.communityGroupsPage .communityGroupDirectoryItems {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1px 3px 8px 0;
+  scrollbar-width: thin;
+}
+
+.communityGroupsPage .directGroupCategories {
+  display: flex !important;
+  flex: 0 0 auto;
+  gap: 5px !important;
+  overflow-x: auto;
+  padding: 1px 0 3px;
+  scrollbar-width: none;
+}
+
+.communityGroupsPage .directGroupCategories::-webkit-scrollbar {
+  display: none;
+}
+
+.communityGroupsPage .directGroupCategories button {
+  min-width: max-content;
+  min-height: 30px !important;
+  border: 1px solid rgba(126, 160, 196, 0.24) !important;
+  border-radius: 9px !important;
+  padding: 0 9px !important;
+  background: transparent !important;
+  color: #60778f !important;
+  font-size: 0.62rem !important;
+  font-weight: 780 !important;
+}
+
+.communityGroupsPage .directGroupCategories .activeGroupTab {
+  border-color: transparent !important;
+  background: #176fc2 !important;
+  color: #fff !important;
+}
+
+.communityGroupsPage .directGroupCategories .addGroupCategoryButton {
+  width: 30px;
+  min-width: 30px !important;
+  padding: 0 !important;
+  border-style: dashed !important;
+  color: #176fc2 !important;
+  font-size: 0.9rem !important;
+}
+
+.communityGroupsPage .groupCategoryComposer {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 5px;
+  padding: 6px;
+  border: 1px solid rgba(126, 160, 196, 0.22);
+  border-radius: 11px;
+  background: #f4f8fb;
+}
+
+.communityGroupsPage .groupCategoryComposer input {
+  min-width: 0;
+  height: 32px;
+  border: 0;
+  background: transparent;
+  color: #10213d;
+  outline: 0;
+  font-size: 0.68rem;
+}
+
+.communityGroupsPage .groupCategoryComposer button {
+  min-height: 32px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 10px;
+  background: #176fc2;
+  color: #fff;
+  font-size: 0.64rem;
+  font-weight: 800;
+}
+
+.communityGroupsPage .groupSettingsActionGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+.communityGroupsPage .groupSettingsActionGrid button {
+  min-height: 44px !important;
+  border-radius: 10px !important;
+  white-space: normal;
+}
+
+.communityGroupsPage .groupSettingsActionGrid .dangerGroupSetting {
+  border-color: rgba(220, 38, 38, 0.2) !important;
+  background: rgba(254, 242, 242, 0.92) !important;
+  color: #b91c1c !important;
+}
+
+.premiumDarkMode .communityGroupsPage .directGroupCategories button {
+  color: #a9bdca !important;
+}
+
+.premiumDarkMode .communityGroupsPage .groupCategoryComposer {
+  background: #172731;
+}
+
+.premiumDarkMode .communityGroupsPage .groupCategoryComposer input {
+  color: #edf6fb;
+}
+
+.premiumDarkMode .communityGroupsPage .groupSettingsActionGrid .dangerGroupSetting {
+  background: rgba(127, 29, 29, 0.24) !important;
+  color: #fda4af !important;
+}
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    grid-template-columns: 310px minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    display: block !important;
+  }
+
+  .communityGroupsPage .communityGroupDirectoryItems {
+    flex: 0 0 auto;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .communityGroupsPage .communityGroupDirectoryItems .communityGroupChat {
+    width: 220px !important;
+    min-width: 220px !important;
+  }
+
+  .communityGroupsPage .groupSettingsActionGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Community Groups must fill the application pane instead of collapsing to content height. */
+body.signovaCommunityGroupsPage .communityMode .signToolsPane {
+  position: relative !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityGroupsPage .communityGroupsPage {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityGroupsPage .communityGroupsLayout {
+  position: absolute;
+  inset: 0;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  align-items: stretch !important;
+}
+
+body.signovaCommunityGroupsPage .groupDirectory,
+body.signovaCommunityGroupsPage .cleanGroupWorkspace {
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  align-self: stretch !important;
+}
+
+body.signovaCommunityGroupsPage .cleanGroupWorkspace {
+  margin: 0 !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+  border-radius: 18px 0 0 18px !important;
+}
+
+.communityGroupsPage .emptyCleanGroupWorkspace {
+  display: grid !important;
+  grid-template: minmax(0, 1fr) / minmax(0, 1fr) !important;
+}
+
+.communityGroupsPage .emptyCleanGroupWorkspace > :not(.groupWorkspaceEmpty) {
+  display: none !important;
+}
+
+.communityGroupsPage .groupWorkspaceEmpty {
+  min-height: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 9px;
+  padding: 28px;
+  text-align: center;
+}
+
+.communityGroupsPage .emptyGroupMark {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 5px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #e7f5fb, #eef0ff);
+  color: #176fc2;
+}
+
+.communityGroupsPage .emptyGroupMark i {
+  width: 31px;
+  height: 25px;
+  display: block;
+  border: 2px solid currentColor;
+  border-radius: 10px 10px 8px 8px;
+}
+
+.communityGroupsPage .emptyGroupMark i::before,
+.communityGroupsPage .emptyGroupMark i::after {
+  content: "";
+  position: absolute;
+  top: 18px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: #edf6fc;
+}
+
+.communityGroupsPage .emptyGroupMark i::before {
+  left: 15px;
+}
+
+.communityGroupsPage .emptyGroupMark i::after {
+  right: 15px;
+}
+
+.communityGroupsPage .emptyGroupMark b {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  background: #12b7ca;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.communityGroupsPage .groupWorkspaceEmpty > strong {
+  color: #10213d;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+}
+
+.communityGroupsPage .groupWorkspaceEmpty > p {
+  max-width: 430px;
+  margin: 0;
+  color: #667d93;
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.communityGroupsPage .groupWorkspaceEmpty > button {
+  min-height: 38px;
+  margin-top: 5px;
+  border: 0;
+  border-radius: 11px;
+  padding: 0 16px;
+  background: linear-gradient(135deg, #176fc2, #12b7ca);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+.premiumDarkMode .communityGroupsPage .groupWorkspaceEmpty > strong {
+  color: #edf6fb;
+}
+
+.premiumDarkMode .communityGroupsPage .emptyGroupMark {
+  background: #172731;
+}
+
+.premiumDarkMode .communityGroupsPage .emptyGroupMark i::before,
+.premiumDarkMode .communityGroupsPage .emptyGroupMark i::after {
+  background: #172731;
+}
+
+@media (max-width: 760px) {
+  body.signovaCommunityGroupsPage .communityGroupsPage,
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    position: relative !important;
+    inset: auto !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupsPage {
+    height: 100% !important;
+    overflow-y: auto !important;
+  }
+
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    min-height: 100% !important;
+  }
+
+  body.signovaCommunityGroupsPage .cleanGroupWorkspace {
+    height: calc(var(--snv-app-height, 100dvh) - 250px) !important;
+    min-height: 430px !important;
+    border: 1px solid rgba(126, 160, 196, 0.24) !important;
+    border-radius: 16px !important;
+  }
+}
+
+/* FINAL community workspace sizing and composer authority. */
+@media (min-width: 761px) {
+  body.signovaCommunityGroupsPage .communityGroupsLayout {
+    grid-template-columns: 330px minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding: 0 !important;
+  }
+
+  body.signovaCommunityGroupsPage .cleanGroupWorkspace {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(126, 160, 196, 0.2) !important;
+    border-radius: 0 !important;
+  }
+}
+
+body.signovaCommunityGroupsPage .cleanGroupComposer {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 62px !important;
+  display: grid !important;
+  grid-template-columns: 36px 36px minmax(0, 1fr) auto 58px !important;
+  grid-template-rows: 42px !important;
+  align-items: center !important;
+  gap: 7px !important;
+  padding: 9px 12px calc(9px + env(safe-area-inset-bottom)) !important;
+}
+
+body.signovaCommunityGroupsPage .cleanGroupComposer > :is(.groupComposerAttach, .groupComposerEmoji, .groupComposerVoice) {
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  align-self: center !important;
+  justify-self: center !important;
+}
+
+body.signovaCommunityGroupsPage .cleanGroupComposer > input {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  align-self: center !important;
+  justify-self: stretch !important;
+}
+
+body.signovaCommunityGroupsPage .cleanGroupComposer > .postButton {
+  width: 58px !important;
+  min-width: 58px !important;
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  align-self: center !important;
+  justify-self: end !important;
+}
+
+body.signovaCommunityGroupsPage .cleanGroupComposer > .activeGroupVoice {
+  width: auto !important;
+  min-width: 62px !important;
+  padding: 0 7px !important;
+}
+
+@media (max-width: 760px) {
+  body.signovaCommunityGroupsPage .cleanGroupComposer {
+    grid-template-columns: 32px 32px minmax(0, 1fr) 32px !important;
+    grid-template-rows: 40px !important;
+    gap: 5px !important;
+    padding-inline: 7px !important;
+  }
+
+  body.signovaCommunityGroupsPage .cleanGroupComposer > :is(.groupComposerAttach, .groupComposerEmoji, .groupComposerVoice) {
+    width: 32px !important;
+    min-width: 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+  }
+
+  body.signovaCommunityGroupsPage .cleanGroupComposer > input {
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+}
+
+/* Minimal group navbar; details live in the profile window. */
+body.signovaCommunityGroupsPage .groupFocusHero {
+  min-height: 82px !important;
+  padding-block: 10px !important;
+}
+
+body.signovaCommunityGroupsPage .groupFocusHero > div:nth-child(2) {
+  align-content: center;
+}
+
+body.signovaCommunityGroupsPage .groupActivityList article.memberGroupUpdate {
+  width: fit-content !important;
+  min-width: 180px;
+  max-width: min(72%, 680px) !important;
+  justify-self: end;
+}
+
+body.signovaCommunityGroupsPage .groupActivityList article.memberGroupUpdate > span {
+  width: fit-content;
+  max-width: 100%;
+}
+
+body.signovaCommunityGroupsPage .groupActivityList article.memberGroupUpdate p {
+  width: fit-content;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.communityGroupsPage .groupProfileDetails {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px 10px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(126, 160, 196, 0.16);
+  border-bottom: 1px solid rgba(126, 160, 196, 0.16);
+}
+
+.communityGroupsPage .groupProfileDetails > span {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 2px;
+}
+
+.communityGroupsPage .groupProfileDetails small {
+  color: #7890a4;
+  font-size: 0.56rem;
+}
+
+.communityGroupsPage .groupProfileDetails strong {
+  overflow: hidden;
+  color: #294967;
+  font-size: 0.61rem;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.premiumDarkMode .communityGroupsPage .groupProfileDetails strong {
+  color: #dcecf3;
+}
+
+@media (max-width: 760px) {
+  body.signovaCommunityGroupsPage .groupFocusHero {
+    min-height: 118px !important;
+  }
+
+  body.signovaCommunityGroupsPage .groupActivityList article.memberGroupUpdate {
+    max-width: 88% !important;
+  }
+}
+
+/* Distinct Community Group conversation actions vs group settings. */
+.communityGroupsPage .groupChatActionsTrigger {
+  width: 40px !important;
+  min-width: 40px !important;
+  letter-spacing: 1px;
+  font-size: 0.72rem !important;
+}
+
+.communityGroupsPage .communityGroupTool-group-chat-actions {
+  top: 62px !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 12px !important;
+  width: min(420px, calc(100% - 24px));
+  border-color: rgba(23, 111, 194, 0.26) !important;
+}
+
+.communityGroupsPage .groupChatActionGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.communityGroupsPage .groupChatActionGrid button {
+  min-height: 42px !important;
+  border-radius: 10px !important;
+  white-space: normal;
+}
+
+.communityGroupsPage .groupHeroActions .groupMoreAction {
+  border-radius: 11px !important;
+  font-size: 1rem !important;
+}
+
+@media (max-width: 760px) {
+  .communityGroupsPage .communityGroupTool-group-chat-actions {
+    position: fixed !important;
+    top: auto !important;
+    right: 8px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    left: 8px !important;
+    width: auto !important;
+    max-height: 60dvh;
+    overflow-y: auto;
+  }
+}

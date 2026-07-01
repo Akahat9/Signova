@@ -1,0 +1,20 @@
+{
+  "name": "signova-backend",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Signova Node.js API gateway for auth, AI predictions, signs, and sentence translation.",
+  "main": "Index.js",
+  "scripts": {
+    "start": "node Index.js",
+    "check": "node --check Index.js && node --check Routes/translate.js && node --check services/aiClient.js && node --check services/communityActions.js && node --check services/communityStats.js && node --check services/firebaseAdmin.js && node --check services/identityResolver.js && node --check services/mongoClient.js && node --check services/platformData.js && node --check services/requestSecurity.js && node --check scripts/migratePrivateIdentities.js",
+    "migrate:identities": "node scripts/migratePrivateIdentities.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "firebase-admin": "^13.10.0",
+    "mongodb": "^7.3.0"
+  }
+}

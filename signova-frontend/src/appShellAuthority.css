@@ -1,0 +1,1872 @@
+/*
+ * App-shell authority.
+ * One viewport owner (`.messengerShell`) and one route scroll owner
+ * (`.conversationPane`). Route content must not create another page scrollbar.
+ */
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.messengerShell {
+  width: 100%;
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+.messengerShell > .appRail,
+.messengerShell > .chatSidebar,
+.messengerShell > .conversationPane {
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+}
+
+.messengerShell > .appRail,
+.messengerShell > .chatSidebar {
+  overflow: hidden;
+}
+
+.messengerShell > .conversationPane {
+  height: 100%;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  -webkit-overflow-scrolling: touch;
+}
+
+.messengerShell.chatMode > .conversationPane {
+  overflow: hidden !important;
+}
+
+.messengerShell.chatMode .messageThread {
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.messengerShell.libraryMode :where(.libraryDashboard, .libraryContentGrid, .libraryMainShelf),
+.messengerShell.learnMode :where(.learnDashboard, .gestureLearnLayout),
+.messengerShell.progressMode :where(.progressDashboard),
+.messengerShell.settingsMode :where(.settingsPage, .settingsWorkspace) {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/*
+ * Progress is rendered inside signToolsPane, not conversationPane.
+ * The shell stays fixed and this is the page's only vertical scroll owner.
+ */
+html.signovaProgressPage,
+html.signovaProgressPage body,
+body.signovaProgressPage,
+body.signovaProgressPage #root {
+  width: 100% !important;
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  overscroll-behavior: none !important;
+}
+
+html body.signovaProgressPage .messengerShell.progressMode {
+  width: 100% !important;
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow: hidden !important;
+}
+
+html body.signovaProgressPage .messengerShell.progressMode > .signToolsPane {
+  grid-column: 2 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  padding-bottom: max(24px, env(safe-area-inset-bottom, 0px)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain !important;
+  scrollbar-gutter: auto;
+  scrollbar-width: none !important;
+  scroll-behavior: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+html body.signovaProgressPage .messengerShell.progressMode > .signToolsPane::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.progressScrollRail {
+  position: fixed;
+  z-index: 90;
+  top: 8px;
+  right: 2px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transition: width 140ms ease, opacity 140ms ease;
+  touch-action: none;
+}
+
+.visibleProgressScrollRail {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.progressScrollRail:hover,
+.progressScrollRail:has(.progressScrollThumb:active) {
+  width: 5px;
+}
+
+.progressScrollThumb {
+  display: block;
+  width: 100%;
+  min-height: 34px;
+  border-radius: inherit;
+  background: rgba(45, 174, 203, 0.76);
+  box-shadow: none;
+  cursor: grab;
+  will-change: transform;
+}
+
+.progressScrollThumb:hover {
+  background: rgba(17, 138, 178, 0.94);
+}
+
+.progressScrollThumb:active {
+  cursor: grabbing;
+}
+
+.premiumDarkMode .progressScrollRail {
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.premiumDarkMode .progressScrollThumb {
+  background: rgba(56, 189, 248, 0.7);
+}
+
+html body.signovaProgressPage .messengerShell.progressMode .progressDashboard {
+  width: min(100%, 1480px);
+  min-height: min-content !important;
+  margin-inline: auto;
+  padding-bottom: 28px !important;
+}
+
+/*
+ * Community filters are a bounded horizontal control row. Resetting scrollLeft
+ * on page entry prevents the first tab from reopening partially clipped.
+ */
+html body.signovaCommunityFeedPage .communityFeedTabs {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center;
+  gap: 8px !important;
+  margin: 0 !important;
+  padding: 5px 6px !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scroll-padding-inline: 6px;
+  scroll-snap-type: x proximity;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+html body.signovaCommunityFeedPage .communityFeedTabs::-webkit-scrollbar {
+  display: none;
+}
+
+html body.signovaCommunityFeedPage .communityFeedTabs > button {
+  flex: 0 0 auto !important;
+  min-width: max-content;
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  border: 1px solid rgba(148, 163, 184, 0.34) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.82) !important;
+  color: #52657c !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  line-height: 1 !important;
+  scroll-snap-align: start;
+  transform: none !important;
+}
+
+html body.signovaCommunityFeedPage .communityFeedTabs > button:hover {
+  border-color: rgba(14, 165, 233, 0.44) !important;
+  background: #f3faff !important;
+  color: #155e9b !important;
+}
+
+html body.signovaCommunityFeedPage .communityFeedTabs > button.activeFeedTab {
+  border-color: #118ab2 !important;
+  background: #118ab2 !important;
+  color: #fff !important;
+}
+
+.premiumDarkMode .communityFeedTabs > button {
+  border-color: rgba(148, 163, 184, 0.2) !important;
+  background: #15212b !important;
+  color: #b7c4d2 !important;
+}
+
+.premiumDarkMode .communityFeedTabs > button.activeFeedTab {
+  border-color: #38bdf8 !important;
+  background: #0e7490 !important;
+  color: #f8fbff !important;
+}
+
+/* Minimal Create Community Sign workspace. */
+html.signovaCreateSignPage,
+html.signovaCreateSignPage body,
+body.signovaCreateSignPage,
+body.signovaCreateSignPage #root {
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow: hidden !important;
+}
+
+html body.signovaCreateSignPage .messengerShell.communityMode {
+  height: var(--snv-app-height, 100dvh) !important;
+  min-height: 0 !important;
+  max-height: var(--snv-app-height, 100dvh) !important;
+  overflow: hidden !important;
+}
+
+html body.signovaCreateSignPage .messengerShell.communityMode > .signToolsPane {
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.42) transparent;
+}
+
+html body.signovaCreateSignPage .communityCreateSignPage {
+  width: 100% !important;
+  min-height: 100% !important;
+  padding: 0 18px !important;
+  background: #f4f7fa !important;
+}
+
+html body.signovaCreateSignPage .createSignWorkspace {
+  width: min(100%, 1180px);
+  min-height: 100%;
+  margin: 0 auto;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0, 1fr) auto !important;
+  gap: 16px !important;
+  overflow: visible !important;
+}
+
+html body.signovaCreateSignPage .createSignTopBar {
+  min-height: 58px;
+  padding: 4px 2px 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+html body.signovaCreateSignPage .createSignTopBar strong {
+  color: #10213a;
+  font-size: clamp(22px, 2vw, 30px) !important;
+  letter-spacing: -0.025em;
+}
+
+html body.signovaCreateSignPage .createSignTopBar small {
+  color: #6b7d91;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+}
+
+html body.signovaCreateSignPage .createSignTopBar > div:last-child button {
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  font-size: 20px !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps {
+  display: flex !important;
+  gap: 4px !important;
+  padding: 0 0 10px !important;
+  border: 0 !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps button {
+  flex: 1 1 0;
+  min-height: 48px;
+  padding: 6px 8px !important;
+  border-radius: 10px !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps button b {
+  width: 24px !important;
+  height: 24px !important;
+  font-size: 11px !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps button strong {
+  font-size: 12px !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps button small {
+  color: #8291a3;
+  font-size: 10px !important;
+  font-weight: 500;
+}
+
+html body.signovaCreateSignPage .createSignSteps .activeCreateSignStep {
+  background: #edf7fb !important;
+}
+
+html body.signovaCreateSignPage .createSignSteps .activeCreateSignStep::after {
+  display: none !important;
+}
+
+html body.signovaCreateSignPage .createSignContent {
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 280px !important;
+  align-items: start;
+  gap: 18px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+html body.signovaCreateSignPage :where(
+  .createSignFormCard,
+  .createSignPreviewCard,
+  .createSignProgressCard,
+  .createSignSummaryCard,
+  .createSignPublishStatus
+) {
+  border: 1px solid #e0e7ef !important;
+  border-radius: 14px !important;
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+html body.signovaCreateSignPage .createSignFormCard {
+  padding: 20px !important;
+}
+
+html body.signovaCreateSignPage .createSignFormCard > header strong {
+  color: #16263b;
+  font-size: 16px;
+}
+
+html body.signovaCreateSignPage .createSignFormGrid {
+  gap: 16px !important;
+}
+
+html body.signovaCreateSignPage .createSignFormGrid :where(label > span, legend) {
+  color: #26384d !important;
+  font-size: 12px !important;
+}
+
+html body.signovaCreateSignPage .createSignFormGrid :where(label > small, fieldset > small) {
+  color: #7b8b9d !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+}
+
+html body.signovaCreateSignPage .createSignFormGrid :where(input, select, textarea) {
+  min-height: 44px !important;
+  border-color: #d7e0ea !important;
+  border-radius: 10px !important;
+  padding-inline: 12px !important;
+  background: #fbfcfe !important;
+  color: #17283d !important;
+  font-size: 13px !important;
+}
+
+html body.signovaCreateSignPage .createSignFormGrid textarea {
+  min-height: 92px !important;
+  padding-block: 11px !important;
+}
+
+html body.signovaCreateSignPage .createSignSegments {
+  border-color: #dce4ed !important;
+  border-radius: 10px !important;
+  background: #f7f9fc !important;
+}
+
+html body.signovaCreateSignPage .createSignSegments button {
+  min-height: 36px !important;
+  font-size: 11px !important;
+}
+
+html body.signovaCreateSignPage .createSignPreviewRail {
+  position: sticky;
+  top: 12px;
+  display: grid;
+  gap: 10px;
+}
+
+html body.signovaCreateSignPage .createSignPreviewCard,
+html body.signovaCreateSignPage :where(.createSignProgressCard, .createSignSummaryCard, .createSignPublishStatus) {
+  padding: 14px !important;
+}
+
+html body.signovaCreateSignPage .createSignVideoPreview {
+  border: 1px solid #e1e8f0;
+  background: #f4f7fa !important;
+}
+
+html body.signovaCreateSignPage .emptyCreateSignPreview {
+  display: grid;
+  min-height: 170px;
+  place-content: center;
+  justify-items: center;
+  gap: 6px;
+  color: #718297;
+  text-align: center;
+}
+
+html body.signovaCreateSignPage .emptyCreateSignPreview > span {
+  font-size: 26px;
+  font-weight: 300;
+}
+
+html body.signovaCreateSignPage .emptyCreateSignPreview > strong {
+  color: #33485f;
+  font-size: 12px;
+}
+
+html body.signovaCreateSignPage .emptyCreateSignPreview > small {
+  font-size: 10px;
+}
+
+html body.signovaCreateSignPage .createSignDropZone {
+  min-height: 150px !important;
+  border: 1px dashed #a9b9ca !important;
+  border-radius: 12px !important;
+  background: #fafcff !important;
+}
+
+html body.signovaCreateSignPage .createSignActionBar {
+  position: sticky;
+  z-index: 30;
+  bottom: 0;
+  display: flex;
+  gap: 8px !important;
+  padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px)) !important;
+  border: 0 !important;
+  border-top: 1px solid #e2e8f0 !important;
+  border-radius: 0 !important;
+  background: rgba(247, 249, 252, 0.96) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px);
+}
+
+html body.signovaCreateSignPage .createSignActionBar button {
+  min-height: 40px !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  font-size: 12px !important;
+}
+
+html body.signovaCreateSignPage .createSignActionBar button:first-child {
+  margin-right: 0 !important;
+}
+
+html body.signovaCreateSignPage .createSignActionBar button:nth-last-child(1) {
+  margin-left: auto;
+}
+
+body.signovaCreateSignPage.signovaPremiumDarkPage .communityCreateSignPage,
+body.signovaCreateSignPage .premiumDarkMode .communityCreateSignPage {
+  background: #0b1117 !important;
+}
+
+body.signovaCreateSignPage .premiumDarkMode :where(
+  .createSignFormCard,
+  .createSignPreviewCard,
+  .createSignProgressCard,
+  .createSignSummaryCard,
+  .createSignPublishStatus
+) {
+  border-color: #25323d !important;
+  background: #111a22 !important;
+  color: #edf4fa !important;
+}
+
+body.signovaCreateSignPage .premiumDarkMode .createSignActionBar {
+  border-color: #25323d !important;
+  background: rgba(11, 17, 23, 0.96) !important;
+}
+
+html body.signovaCreateSignPage .minimalSignCreator {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 18px 0 0;
+  color: #17283d;
+}
+
+.minimalSignCreatorHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0 18px;
+  border-bottom: 1px solid #dde5ed;
+}
+
+.minimalSignCreatorHeader > div {
+  display: grid;
+  gap: 3px;
+}
+
+.minimalSignCreatorHeader span {
+  color: #118ab2;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.minimalSignCreatorHeader strong {
+  font-size: clamp(24px, 3vw, 34px);
+  letter-spacing: -0.035em;
+}
+
+.minimalSignCreatorHeader small {
+  color: #718196;
+  font-size: 12px;
+}
+
+.minimalSignCreatorHeader > button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #d8e0e9;
+  border-radius: 12px;
+  background: transparent;
+  color: #52657a;
+  box-shadow: none;
+  font-size: 20px;
+}
+
+.minimalSignCreatorLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 28px;
+  padding: 24px 0;
+}
+
+.communitySignPipeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 18px 0 4px;
+  padding: 0 10px;
+}
+
+.communitySignPipelineTrack {
+  position: absolute;
+  top: 17px;
+  right: 12.5%;
+  left: 12.5%;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce5ed;
+}
+
+.communitySignPipelineTrack i {
+  display: block;
+  width: var(--pipeline-progress);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #1479dc, #15b9c8);
+  transition: width 420ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.communitySignPipelineStage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #6e7f91;
+  box-shadow: none;
+}
+
+.communitySignPipelineStage > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 3px solid #f4f7fa;
+  border-radius: 50%;
+  background: #dce5ed;
+  color: #6d7f91;
+  font-size: 11px;
+  font-weight: 850;
+  transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease;
+}
+
+.communitySignPipelineStage strong {
+  color: #45596f;
+  font-size: 11px;
+}
+
+.communitySignPipelineStage small {
+  color: #8a98a7;
+  font-size: 9px;
+}
+
+.communitySignPipelineStage.active > span {
+  background: #138fba;
+  color: #fff;
+  box-shadow: 0 0 0 5px rgba(19, 143, 186, 0.12);
+  animation: signPipelineLive 1.8s ease-in-out infinite;
+}
+
+.communitySignPipelineStage.complete > span {
+  background: #0eaa86;
+  color: #fff;
+}
+
+.communitySignPipelineStage.active strong,
+.communitySignPipelineStage.complete strong {
+  color: #173049;
+}
+
+.communitySignPipelineStage:disabled {
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+@keyframes signPipelineLive {
+  50% { transform: scale(1.06); box-shadow: 0 0 0 8px rgba(19, 143, 186, 0.06); }
+}
+
+.minimalSignCreatorForm {
+  display: grid;
+  gap: 12px;
+}
+
+.minimalSignSection {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 20px;
+  border: 1px solid #dce5ed;
+  border-radius: 16px;
+  background: #fff;
+  transition: opacity 220ms ease, border-color 220ms ease;
+}
+
+.minimalSignSection:first-child {
+  padding-top: 20px;
+}
+
+.pipelineSignSection.activePipelineSection {
+  border-color: #8dd7e6;
+  box-shadow: 0 10px 30px rgba(29, 84, 112, 0.07);
+}
+
+.pipelineSignSection.lockedPipelineSection {
+  max-height: 76px;
+  overflow: hidden;
+  opacity: 0.58;
+  background: #f7f9fb;
+}
+
+.pipelineSignSection.lockedPipelineSection > :not(header) {
+  visibility: hidden;
+}
+
+.pipelineSignSection.completePipelineSection {
+  opacity: 0.72;
+  background: #f9fbfc;
+}
+
+.pipelineContinueButton {
+  justify-self: end;
+  min-height: 40px;
+  border: 0;
+  border-radius: 10px;
+  padding: 0 15px;
+  background: #168fba;
+  color: #fff;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.pipelineContinueButton span {
+  margin-left: 7px;
+}
+
+.minimalSignSection > header {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+
+.minimalSignSection > header > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 9px;
+  background: #e9f7fb;
+  color: #087c9f;
+  font-size: 10px;
+  font-weight: 850;
+}
+
+.minimalSignSection > header > div {
+  display: grid;
+  gap: 2px;
+}
+
+.minimalSignSection > header strong {
+  color: #1c3047;
+  font-size: 16px;
+}
+
+.minimalSignSection > header small {
+  color: #7a8a9c;
+  font-size: 11px;
+}
+
+.minimalSignFieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.minimalSignFieldGrid label,
+.minimalSignWideField {
+  display: grid;
+  gap: 6px;
+}
+
+.minimalSignFieldGrid label > span,
+.minimalSignWideField > span {
+  color: #354a61;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.minimalSignFieldGrid :where(input, select),
+.minimalSignWideField textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid #d8e1ea;
+  border-radius: 10px;
+  padding: 0 12px;
+  background: #fff;
+  color: #17283d;
+  outline: none;
+  font: inherit;
+  font-size: 13px;
+}
+
+.minimalSignWideField textarea {
+  min-height: 96px;
+  padding-block: 11px;
+  resize: vertical;
+}
+
+.minimalSignFieldGrid :where(input, select):focus,
+.minimalSignWideField textarea:focus {
+  border-color: #2aa6c6;
+  box-shadow: 0 0 0 3px rgba(42, 166, 198, 0.11);
+}
+
+.minimalSignWideField > small {
+  justify-self: end;
+  color: #8795a5;
+  font-size: 10px;
+}
+
+.minimalSignChoiceRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.minimalSignChoiceRow button {
+  min-height: 34px;
+  border: 1px solid #d7e0e9;
+  border-radius: 10px;
+  padding: 0 13px;
+  background: transparent;
+  color: #5e7084;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 750;
+  text-transform: capitalize;
+}
+
+.minimalSignChoiceRow button.activeMinimalChoice {
+  border-color: #118ab2;
+  background: #eaf8fb;
+  color: #087c9f;
+}
+
+.minimalMediaActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.minimalMediaActions label {
+  cursor: pointer;
+}
+
+.minimalMediaActions input {
+  display: none;
+}
+
+.minimalMediaActions label > span,
+.minimalMediaActions > button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 38px;
+  border: 1px solid #d5dfe9;
+  border-radius: 10px;
+  padding: 0 13px;
+  background: #fff;
+  color: #31516e;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.minimalMediaActions > button {
+  gap: 6px;
+  box-shadow: none;
+}
+
+.minimalMediaActions > small {
+  color: #8593a2;
+  font-size: 10px;
+}
+
+.communitySignCapture {
+  overflow: hidden;
+  border: 1px solid #d7e2eb;
+  border-radius: 14px;
+  background: #f4f8fb;
+}
+
+.communityCaptureError {
+  margin: 0;
+  border: 1px solid #efc4c9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff5f6;
+  color: #a1263b;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.communitySignCapture > header,
+.communitySignCapture > footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+}
+
+.communitySignCapture > header > span {
+  display: grid;
+  gap: 2px;
+}
+
+.communitySignCapture > header strong {
+  color: #20364c;
+  font-size: 12px;
+}
+
+.communitySignCapture > header small,
+.communitySignCapture > footer small {
+  color: #728398;
+  font-size: 9px;
+}
+
+.communitySignCapture > header > button {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 9px;
+  background: #e7eef4;
+  color: #53687c;
+  box-shadow: none;
+}
+
+.communitySignCaptureView {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #14212c;
+}
+
+.communitySignCaptureView video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.communityCaptureGuide {
+  position: absolute;
+  inset: 10% 18%;
+  border: 1px dashed rgba(255, 255, 255, 0.72);
+  border-radius: 42% 42% 18% 18%;
+  pointer-events: none;
+}
+
+.communityCaptureTimer {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(174, 24, 45, 0.9);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+.communitySignCapture > footer button {
+  min-height: 36px;
+  border: 0;
+  border-radius: 9px;
+  padding: 0 13px;
+  background: #148fb9;
+  color: #fff;
+  box-shadow: none;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.communitySignCapture > footer button.stopCaptureButton {
+  background: #b4233d;
+}
+
+.communityMediaQuality {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid #dce5ed;
+  border-radius: 12px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.communityMediaQuality > span {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 8px;
+  background: #e5edf4;
+  color: #526b82;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.communityMediaQuality > div {
+  display: grid;
+  gap: 5px;
+}
+
+.communityMediaQuality strong {
+  color: #2b4055;
+  font-size: 11px;
+}
+
+.communityMediaQuality small,
+.communityMediaQuality li {
+  color: #728398;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+.communityMediaQuality ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.communityMediaQuality li.pass {
+  color: #087f5b;
+}
+
+.communityMediaQuality li.fail {
+  color: #b4233d;
+}
+
+.communityMediaQuality.ready {
+  border-color: #b8e2d5;
+  background: #f3fbf8;
+}
+
+.communityMediaQuality.ready > span {
+  background: #d8f4e9;
+  color: #087f5b;
+}
+
+.communityMediaQuality.review {
+  border-color: #f0d6a2;
+  background: #fffaf0;
+}
+
+.communityMediaQuality.review > span {
+  background: #f8e9c8;
+  color: #946200;
+}
+
+.minimalMediaStrip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 100px));
+  gap: 8px;
+}
+
+.minimalMediaStrip button {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: 10px;
+  padding: 0;
+  background: #edf2f6;
+}
+
+.minimalMediaStrip button.activeMinimalMedia {
+  border-color: #118ab2;
+}
+
+.minimalMediaStrip img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minimalConsentRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: #32485f;
+}
+
+.minimalConsentRow input {
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  accent-color: #118ab2;
+}
+
+.minimalConsentRow > span {
+  display: grid;
+  gap: 2px;
+}
+
+.minimalConsentRow strong {
+  font-size: 12px;
+}
+
+.minimalConsentRow small {
+  color: #7e8d9e;
+  font-size: 10px;
+}
+
+.minimalSignPreview {
+  position: sticky;
+  top: 16px;
+  overflow: hidden;
+  border: 1px solid #dce4ec;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 12px 34px rgba(29, 57, 82, 0.07);
+}
+
+.minimalSignPreviewMedia {
+  aspect-ratio: 4 / 3;
+  background: #f0f4f7;
+}
+
+.minimalSignPreviewMedia video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.emptyMinimalSignPreview {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 7px;
+  color: #8290a0;
+}
+
+.emptyMinimalSignPreview span {
+  font-size: 30px;
+  font-weight: 300;
+}
+
+.emptyMinimalSignPreview strong {
+  font-size: 11px;
+}
+
+.minimalSignPreviewCopy {
+  display: grid;
+  gap: 5px;
+  padding: 16px;
+}
+
+.minimalSignPreviewCopy span {
+  color: #118ab2;
+  font-size: 10px;
+  font-weight: 750;
+  text-transform: capitalize;
+}
+
+.minimalSignPreviewCopy strong {
+  color: #1d3046;
+  font-size: 18px;
+}
+
+.minimalSignPreviewCopy p {
+  margin: 0;
+  color: #6c7d90;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.minimalSignPreview dl {
+  margin: 0;
+  padding: 0 16px 16px;
+}
+
+.minimalSignPreview dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px solid #edf1f5;
+  padding: 9px 0 0;
+}
+
+.minimalSignPreview dt,
+.minimalSignPreview dd {
+  margin: 0;
+  color: #718195;
+  font-size: 10px;
+}
+
+.minimalSignPreview dd {
+  color: #324a62;
+  font-weight: 700;
+}
+
+.minimalSignCreatorActions {
+  position: sticky;
+  z-index: 20;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid #dde5ed;
+  background: rgba(247, 249, 252, 0.96);
+  backdrop-filter: blur(12px);
+}
+
+.minimalSignCreatorActions > span {
+  margin-right: auto;
+  color: #7d8c9d;
+  font-size: 10px;
+}
+
+.minimalSignCreatorActions button {
+  min-height: 40px;
+  border: 1px solid #d5dee8;
+  border-radius: 10px;
+  padding: 0 14px;
+  background: #fff;
+  color: #40566d;
+  box-shadow: none;
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.minimalSignCreatorActions button[type="submit"] {
+  border-color: #118ab2;
+  background: #118ab2;
+  color: #fff;
+}
+
+.minimalSignCreatorActions button:disabled {
+  opacity: 0.42;
+}
+
+.premiumDarkMode .minimalSignCreator {
+  color: #eef5fa;
+}
+
+body.signovaCreateSignPage .premiumDarkMode .communityCreateSignPage {
+  background: #0b1117 !important;
+}
+
+.premiumDarkMode .communitySignPipelineTrack,
+.premiumDarkMode .communitySignPipelineStage > span {
+  background: #273540;
+}
+
+.premiumDarkMode .communitySignPipelineStage > span {
+  border-color: #0b1117;
+}
+
+.premiumDarkMode .pipelineSignSection {
+  border-color: #263540;
+  background: #111a22;
+}
+
+.premiumDarkMode .pipelineSignSection.lockedPipelineSection,
+.premiumDarkMode .pipelineSignSection.completePipelineSection {
+  background: #0f171e;
+}
+
+.premiumDarkMode :where(.minimalSignCreatorHeader, .minimalSignSection, .minimalSignCreatorActions) {
+  border-color: #25323d;
+}
+
+.premiumDarkMode :where(.minimalSignSection > header strong, .minimalSignPreviewCopy strong) {
+  color: #eef5fa;
+}
+
+.premiumDarkMode :where(
+  .minimalSignFieldGrid input,
+  .minimalSignFieldGrid select,
+  .minimalSignWideField textarea,
+  .minimalMediaActions label > span,
+  .minimalMediaActions > button,
+  .minimalSignPreview
+) {
+  border-color: #293844;
+  background: #111a22;
+  color: #e7eff5;
+}
+
+.premiumDarkMode :where(.communitySignCapture, .communityMediaQuality) {
+  border-color: #293844;
+  background: #111a22;
+}
+
+.premiumDarkMode :where(.communitySignCapture > header strong, .communityMediaQuality strong) {
+  color: #edf4fa;
+}
+
+.premiumDarkMode .communitySignCapture > header > button {
+  background: #22303b;
+  color: #dce7ef;
+}
+
+.premiumDarkMode .communityCaptureError {
+  border-color: #64303a;
+  background: #2a151a;
+  color: #ffb7c1;
+}
+
+.premiumDarkMode .communityMediaQuality.ready {
+  border-color: #1f5c4b;
+  background: #10251f;
+}
+
+.premiumDarkMode .communityMediaQuality.review {
+  border-color: #604a23;
+  background: #261f12;
+}
+
+.premiumDarkMode .minimalSignCreatorActions {
+  background: rgba(11, 17, 23, 0.96);
+}
+
+@media (max-width: 760px) {
+  .messengerShell {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .messengerShell > .conversationPane {
+    scrollbar-gutter: auto;
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0));
+  }
+
+  .messengerShell.chatMode.mobileChatRoomOpen > .conversationPane {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .messengerShell.chatMode.mobileChatRoomOpen > .appRail {
+    display: none !important;
+  }
+
+  html body.signovaProgressPage .messengerShell.progressMode > .signToolsPane {
+    grid-column: 1 !important;
+    padding-bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+    scrollbar-gutter: auto;
+  }
+
+  .progressScrollRail {
+    top: 6px;
+    right: 1px;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html body.signovaCommunityFeedPage .communityFeedTabs {
+    gap: 6px !important;
+    padding-inline: 4px 12px !important;
+  }
+
+  html body.signovaCommunityFeedPage .communityFeedTabs > button {
+    min-height: 32px !important;
+    padding-inline: 12px !important;
+  }
+
+  html body.signovaCreateSignPage .communityCreateSignPage {
+    padding: 10px 10px 84px !important;
+  }
+
+  html body.signovaCreateSignPage .createSignWorkspace {
+    gap: 12px !important;
+  }
+
+  html body.signovaCreateSignPage .createSignTopBar {
+    min-height: 50px;
+  }
+
+  html body.signovaCreateSignPage .createSignTopBar small,
+  html body.signovaCreateSignPage .createSignSteps button small {
+    display: none;
+  }
+
+  html body.signovaCreateSignPage .createSignSteps {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  html body.signovaCreateSignPage .createSignSteps::-webkit-scrollbar {
+    display: none;
+  }
+
+  html body.signovaCreateSignPage .createSignSteps button {
+    min-width: 96px;
+  }
+
+  html body.signovaCreateSignPage .createSignContent {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body.signovaCreateSignPage .createSignPreviewRail {
+    position: static;
+    grid-row: 1;
+  }
+
+  html body.signovaCreateSignPage .createSignPreviewCard {
+    display: grid;
+    grid-template-columns: minmax(0, 150px) minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  html body.signovaCreateSignPage .createSignPreviewCard header {
+    align-self: center;
+  }
+
+  html body.signovaCreateSignPage .emptyCreateSignPreview {
+    min-height: 100px;
+  }
+
+  html body.signovaCreateSignPage .createSignFormGrid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  html body.signovaCreateSignPage .createSignFormCard {
+    padding: 14px !important;
+  }
+
+  html body.signovaCreateSignPage .createSignActionBar {
+    flex-wrap: wrap;
+    bottom: 72px;
+  }
+
+  .minimalSignCreatorLayout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    padding-top: 14px;
+  }
+
+  .communitySignPipeline {
+    padding-inline: 0;
+  }
+
+  .communitySignPipelineStage strong {
+    font-size: 10px;
+  }
+
+  .communitySignPipelineStage small {
+    display: none;
+  }
+
+  .communitySignPipelineTrack {
+    right: 12%;
+    left: 12%;
+  }
+
+  .minimalSignPreview {
+    position: static;
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+  }
+
+  .minimalSignPreview dl {
+    display: none;
+  }
+
+  .minimalSignFieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .minimalSignSection {
+    padding-block: 18px;
+  }
+
+  .minimalSignCreatorActions {
+    bottom: 72px;
+    flex-wrap: wrap;
+  }
+
+  .minimalSignCreatorActions > span {
+    width: 100%;
+  }
+
+  .minimalSignCreatorActions button {
+    flex: 1 1 auto;
+  }
+}
+
+/* Community Sign page audit: one opaque canvas, one scroll owner, no card bleed. */
+html body.signovaCreateSignPage .messengerShell.communityMode > .signToolsPane {
+  background: #f4f7fa !important;
+  scrollbar-gutter: auto !important;
+}
+
+html body.signovaCreateSignPage .communityCreateSignPage {
+  display: flow-root !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #f4f7fa !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+html body.signovaCreateSignPage .minimalSignCreator {
+  min-height: 100%;
+  padding-bottom: 0;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorForm {
+  min-width: 0;
+  padding-bottom: 12px;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection {
+  box-sizing: border-box;
+  min-width: 0;
+  opacity: 1 !important;
+  isolation: isolate;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection.lockedPipelineSection {
+  height: 78px;
+  min-height: 78px;
+  max-height: 78px;
+  border-color: #dfe7ee;
+  background: #f8fafc;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection.completePipelineSection {
+  height: 78px;
+  min-height: 78px;
+  max-height: 78px;
+  overflow: hidden;
+  border-color: #d9e5e8;
+  background: #f7fbfa;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection.completePipelineSection > :not(header) {
+  visibility: hidden;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection.lockedPipelineSection > header,
+html body.signovaCreateSignPage .pipelineSignSection.completePipelineSection > header {
+  opacity: 0.68;
+}
+
+html body.signovaCreateSignPage .pipelineSignSection.activePipelineSection {
+  position: relative;
+  z-index: 1;
+  background: #fff;
+}
+
+html body.signovaCreateSignPage .minimalSignPreview {
+  z-index: 2;
+  background: #fff;
+  opacity: 1;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorActions {
+  z-index: 30;
+  width: 100%;
+  margin-top: 0;
+  background: #f4f7fa;
+  backdrop-filter: none;
+}
+
+html body.signovaCreateSignPage :where(
+  .minimalSignFieldGrid input,
+  .minimalSignFieldGrid select,
+  .minimalSignWideField textarea,
+  .minimalSignChoiceRow button,
+  .pipelineContinueButton,
+  .minimalSignCreatorActions button
+):focus-visible {
+  outline: 3px solid rgba(19, 143, 186, 0.24);
+  outline-offset: 2px;
+}
+
+body.signovaCreateSignPage.signovaPremiumDarkPage .messengerShell.communityMode > .signToolsPane,
+body.signovaCreateSignPage.signovaPremiumDarkPage .communityCreateSignPage,
+body.signovaCreateSignPage .premiumDarkMode .communityCreateSignPage,
+body.signovaCreateSignPage .premiumDarkMode .minimalSignCreatorActions {
+  background: #0b1117 !important;
+}
+
+body.signovaCreateSignPage .premiumDarkMode .pipelineSignSection.lockedPipelineSection,
+body.signovaCreateSignPage .premiumDarkMode .pipelineSignSection.completePipelineSection {
+  border-color: #25333e;
+  background: #0f171e;
+}
+
+body.signovaCreateSignPage .premiumDarkMode .pipelineSignSection.activePipelineSection,
+body.signovaCreateSignPage .premiumDarkMode .minimalSignPreview {
+  background: #111a22;
+}
+
+@media (max-width: 760px) {
+  html body.signovaCreateSignPage .communityCreateSignPage {
+    padding: 0 12px calc(84px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreator {
+    padding-top: 12px;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreatorHeader {
+    padding-bottom: 12px;
+  }
+
+  html body.signovaCreateSignPage .communitySignPipeline {
+    margin-top: 14px;
+  }
+
+  html body.signovaCreateSignPage .pipelineSignSection {
+    padding: 16px;
+  }
+
+  html body.signovaCreateSignPage .pipelineSignSection.lockedPipelineSection {
+    height: 70px;
+    min-height: 70px;
+    max-height: 70px;
+  }
+
+  html body.signovaCreateSignPage .pipelineSignSection.completePipelineSection {
+    height: 70px;
+    min-height: 70px;
+    max-height: 70px;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreatorActions {
+    bottom: calc(68px + env(safe-area-inset-bottom, 0px));
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .communitySignPipelineStage.active > span {
+    animation: none;
+  }
+
+  .communitySignPipelineTrack i {
+    transition: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .communitySignCapture > footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .communitySignCapture > footer button {
+    width: 100%;
+  }
+}
+
+/* Compact, edge-to-edge Create Sign app bar. */
+html body.signovaCreateSignPage .minimalSignCreator {
+  width: 100%;
+  max-width: none;
+  padding-top: 0;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader {
+  width: calc(100% + 36px);
+  min-height: 58px;
+  margin-inline: -18px;
+  padding: 8px clamp(16px, 2vw, 28px);
+  border-bottom: 1px solid #dde5ed;
+  background: #f8fafc;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader > div {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 12px;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader span {
+  flex: 0 0 auto;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader strong {
+  flex: 0 0 auto;
+  font-size: clamp(18px, 1.8vw, 22px);
+  letter-spacing: -0.025em;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader small {
+  min-width: 0;
+  overflow: hidden;
+  color: #758598;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body.signovaCreateSignPage .minimalSignCreatorHeader > button {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  font-size: 17px;
+}
+
+html body.signovaCreateSignPage :where(
+  .communitySignPipeline,
+  .minimalSignCreatorLayout,
+  .minimalSignCreatorActions
+) {
+  width: min(100%, 1120px);
+  margin-inline: auto;
+}
+
+body.signovaCreateSignPage .premiumDarkMode .minimalSignCreatorHeader {
+  border-color: #29323d;
+  background: #11161d;
+}
+
+@media (max-width: 760px) {
+  html body.signovaCreateSignPage .minimalSignCreatorHeader {
+    width: calc(100% + 24px);
+    min-height: 54px;
+    margin-inline: -12px;
+    padding: 7px 12px;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreatorHeader > div {
+    gap: 8px;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreatorHeader small {
+    display: none;
+  }
+
+  html body.signovaCreateSignPage .minimalSignCreatorHeader strong {
+    font-size: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .messengerShell *,
+  .messengerShell *::before,
+  .messengerShell *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+.encryptionStatusNotice {
+  position: relative;
+  flex: 0 0 auto;
+  color: #496078;
+}
+
+.encryptionStatusNotice > summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  gap: 7px;
+  padding: 5px 10px;
+  border: 1px solid color-mix(in srgb, currentColor 24%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, currentColor 7%, transparent);
+  color: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.encryptionStatusNotice > summary::-webkit-details-marker {
+  display: none;
+}
+
+.encryptionStatusIcon {
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 6px;
+  background: currentColor;
+  color: #fff;
+  font-size: 11px;
+}
+
+.encryptionStatusActive {
+  color: #087f5b;
+}
+
+.encryptionStatusUnavailable {
+  color: #9a6700;
+}
+
+.encryptionStatusPopover {
+  position: absolute;
+  z-index: 120;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(300px, calc(100vw - 24px));
+  padding: 13px 14px;
+  border: 1px solid rgba(100, 116, 139, 0.22);
+  border-radius: 14px;
+  background: #fff;
+  color: #10213a;
+  box-shadow: 0 16px 42px rgba(15, 35, 58, 0.18);
+}
+
+.encryptionStatusPopover strong,
+.encryptionStatusPopover p,
+.encryptionStatusPopover small {
+  display: block;
+}
+
+.encryptionStatusPopover p {
+  margin: 6px 0;
+  color: #52657c;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.encryptionStatusPopover small {
+  color: #73839a;
+  font-size: 11px;
+}
+
+.premiumDarkMode .encryptionStatusPopover {
+  border-color: rgba(148, 163, 184, 0.2);
+  background: #101a24;
+  color: #f3f7fb;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+}
+
+.premiumDarkMode .encryptionStatusPopover p,
+.premiumDarkMode .encryptionStatusPopover small {
+  color: #aab8c7;
+}
+
+@media (max-width: 760px) {
+  .encryptionStatusNotice > summary {
+    width: 34px;
+    min-width: 34px;
+    padding: 5px;
+    justify-content: center;
+  }
+
+  .encryptionStatusNotice > summary > span:last-child {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

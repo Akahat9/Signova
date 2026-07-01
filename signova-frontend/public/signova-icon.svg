@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Signova">
+  <defs>
+    <linearGradient id="signovaGradient" x1="92" x2="420" y1="420" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1d4f9a"/>
+      <stop offset="0.52" stop-color="#0ea5e9"/>
+      <stop offset="1" stop-color="#16c6d9"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="#f7fcff"/>
+  <path d="M96 256a160 160 0 0 1 160-160" fill="none" stroke="url(#signovaGradient)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M416 256a160 160 0 0 0-80-139" fill="none" stroke="url(#signovaGradient)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M121 343a160 160 0 0 0 247 17" fill="none" stroke="url(#signovaGradient)" stroke-width="22" stroke-linecap="round"/>
+  <path d="M140 256a116 116 0 0 1 116-116" fill="none" stroke="url(#signovaGradient)" stroke-width="16" stroke-linecap="round" opacity=".78"/>
+  <path d="M372 256a116 116 0 0 0-58-101" fill="none" stroke="url(#signovaGradient)" stroke-width="16" stroke-linecap="round" opacity=".78"/>
+  <path d="M171 251c16-35 43-51 83-47 25 2 49 22 58 49 14-9 30-6 41 7-18 24-32 50-42 78-9 28-33 46-63 46h-54c0-42-8-79-23-133Z" fill="url(#signovaGradient)"/>
+  <path d="M246 111l25 71-56 12 16-38-32-28 35 2 12-19Z" fill="#16c6d9"/>
+  <circle cx="256" cy="256" r="40" fill="#f7fcff"/>
+  <circle cx="256" cy="256" r="21" fill="none" stroke="url(#signovaGradient)" stroke-width="12"/>
+  <circle cx="96" cy="223" r="13" fill="#0ea5e9"/>
+  <circle cx="341" cy="244" r="13" fill="#0ea5e9"/>
+  <circle cx="332" cy="96" r="19" fill="#1d4f9a"/>
+</svg>

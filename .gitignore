@@ -1,0 +1,71 @@
+# Dependencies and generated output
+node_modules/
+build/
+dist/
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+*.pem
+*.p12
+*.pfx
+*serviceAccount*.json
+*credential*.json
+*secret*.json
+
+# Local tooling state
+.venv/
+.vs/
+.vscode/
+.signova-logs/
+.tmp-edge-learn-check/
+.vercel/
+Backend (Node.js)/.vercel/
+__pycache__/
+*.pyc
+
+# Local experiments and duplicate starter workspaces
+atlas_starter_nodejs/
+tempCodeRunnerFile.js
+Frontend (React/
+.azure/
+
+# Large local AI datasets and trained model artifacts
+ai-service/Data/
+ai-service/Datasets/
+ai-service/Models/*.pt
+ai-service/Models/*.pth
+ai-service/Models/*.pt.bak
+ai-service/Models/*.pth.bak
+ai-service/Models/*.onnx
+ai-service/Models/*.h5
+ai-service/Models/*.keras
+ai-service/Models/*.joblib
+ai-service/Models/*.pkl
+
+# Reproducible model evaluation output (keep source/config/class maps)
+ai-service/Models/*.metrics.json
+ai-service/Models/*_error_report.json
+ai-service/Models/*_error_report.md
+ai-service/Models/*_class_rankings.csv
+ai-service/Models/*_comparison.json
+ai-service/Models/*_lenient_report.json
+ai-service/Models/*_official_test_report.json
+ai-service/Models/*official_test*report.json
+ai-service/Models/call_pipeline_*.json
+ai-service/Models/call_tracking_*.json
+ai-service/Models/rtmw_single_person_*.json
+ai-service/Models/model_promotion_report.json
+ai-service/Models/tempCodeRunnerFile.py
+
+# OS files
+.DS_Store
+Thumbs.db

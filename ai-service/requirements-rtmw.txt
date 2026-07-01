@@ -1,0 +1,3 @@
+# Optional production whole-body engine. Install after the base requirements.
+rtmlib==0.0.15
+onnxruntime-gpu

@@ -1,0 +1,146 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verifiedUser() {
+      return signedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isChatMember(chatId) {
+      return signedIn()
+        && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.memberIds;
+    }
+
+    match /users/{userId} {
+      allow read, delete: if signedIn() && request.auth.uid == userId;
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'name', 'username', 'email', 'phone', 'showNumber',
+          'communityName', 'communityUsername', 'communityBio',
+          'communityAvatarInitials', 'communityAvatarTone', 'communityAvatarMode',
+          'communityAvatarMood', 'communityAvatarAccessory', 'communityAvatarImage',
+          'createdAt', 'updatedAt', 'schemaVersion'
+        ]);
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'name', 'username', 'email', 'phone', 'showNumber',
+          'communityName', 'communityUsername', 'communityBio',
+          'communityAvatarInitials', 'communityAvatarTone', 'communityAvatarMode',
+          'communityAvatarMood', 'communityAvatarAccessory', 'communityAvatarImage',
+          'createdAt', 'updatedAt', 'schemaVersion'
+        ]);
+
+      match /{collectionId}/{document=**} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    match /chats/{chatId} {
+      allow read: if signedIn() && request.auth.uid in resource.data.memberIds;
+      allow create: if verifiedUser()
+        && request.resource.data.memberIds is list
+        && request.resource.data.memberIds.size() >= 2
+        && request.resource.data.memberIds.size() <= 50
+        && request.auth.uid in request.resource.data.memberIds
+        && request.resource.data.keys().hasOnly([
+          'memberIds', 'title', 'avatarUrl', 'createdAt', 'updatedAt',
+          'lastMessage', 'lastMessageAt'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 120;
+      allow update: if signedIn()
+        && request.auth.uid in resource.data.memberIds
+        && request.resource.data.memberIds == resource.data.memberIds
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title', 'avatarUrl', 'lastMessage', 'lastMessageAt', 'updatedAt'
+        ]);
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if isChatMember(chatId);
+        allow create: if isChatMember(chatId)
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            'senderUid', 'type', 'text', 'mediaPath', 'createdAt',
+            'clientMessageId', 'replyToId'
+          ])
+          && request.resource.data.type in ['text', 'sign', 'image', 'video', 'audio', 'system']
+          && (!('text' in request.resource.data)
+            || (request.resource.data.text is string && request.resource.data.text.size() <= 4000))
+          && (!('mediaPath' in request.resource.data)
+            || (request.resource.data.mediaPath is string
+              && request.resource.data.mediaPath.matches('users/' + request.auth.uid + '/private/.*')));
+        allow update: if isChatMember(chatId)
+          && resource.data.senderUid == request.auth.uid
+          && request.resource.data.senderUid == resource.data.senderUid
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.type == resource.data.type
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'text', 'editedAt', 'deletedAt'
+          ])
+          && (!('text' in request.resource.data)
+            || (request.resource.data.text is string && request.resource.data.text.size() <= 4000));
+        allow delete: if isChatMember(chatId)
+          && resource.data.senderUid == request.auth.uid;
+      }
+    }
+
+    match /publicUserIdentities/{identityId} {
+      allow read, write: if false;
+    }
+
+    match /privateAuthIdentities/{identityId} {
+      allow read, write: if false;
+    }
+
+    match /publicStats/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /publicCommunityPosts/{postId} {
+      allow read: if true;
+      allow create: if verifiedUser()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'authorUid', 'text', 'name', 'username', 'stats', 'mediaPath',
+          'createdAt', 'updatedAt', 'tags', 'visibility'
+        ])
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 600
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.username is string
+        && request.resource.data.username.size() <= 40
+        && (!('mediaPath' in request.resource.data)
+          || (request.resource.data.mediaPath is string
+            && request.resource.data.mediaPath.matches('community/' + request.auth.uid + '/.*')))
+        && request.resource.data.stats.likes == 0
+        && request.resource.data.stats.comments == 0
+        && request.resource.data.stats.shares == 0;
+      allow update: if false;
+      allow delete: if signedIn()
+        && request.auth.uid == resource.data.authorUid;
+
+      match /likes/{userId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow create: if verifiedUser()
+          && request.auth.uid == userId
+          && request.resource.data.userId == request.auth.uid;
+        allow delete: if verifiedUser()
+          && request.auth.uid == userId;
+        allow update: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

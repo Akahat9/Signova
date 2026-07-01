@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "policy": {
+    "minimum_accuracy_gain": 0.25,
+    "maximum_f1_regression": 0.005,
+    "minimum_validation_samples": 50,
+    "require_equal_or_wider_vocabulary": true
+  },
+  "tasks": {
+    "alphabet": {
+      "active_checkpoint": "signova_alphabet_transformer.pt",
+      "active_metrics": "signova_alphabet_transformer.metrics.json",
+      "candidates": []
+    },
+    "asl_primary": {
+      "active_checkpoint": "signova_asl_transformer_top200_clean_trainval_v3.pt",
+      "active_metrics": "signova_asl_transformer_top200_clean_trainval_v3.metrics.json",
+      "candidates": [
+        {
+          "id": "asl-top200-cnn-v6",
+          "checkpoint": "signova_asl_cnn_transformer_top200_v6.pt",
+          "metrics": "signova_asl_cnn_transformer_top200_v6.metrics.json"
+        }
+      ]
+    },
+    "asl_top300": {
+      "active_checkpoint": "signova_asl_transformer_top300_clean_trainval_v2.pt",
+      "active_metrics": "signova_asl_transformer_top300_clean_trainval_v2.metrics.json",
+      "candidates": []
+    },
+    "asl_top500": {
+      "active_checkpoint": "signova_asl_transformer_top500_clean_trainval_v2.pt",
+      "active_metrics": "signova_asl_transformer_top500_clean_trainval_v2.metrics.json",
+      "candidates": [
+        {
+          "id": "asl-top500-gru-v2",
+          "checkpoint": "signova_asl_gru_top500_clean_trainval_v2.pt",
+          "metrics": "signova_asl_gru_top500_clean_trainval_v2.metrics.json"
+        }
+      ]
+    },
+    "isl": {
+      "active_checkpoint": "signova_isl_transformer_top10.pt",
+      "active_metrics": "signova_isl_transformer_top10.metrics.json",
+      "candidates": [
+        {
+          "id": "isl-top30-cnn-v3",
+          "checkpoint": "signova_isl_cnn_transformer_top30_clean_v3.pt",
+          "metrics": "signova_isl_cnn_transformer_top30_clean_v3.metrics.json"
+        },
+        {
+          "id": "isl-top30-gru-v3",
+          "checkpoint": "signova_isl_gru_top30_clean_v3.pt",
+          "metrics": "signova_isl_gru_top30_clean_v3.metrics.json"
+        }
+      ]
+    },
+    "mixed": {
+      "active_checkpoint": "signova_sequence_transformer.pt",
+      "active_metrics": null,
+      "candidates": [
+        {
+          "id": "mixed-dynamic-cnn-v3",
+          "checkpoint": "signova_sequence_cnn_transformer_mixed_clean_v3.pt",
+          "metrics": "signova_sequence_cnn_transformer_mixed_clean_v3.metrics.json"
+        }
+      ]
+    }
+  }
+}

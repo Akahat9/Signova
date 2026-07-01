@@ -1,0 +1,19 @@
+{
+  "name": "asl_top300_v2_cleanup",
+  "reason": "Exclude only Top300 v1 zero-recall classes and backfill to 300 classes. Preserve difficult but learnable classes.",
+  "source_report": "Models/signova_asl_top300_v1_error_report.md",
+  "exclude_labels": [
+    "alright",
+    "chop",
+    "confused1",
+    "depth",
+    "differentsituation",
+    "expect",
+    "gamble",
+    "holdhands",
+    "recent1",
+    "shake1",
+    "spill2",
+    "wheelchair"
+  ]
+}

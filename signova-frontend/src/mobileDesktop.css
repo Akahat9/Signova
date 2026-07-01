@@ -1,0 +1,5623 @@
+/* Signova adaptive shell.
+   Desktop keeps App.css. This file is the final authority for tablet/mobile. */
+
+.mobileChatBackButton {
+  display: none;
+}
+
+.railLogoButton,
+.railLogo,
+.railLogoTribute,
+.fullSignovaIntro,
+.tributeLogoReveal {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.railLogo {
+  will-change: transform;
+}
+
+.railLogoButton:active .railLogo {
+  transform: translate3d(0, 1px, 0) scale(0.96);
+}
+
+@media (min-width: 1181px) and (max-width: 1366px) {
+  .messengerShell.chatMode {
+    grid-template-columns: 72px var(--chat-sidebar-width, 320px) minmax(0, 1fr) !important;
+  }
+
+  .conversationHistoryMode {
+    grid-template-columns: 72px var(--chat-sidebar-width, 320px) minmax(0, 1fr) !important;
+  }
+
+  .conversationPane,
+  .signToolsPane,
+  .chatSidebar {
+    min-width: 0 !important;
+  }
+
+  .chatHeader,
+  .messageThread,
+  .chatComposer {
+    max-width: none !important;
+  }
+
+  .communityHeroGrid,
+  .progressHeroGrid,
+  .profileHeroCard {
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr) !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  .signovaAuthPanel {
+    grid-template-columns: minmax(320px, 0.9fr) minmax(420px, 1fr) !important;
+  }
+
+  .signovaAuthStory {
+    padding: 24px !important;
+  }
+
+  .signovaAuthCard {
+    padding: 20px !important;
+  }
+
+  .authMainPane {
+    min-height: auto !important;
+  }
+
+  .messengerShell.chatMode {
+    grid-template-columns: 68px minmax(280px, var(--chat-sidebar-width, 300px)) minmax(0, 1fr) !important;
+  }
+
+  .conversationHistoryMode {
+    grid-template-columns: 68px minmax(280px, var(--chat-sidebar-width, 300px)) minmax(0, 1fr) !important;
+  }
+
+  .learnMode,
+  .practiceMode,
+  .libraryMode,
+  .progressMode,
+  .profileMode,
+  .settingsMode,
+  .contactsMode,
+  .communityMode {
+    grid-template-columns: 68px minmax(0, 1fr) !important;
+  }
+
+  .learnMode .chatSidebar,
+  .practiceMode .chatSidebar,
+  .libraryMode .chatSidebar,
+  .progressMode .chatSidebar,
+  .profileMode .chatSidebar,
+  .settingsMode .chatSidebar,
+  .contactsMode .chatSidebar,
+  .communityMode .chatSidebar,
+  .learnMode .conversationPane,
+  .practiceMode .conversationPane,
+  .libraryMode .conversationPane,
+  .progressMode .conversationPane,
+  .profileMode .conversationPane,
+  .settingsMode .conversationPane,
+  .contactsMode .conversationPane,
+  .communityMode .conversationPane {
+    display: none !important;
+  }
+
+  .learnMode .signToolsPane,
+  .practiceMode .signToolsPane,
+  .libraryMode .signToolsPane,
+  .progressMode .signToolsPane,
+  .profileMode .signToolsPane,
+  .settingsMode .signToolsPane,
+  .contactsMode .signToolsPane,
+  .communityMode .signToolsPane {
+    grid-column: 2 !important;
+    display: block !important;
+    padding: 16px !important;
+    overflow-y: auto !important;
+  }
+
+  .messengerShell.libraryMode,
+  .libraryMode .signToolsPane {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+  }
+
+  .communityHeroGrid,
+  .communityContentGrid,
+  .communityGroupsLayout,
+  .learnLayout,
+  .libraryContentGrid,
+  .progressHeroGrid,
+  .progressAnalyticsGrid,
+  .progressBottomGrid,
+  .profileHeroCard,
+  .profileLayout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .communityActionGrid,
+  .learningPathGrid,
+  .learnCategoryGrid,
+  .signCollectionGrid,
+  .tutorialBookGrid,
+  .settingsGrid,
+  .settingsGrid.twoColumns,
+  .profileFormGrid,
+  .profileSwitchGrid,
+  .profileProgressGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  :root {
+    --mobile-nav-height: 72px;
+    --mobile-page-height: calc(100dvh - var(--mobile-nav-height));
+    --mobile-pad: 12px;
+    --mobile-card: rgba(255, 255, 255, 0.86);
+    --mobile-line: rgba(184, 206, 218, 0.78);
+    --mobile-shadow: 0 14px 34px rgba(15, 23, 42, 0.1);
+  }
+
+  @supports (height: 100svh) {
+    :root {
+      --mobile-page-height: calc(100svh - var(--mobile-nav-height));
+    }
+
+    .messengerShell,
+    .messengerShell.chatMode,
+    .conversationHistoryMode,
+    .learnMode,
+    .practiceMode,
+    .libraryMode,
+    .progressMode,
+    .profileMode,
+    .settingsMode,
+    .contactsMode,
+    .communityMode {
+      height: 100svh !important;
+    }
+  }
+
+  html,
+  body,
+  #root {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    min-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  body {
+    background: #eef7fb !important;
+    touch-action: manipulation;
+  }
+
+  .signovaAuthShell {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: auto !important;
+    place-items: stretch !important;
+  }
+
+  .signovaAuthPanel {
+    height: auto !important;
+    min-height: 100dvh !important;
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+    overflow: visible !important;
+  }
+
+  .signovaAuthStory {
+    min-height: 178px !important;
+    grid-template-rows: auto auto !important;
+    padding: 16px !important;
+    overflow: hidden !important;
+  }
+
+  .signovaAuthBrand small,
+  .signovaAuthFeatureList,
+  .signovaAuthQuote,
+  .signovaAuthAvatarStage {
+    display: none !important;
+  }
+
+  .signovaAuthHeadline strong {
+    font-size: clamp(25px, 8vw, 36px) !important;
+  }
+
+  .signovaAuthCard {
+    align-content: start !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .signovaAuthCardPane {
+    width: 100% !important;
+    min-height: auto !important;
+    border-radius: 22px !important;
+    padding: 16px !important;
+  }
+
+  .signupFieldGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .signupFieldGrid label {
+    grid-column: 1 / -1 !important;
+  }
+
+  .signovaAuthStatus {
+    grid-template-columns: 1fr !important;
+  }
+
+  .signovaAuthStatus span {
+    min-height: 24px !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  .messengerShell,
+  .messengerShell.chatMode,
+  .conversationHistoryMode,
+  .learnMode,
+  .practiceMode,
+  .libraryMode,
+  .progressMode,
+  .profileMode,
+  .settingsMode,
+  .contactsMode,
+  .communityMode {
+    width: 100vw !important;
+    min-width: 0 !important;
+    height: 100dvh !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: var(--mobile-page-height) var(--mobile-nav-height) !important;
+    overflow: hidden !important;
+    background:
+      radial-gradient(circle at 20% 0%, rgba(22, 198, 217, 0.16), transparent 34%),
+      radial-gradient(circle at 100% 12%, rgba(29, 79, 154, 0.09), transparent 28%),
+      linear-gradient(180deg, #f8fcff 0%, #eef4f8 100%) !important;
+  }
+
+  .appRail,
+  .communityMode .appRail {
+    position: fixed !important;
+    inset: auto 10px calc(8px + env(safe-area-inset-bottom)) 10px !important;
+    z-index: 1000 !important;
+    width: auto !important;
+    height: 58px !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) 42px !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border: 1px solid var(--mobile-line) !important;
+    border-radius: 22px !important;
+    padding: 6px 8px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(22px) saturate(155%) !important;
+    overflow: hidden !important;
+    contain: layout paint !important;
+  }
+
+  .railLogoButton,
+  .profileButton {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    border-radius: 16px !important;
+    padding: 0 !important;
+  }
+
+  .railLogo {
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 13px !important;
+    box-shadow: 0 10px 22px rgba(29, 79, 154, 0.18) !important;
+    transform: translate3d(0, 0, 0) !important;
+    animation: mobileLogoBreathe 5.4s ease-in-out infinite !important;
+  }
+
+  .railNav,
+  .communityMode .railNav {
+    display: grid !important;
+    grid-auto-flow: column !important;
+    grid-auto-columns: 44px !important;
+    align-items: center !important;
+    justify-content: start !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    min-width: 0 !important;
+  }
+
+  .railNav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railButton {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    min-height: 42px !important;
+    border-radius: 16px !important;
+    padding: 0 !important;
+    flex: 0 0 42px !important;
+  }
+
+  .railIcon3d {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .railButton .railLabel,
+  .profileButton .railLabel,
+  .railSecurityCard,
+  .communityRailOptions {
+    display: none !important;
+  }
+
+  .railLogoTribute {
+    left: 30px !important;
+    top: 6px !important;
+    width: 44px !important;
+    height: 44px !important;
+    contain: layout paint !important;
+  }
+
+  .activeRailLogoTribute {
+    animation-duration: 1.8s !important;
+  }
+
+  .railTributeCopy {
+    display: none !important;
+  }
+
+  .fullSignovaIntro {
+    height: 100dvh !important;
+    background: rgba(248, 252, 255, 0.84) !important;
+    backdrop-filter: blur(14px) saturate(140%) !important;
+  }
+
+  .tributeGlow {
+    width: 148px !important;
+    height: 148px !important;
+    filter: none !important;
+  }
+
+  .tributeIcon {
+    width: 42px !important;
+    height: 42px !important;
+    filter: none !important;
+  }
+
+  .tributeIcon .railIcon3d {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .tributeLogoReveal {
+    width: min(260px, 86vw) !important;
+  }
+
+  .tributeLogoReveal img {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  .railProfileSection {
+    display: grid !important;
+    place-items: center !important;
+    min-width: 0 !important;
+  }
+
+  .conversationPane,
+  .chatSidebar,
+  .signToolsPane,
+  .communityMode .signToolsPane {
+    grid-row: 1 !important;
+    grid-column: 1 !important;
+    width: 100% !important;
+    height: var(--mobile-page-height) !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+  }
+
+  .learnMode .chatSidebar,
+  .practiceMode .chatSidebar,
+  .libraryMode .chatSidebar,
+  .progressMode .chatSidebar,
+  .profileMode .chatSidebar,
+  .settingsMode .chatSidebar,
+  .contactsMode .chatSidebar,
+  .communityMode .chatSidebar,
+  .learnMode .conversationPane,
+  .practiceMode .conversationPane,
+  .libraryMode .conversationPane,
+  .progressMode .conversationPane,
+  .profileMode .conversationPane,
+  .settingsMode .conversationPane,
+  .contactsMode .conversationPane,
+  .communityMode .conversationPane {
+    display: none !important;
+  }
+
+  .learnMode .signToolsPane,
+  .practiceMode .signToolsPane,
+  .libraryMode .signToolsPane,
+  .progressMode .signToolsPane,
+  .profileMode .signToolsPane,
+  .settingsMode .signToolsPane,
+  .contactsMode .signToolsPane,
+  .communityMode .signToolsPane {
+    display: block !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: var(--mobile-pad) !important;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom)) !important;
+    scroll-padding-bottom: 96px !important;
+    background:
+      radial-gradient(circle at 84% 2%, rgba(29, 79, 154, 0.08), transparent 30%),
+      linear-gradient(180deg, rgba(248, 252, 255, 0.96), rgba(238, 244, 248, 0.9)) !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .signToolsPane > section,
+  .settingsPanel,
+  .profilePage,
+  .progressDashboard,
+  .learnDashboard,
+  .libraryDashboard,
+  .communityPage,
+  .contactsPanel {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding-bottom: calc(86px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .mobileChatRoomOpen.chatMode .chatSidebar,
+  .mobileChatListOpen.chatMode .conversationPane {
+    display: none !important;
+  }
+
+  .mobileChatListOpen.chatMode .chatSidebar,
+  .mobileChatRoomOpen.chatMode .conversationPane {
+    display: grid !important;
+  }
+
+  .chatSidebar {
+    grid-template-rows: auto auto auto minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding: 14px 12px 12px !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    overflow: hidden !important;
+  }
+
+  .conversationPane {
+    grid-template-rows: auto auto minmax(0, 1fr) auto !important;
+    background:
+      linear-gradient(180deg, rgba(251, 251, 253, 0.74), rgba(238, 244, 247, 0.54)),
+      rgba(238, 244, 247, 0.52) !important;
+    overflow: hidden !important;
+  }
+
+  .chatSidebarTop,
+  .chatHeader,
+  .communityTopBar,
+  .learnTopBar,
+  .libraryTopBar,
+  .progressTopBar,
+  .settingsSubPageHeader,
+  .profileHeroCard,
+  .groupChatHeader {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 40 !important;
+    border: 1px solid var(--mobile-line) !important;
+    border-radius: 0 0 24px 24px !important;
+    padding: 12px !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08) !important;
+    backdrop-filter: blur(20px) saturate(150%) !important;
+  }
+
+  .communityTopBar,
+  .learnTopBar,
+  .libraryTopBar,
+  .progressTopBar,
+  .settingsSubPageHeader,
+  .profileHeroCard,
+  .groupChatHeader {
+    margin: calc(-1 * var(--mobile-pad)) calc(-1 * var(--mobile-pad)) 12px !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+  }
+
+  .chatSidebarTop {
+    min-height: 54px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 0 !important;
+  }
+
+  .chatSidebarTop strong,
+  .communityTopBar strong,
+  .learnTopBar strong,
+  .libraryTopBar strong,
+  .progressTopBar strong,
+  .profileHeroText > strong,
+  .settingsHero strong,
+  .settingsSubPageHeader strong {
+    font-size: clamp(24px, 7vw, 32px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: 0 !important;
+  }
+
+  .chatSidebarTop small,
+  .communityTopBar small,
+  .learnTopBar small,
+  .libraryTopBar small,
+  .progressTopBar small,
+  .profileHeroText > small,
+  .settingsHero small {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  .chatTopAction,
+  .communityIconButton,
+  .libraryIconButton,
+  .learnIconButton,
+  .progressIconButton,
+  .groupHeaderActions button,
+  .groupChatHeader .postButton,
+  .groupComposer .postButton {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 16px !important;
+  }
+
+  .searchBox,
+  .learnSearch,
+  .groupSearchBox,
+  .communityGroupSearch,
+  .chatHeaderSearch {
+    min-height: 48px !important;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.86) !important;
+  }
+
+  .chatCategoryRow,
+  .communityTopActions,
+  .groupsTopActions,
+  .learnTopActions,
+  .libraryTopActions,
+  .progressToolbar,
+  .chatCameraHeaderActions {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding-bottom: 2px !important;
+    scrollbar-width: none !important;
+  }
+
+  .chatCategoryRow::-webkit-scrollbar,
+  .communityTopActions::-webkit-scrollbar,
+  .groupsTopActions::-webkit-scrollbar,
+  .learnTopActions::-webkit-scrollbar,
+  .libraryTopActions::-webkit-scrollbar,
+  .progressToolbar::-webkit-scrollbar,
+  .chatCameraHeaderActions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chatCategoryRow button {
+    flex: 0 0 auto !important;
+    min-height: 38px !important;
+    border-radius: 999px !important;
+    padding-inline: 14px !important;
+  }
+
+  .chatReadinessPanel {
+    display: none !important;
+  }
+
+  .chatList {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    gap: 10px !important;
+    padding: 2px 0 10px !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .chatListItem {
+    min-height: 76px !important;
+    border-radius: 20px !important;
+    padding: 10px !important;
+    background: var(--mobile-card) !important;
+    box-shadow: var(--mobile-shadow) !important;
+  }
+
+  .chatListItem .avatar {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .chatListItem strong {
+    font-size: 16px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .chatHeader {
+    position: relative !important;
+    min-height: 64px !important;
+    display: grid !important;
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    border-top: 0 !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+    padding: 8px 10px !important;
+  }
+
+  .mobileChatBackButton {
+    display: grid !important;
+    place-items: center !important;
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 14px !important;
+    background: rgba(238, 247, 251, 0.92) !important;
+    color: #1d4f9a !important;
+    font-size: 30px !important;
+    line-height: 1 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 8px 18px rgba(15, 23, 42, 0.08) !important;
+  }
+
+  .chatIdentity,
+  .chatIdentityButton {
+    min-width: 0 !important;
+    gap: 8px !important;
+  }
+
+  .chatIdentity .avatar {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .chatIdentity strong {
+    max-width: 100% !important;
+    font-size: 16px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .contactMetaLine {
+    max-width: 100% !important;
+  }
+
+  .headerActions {
+    gap: 6px !important;
+  }
+
+  .premiumHeaderButton {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    border-radius: 15px !important;
+  }
+
+  .premiumHeaderButton svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .chatHeaderCallStatus,
+  .chatSearchIconButton {
+    display: none !important;
+  }
+
+  .messageThread {
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 14px 10px 92px !important;
+    gap: 10px !important;
+    background:
+      radial-gradient(circle at 20% 12%, rgba(22, 198, 217, 0.1), transparent 32%),
+      linear-gradient(180deg, rgba(251, 251, 253, 0.8), rgba(238, 244, 247, 0.72)) !important;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .messageBubble {
+    max-width: 86% !important;
+    border-radius: 20px !important;
+    padding: 12px 13px !important;
+    font-size: 14px !important;
+  }
+
+  .chatComposer {
+    position: absolute !important;
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(8px + env(safe-area-inset-bottom)) !important;
+    display: grid !important;
+    grid-template-columns: 40px 44px 44px minmax(0, 1fr) 48px !important;
+    gap: 7px !important;
+    min-height: 58px !important;
+    padding: 6px !important;
+    border-radius: 22px !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.13) !important;
+    backdrop-filter: blur(18px) saturate(150%) !important;
+  }
+
+  .chatComposer button,
+  .composerSignButton,
+  .composerVoiceButton,
+  .sendIconButton {
+    width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+    border-radius: 15px !important;
+  }
+
+  .chatComposer input {
+    min-width: 0 !important;
+    min-height: 40px !important;
+    border-radius: 16px !important;
+    padding-inline: 12px !important;
+    font-size: 14px !important;
+    width: 100% !important;
+  }
+
+  .composerPickerPanel {
+    left: 8px !important;
+    right: 8px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+    max-height: min(420px, 58dvh) !important;
+    border-radius: 22px !important;
+  }
+
+  .panel,
+  .communityPanel,
+  .profileCard,
+  .settingsHero,
+  .settingsGroup,
+  .settingsSubPageHeader,
+  .progressStatCard,
+  .learningPathCard,
+  .learnCategoryTile,
+  .learningProgressCard,
+  .libraryBookCard,
+  .tutorialBook,
+  .dailySignCard,
+  .savedLearning,
+  .contactMiniModal,
+  .contactInfoWindow,
+  .feedPostCard,
+  .communitySignCard,
+  .communityGroupChat,
+  .groupMessage,
+  .settingsChoiceCard,
+  .settingField,
+  .settingSwitch,
+  .settingRange,
+  .profileFormGrid label,
+  .profileSwitchGrid label {
+    border-radius: 20px !important;
+    border-color: var(--mobile-line) !important;
+    background: var(--mobile-card) !important;
+    box-shadow: var(--mobile-shadow) !important;
+  }
+
+  .communityTopBar,
+  .learnTopBar,
+  .libraryTopBar,
+  .progressTopBar,
+  .profileHeroCard,
+  .groupChatHeader,
+  .libraryHeroSpace,
+  .learningBookReader,
+  .learnHeroCard,
+  .progressHeroGrid,
+  .communityHeroGrid,
+  .communityContentGrid,
+  .communityGroupsLayout,
+  .learnLayout,
+  .libraryContentGrid,
+  .profileLayout,
+  .settingsChooser,
+  .settingsGrid,
+  .settingsGrid.twoColumns,
+  .progressAnalyticsGrid,
+  .progressBottomGrid,
+  .communityActionGrid,
+  .communitySignForm,
+  .communitySignGrid,
+  .learningPathGrid,
+  .learnCategoryGrid,
+  .signCollectionGrid,
+  .learningBookShelf,
+  .tutorialBookGrid,
+  .profileFormGrid,
+  .profileSwitchGrid,
+  .profileProgressGrid,
+  .contactVisibilityGrid,
+  .contactAvatarOptions,
+  .miniFormGrid,
+  .groupFeatureGrid,
+  .attachChoiceGrid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .libraryHeroStats,
+  .callHealthGrid,
+  .profileProgressGrid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .libraryHeroSpace,
+  .learnHeroCard {
+    min-height: auto !important;
+    padding: 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .libraryHeroCopy h1,
+  .learnHeroCopy h2 {
+    font-size: clamp(28px, 9vw, 40px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .libraryHeroCopy p,
+  .learnHeroCopy p {
+    max-width: none !important;
+    font-size: 14px !important;
+  }
+
+  .libraryDetectionGraph,
+  .signModelArt,
+  .progressCharacter {
+    max-width: 100% !important;
+    transform: none !important;
+  }
+
+  .settingsGrid label,
+  .profileFormGrid label,
+  .contactForm input,
+  .contactForm select,
+  .miniFormGrid input,
+  .miniFormGrid select,
+  .miniFormGrid textarea,
+  .communityPostComposer textarea,
+  .communitySignForm input,
+  .communitySignForm select,
+  .communitySignForm textarea,
+  .groupComposer input {
+    min-height: 46px !important;
+    border-radius: 15px !important;
+  }
+
+  .settingsChoiceCard {
+    display: grid !important;
+    grid-template-columns: 42px minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    min-width: 0 !important;
+  }
+
+  .profilePhotoBlock,
+  .profileQrCard {
+    justify-self: center !important;
+    width: 100% !important;
+  }
+
+  .profilePhoto {
+    width: 118px !important;
+    height: 118px !important;
+  }
+
+  .practiceRemoteCaption {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    margin: 10px 0 0 !important;
+  }
+
+  .communityGroupsLayout,
+  .communityGroupList,
+  .groupChatMessages,
+  .communityGroupsSide {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .groupChatPanel {
+    min-height: 500px !important;
+  }
+
+  .groupComposer {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+  }
+
+  .conversationHistoryMode .chatSidebar {
+    display: grid !important;
+  }
+
+  .conversationHistoryMode .conversationPane {
+    display: none !important;
+  }
+
+  .contactMiniModal,
+  .contactInfoWindow {
+    width: calc(100vw - 24px) !important;
+    max-height: calc(100dvh - 96px) !important;
+    overflow-y: auto !important;
+    border-radius: 24px !important;
+  }
+
+  .contactPhoneRow {
+    grid-template-columns: 108px minmax(0, 1fr) !important;
+  }
+
+  .minimizedCameraWindow {
+    left: auto !important;
+    right: 12px !important;
+    top: auto !important;
+    bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+    width: 210px !important;
+    height: 118px !important;
+  }
+
+  @keyframes mobileLogoBreathe {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(0, -1px, 0) scale(1.035);
+    }
+  }
+}
+
+@media (max-width: 430px) {
+  :root {
+    --mobile-nav-height: 68px;
+    --mobile-pad: 10px;
+  }
+
+  .appRail,
+  .communityMode .appRail {
+    inset-inline: 8px !important;
+    height: 54px !important;
+    grid-template-columns: 40px minmax(0, 1fr) 38px !important;
+    gap: 6px !important;
+    border-radius: 20px !important;
+  }
+
+  .railLogoButton,
+  .profileButton,
+  .railButton {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 14px !important;
+  }
+
+  .railNav,
+  .communityMode .railNav {
+    grid-auto-columns: 40px !important;
+    gap: 5px !important;
+  }
+
+  .railIcon3d {
+    width: 27px !important;
+    height: 27px !important;
+  }
+
+  .chatHeader {
+    grid-template-columns: 38px minmax(0, 1fr) auto !important;
+    padding: 8px !important;
+  }
+
+  .headerActions {
+    gap: 4px !important;
+  }
+
+  .premiumHeaderButton {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 13px !important;
+  }
+
+  .premiumHeaderButton svg {
+    width: 23px !important;
+    height: 23px !important;
+  }
+
+  .chatComposer {
+    left: 6px !important;
+    right: 6px !important;
+    grid-template-columns: 36px 38px 38px minmax(0, 1fr) 42px !important;
+    gap: 5px !important;
+    min-height: 54px !important;
+    border-radius: 20px !important;
+  }
+
+  .chatComposer button,
+  .composerSignButton,
+  .composerVoiceButton,
+  .sendIconButton {
+    width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
+    border-radius: 13px !important;
+  }
+
+  .messageBubble {
+    max-width: 92% !important;
+  }
+
+  .libraryHeroStats,
+  .callHealthGrid,
+  .profileProgressGrid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --mobile-nav-height: 64px;
+  }
+
+  .chatSidebarTop strong,
+  .communityTopBar strong,
+  .learnTopBar strong,
+  .libraryTopBar strong,
+  .progressTopBar strong,
+  .profileHeroText > strong,
+  .settingsHero strong,
+  .settingsSubPageHeader strong {
+    font-size: 24px !important;
+  }
+
+  .chatComposer {
+    grid-template-columns: 34px 36px minmax(0, 1fr) 40px !important;
+  }
+
+  .composerVoiceButton {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) and (orientation: landscape) {
+  :root {
+    --mobile-nav-height: 58px;
+    --mobile-pad: 10px;
+  }
+
+  .appRail,
+  .communityMode .appRail {
+    height: 48px !important;
+    border-radius: 18px !important;
+  }
+
+  .railLogoButton,
+  .profileButton,
+  .railButton {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+
+  .railLogo {
+    width: 31px !important;
+    height: 31px !important;
+  }
+
+  .chatHeader,
+  .chatSidebarTop,
+  .communityTopBar,
+  .learnTopBar,
+  .libraryTopBar,
+  .progressTopBar {
+    padding-block: 7px !important;
+    min-height: 50px !important;
+  }
+
+  .messageThread {
+    padding-bottom: 78px !important;
+  }
+
+  .chatComposer {
+    min-height: 50px !important;
+    bottom: calc(5px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Mobile product pass: keep one clear task on screen and move secondary tools
+   into compact, touch-friendly sheets. */
+@media (max-width: 760px) {
+  :root {
+    --mobile-nav-height: 68px;
+    --mobile-sheet-bg: rgba(250, 253, 255, 0.98);
+    --mobile-sheet-line: rgba(174, 198, 214, 0.72);
+    --mobile-sheet-shadow: 0 -18px 50px rgba(15, 23, 42, 0.18);
+  }
+
+  .signovaAuthShell,
+  .signovaAuthPanel,
+  .signovaAuthStory,
+  .signovaAuthCard,
+  .signovaAuthCardPane,
+  .authMainPane,
+  .signupFieldGrid,
+  .signovaAuthStatus {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .signovaAuthCard {
+    padding: 10px !important;
+  }
+
+  .signovaAuthCardPane {
+    padding: 14px !important;
+    overflow-x: hidden !important;
+  }
+
+  .signovaAuthHeadline,
+  .signovaAuthHeadline strong,
+  .signovaAuthHeadline small,
+  .signovaAuthBrand,
+  .signovaAuthBrand strong,
+  .signovaAuthBrand small {
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+  }
+
+  .signovaAuthHeadline strong {
+    font-size: clamp(20px, 6.5vw, 28px) !important;
+  }
+
+  .signovaAuthCardPane input:not([type="checkbox"]):not([type="radio"]),
+  .signovaAuthCardPane select,
+  .signovaAuthCardPane button,
+  .signovaAuthStatus > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .signovaAuthCardPane input[type="checkbox"],
+  .signovaAuthCardPane input[type="radio"] {
+    width: 18px !important;
+    min-width: 18px !important;
+    max-width: 18px !important;
+    min-height: 18px !important;
+  }
+
+  .signovaAuthCardHeader strong {
+    font-size: clamp(18px, 5.5vw, 24px) !important;
+  }
+
+  .signovaAuthCardHeader small {
+    max-width: 32ch !important;
+    margin-inline: auto !important;
+    font-size: 10px !important;
+    line-height: 1.35 !important;
+    white-space: normal !important;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .appRail,
+  .communityMode .appRail {
+    height: 56px !important;
+    border-radius: 18px !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14) !important;
+  }
+
+  .railNav,
+  .communityMode .railNav {
+    scroll-snap-type: x proximity;
+    overscroll-behavior-x: contain;
+  }
+
+  .railButton {
+    scroll-snap-align: center;
+  }
+
+  .activeRailButton {
+    box-shadow: inset 0 0 0 1px rgba(14, 165, 233, 0.22), 0 8px 18px rgba(29, 79, 154, 0.12) !important;
+  }
+
+  .conversationPane {
+    isolation: isolate;
+  }
+
+  .chatHeader {
+    z-index: 160 !important;
+    min-height: 60px !important;
+    box-shadow: 0 7px 22px rgba(15, 23, 42, 0.07) !important;
+  }
+
+  .chatIdentity .avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .chatIdentity strong {
+    font-size: 15px !important;
+  }
+
+  .contactMetaLine {
+    font-size: 10px !important;
+  }
+
+  .headerActions .voiceSignChatButton,
+  .headerActions .chatSearchIconButton {
+    display: none !important;
+  }
+
+  .premiumHeaderButton {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 13px !important;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08) !important;
+  }
+
+  .chatHeaderMenuWrap {
+    position: static !important;
+  }
+
+  .headerChatActionMenu,
+  .chatActionMenu.headerChatActionMenu {
+    position: fixed !important;
+    z-index: 2200 !important;
+    inset: auto 8px calc(76px + env(safe-area-inset-bottom)) 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(68dvh, 560px) !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    overflow-y: auto !important;
+    border: 1px solid var(--mobile-sheet-line) !important;
+    border-radius: 22px !important;
+    padding: 10px !important;
+    background: var(--mobile-sheet-bg) !important;
+    box-shadow: var(--mobile-sheet-shadow) !important;
+    backdrop-filter: blur(24px) saturate(130%) !important;
+    animation: mobileSheetRise 190ms cubic-bezier(0.2, 0.86, 0.2, 1) both !important;
+  }
+
+  .headerChatActionMenu button {
+    min-height: 50px !important;
+    display: grid !important;
+    grid-template-columns: 34px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 8px !important;
+    border-radius: 14px !important;
+    padding: 7px 9px !important;
+    background: rgba(241, 247, 250, 0.84) !important;
+    font-size: 11px !important;
+    text-align: left !important;
+  }
+
+  .headerChatActionMenu button .attachIcon3d {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .chatHeaderSearch {
+    position: fixed !important;
+    z-index: 2250 !important;
+    top: 70px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    min-height: 46px !important;
+    border-radius: 16px !important;
+    background: var(--mobile-sheet-bg) !important;
+    box-shadow: 0 16px 38px rgba(15, 23, 42, 0.16) !important;
+  }
+
+  .messageThread {
+    padding: 12px 9px calc(82px + env(safe-area-inset-bottom)) !important;
+    scroll-padding-bottom: 118px;
+  }
+
+  .e2eeNotice {
+    max-width: 92% !important;
+    margin: 2px auto 8px !important;
+    padding: 6px 10px !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  .messageBubble {
+    max-width: 88% !important;
+    border-radius: 17px !important;
+    padding: 10px 11px !important;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.07) !important;
+    transform: none !important;
+  }
+
+  .messageBubble p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.42 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .outgoingReceiptLine,
+  .messageLiveActivity {
+    margin-top: 5px !important;
+    font-size: 9px !important;
+  }
+
+  .specialMessageCard,
+  .specialImageCard,
+  .specialAudioCard,
+  .specialStickerCard {
+    min-width: 0 !important;
+    width: 100% !important;
+    grid-template-columns: 38px minmax(0, 1fr) !important;
+    gap: 8px !important;
+    border-radius: 14px !important;
+    padding: 8px !important;
+    box-shadow: none !important;
+  }
+
+  .specialMessageCard .attachIcon3d {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .specialImageCard > img {
+    width: 54px !important;
+    height: 48px !important;
+    grid-row: span 2;
+  }
+
+  .specialMessageCard strong {
+    font-size: 13px !important;
+  }
+
+  .specialMessageCard small {
+    font-size: 10px !important;
+  }
+
+  .specialCardActions,
+  .meetReceiverActions,
+  .audioSpeedControls {
+    grid-column: 1 / -1 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+  }
+
+  .specialCardActions a,
+  .specialCardActions button,
+  .meetReceiverActions button,
+  .audioSpeedControls button {
+    min-height: 30px !important;
+    flex: 1 1 auto !important;
+    padding-inline: 8px !important;
+    font-size: 9px !important;
+  }
+
+  .messageReactionWindow,
+  .messageToolWindow,
+  .messageEmojiPicker,
+  .messageInfoPopover,
+  .messageTranslatePopover,
+  .incomingBubble .messageReactionWindow,
+  .incomingBubble .messageToolWindow,
+  .outgoingBubble .messageReactionWindow,
+  .outgoingBubble .messageToolWindow,
+  .incomingBubble .messageEmojiPicker,
+  .outgoingBubble .messageEmojiPicker,
+  .incomingBubble .messageInfoPopover,
+  .outgoingBubble .messageInfoPopover {
+    position: fixed !important;
+    z-index: 2300 !important;
+    inset: auto 8px calc(76px + env(safe-area-inset-bottom)) 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    transform: none !important;
+    transform-origin: bottom center !important;
+    border: 1px solid var(--mobile-sheet-line) !important;
+    border-radius: 20px !important;
+    background: var(--mobile-sheet-bg) !important;
+    box-shadow: var(--mobile-sheet-shadow) !important;
+    backdrop-filter: blur(24px) saturate(130%) !important;
+    animation: mobileSheetRise 180ms cubic-bezier(0.2, 0.86, 0.2, 1) both !important;
+  }
+
+  .messageReactionWindow {
+    display: grid !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    padding: 7px !important;
+  }
+
+  .messageToolWindow {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    padding: 9px !important;
+  }
+
+  .messageEmojiPicker {
+    max-height: 36dvh !important;
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+    overflow-y: auto !important;
+    padding: 10px !important;
+  }
+
+  .messageInfoPopover,
+  .messageTranslatePopover {
+    max-height: 46dvh !important;
+    overflow-y: auto !important;
+    padding: 12px !important;
+  }
+
+  .messageReactionWindow button,
+  .messageToolWindow button,
+  .messageEmojiPicker button {
+    min-width: 0 !important;
+    min-height: 40px !important;
+  }
+
+  .messageToolWindow .attachIcon3d {
+    width: 28px !important;
+    height: 28px !important;
+  }
+
+  .chatComposer {
+    z-index: 1200 !important;
+    left: 7px !important;
+    right: 7px !important;
+    bottom: calc(7px + env(safe-area-inset-bottom)) !important;
+    grid-template-columns: 38px 40px 40px minmax(72px, 1fr) 44px !important;
+    gap: 5px !important;
+    min-height: 54px !important;
+    padding: 6px !important;
+    border: 1px solid var(--mobile-sheet-line) !important;
+    border-radius: 18px !important;
+    background: rgba(252, 254, 255, 0.96) !important;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14) !important;
+  }
+
+  .chatComposer input {
+    min-height: 38px !important;
+    padding-inline: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .chatComposer button,
+  .composerSignButton,
+  .voiceComposerButton,
+  .sendIconButton {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 13px !important;
+  }
+
+  .sendIconButton {
+    width: 44px !important;
+  }
+
+  .composerLiveActivity {
+    display: none !important;
+  }
+
+  .signovaAttachMenu,
+  .composerPickerPanel,
+  .scheduleSendPanel {
+    position: fixed !important;
+    z-index: 2400 !important;
+    inset: auto 8px calc(76px + env(safe-area-inset-bottom)) 8px !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: min(64dvh, 540px) !important;
+    overflow-y: auto !important;
+    border: 1px solid var(--mobile-sheet-line) !important;
+    border-radius: 22px !important;
+    padding: 10px !important;
+    background: var(--mobile-sheet-bg) !important;
+    box-shadow: var(--mobile-sheet-shadow) !important;
+    backdrop-filter: blur(24px) saturate(130%) !important;
+    animation: mobileSheetRise 190ms cubic-bezier(0.2, 0.86, 0.2, 1) both !important;
+  }
+
+  .signovaAttachMenu {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  .signovaAttachBrand {
+    grid-column: 1 / -1 !important;
+    min-height: 42px !important;
+    box-shadow: none !important;
+  }
+
+  .signovaAttachMenu button {
+    min-width: 0 !important;
+    min-height: 66px !important;
+    border-radius: 13px !important;
+    padding: 6px 3px !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .signovaAttachMenu .attachIcon3d {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .composerPickerPanel {
+    grid-template-rows: auto minmax(0, 1fr) !important;
+  }
+
+  .composerPickerTabs {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .composerEmojiGrid {
+    grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+  }
+
+  .scheduleSendPanel {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .scheduleSendPanel div,
+  .scheduleSendPanel input[type="text"] {
+    grid-column: 1 / -1 !important;
+  }
+
+  .voiceNoteComposerBar {
+    position: absolute !important;
+    z-index: 4 !important;
+    inset: 5px 50px 5px 48px !important;
+    min-height: 42px !important;
+    grid-template-columns: auto auto minmax(0, 1fr) auto auto !important;
+    gap: 5px !important;
+    padding: 0 7px !important;
+    overflow: hidden !important;
+  }
+
+  .voiceNoteComposerBar small {
+    display: none !important;
+  }
+
+  .voiceNoteComposerBar button {
+    width: auto !important;
+    min-width: 34px !important;
+    min-height: 30px !important;
+    height: 30px !important;
+    padding: 0 7px !important;
+    font-size: 9px !important;
+  }
+
+  .contactMiniModalOverlay {
+    align-items: end !important;
+    padding: 8px !important;
+  }
+
+  .contactMiniModal,
+  .contactInfoWindow,
+  .attachMiniModal {
+    width: 100% !important;
+    max-height: min(82dvh, 680px) !important;
+    border-radius: 24px 24px 16px 16px !important;
+    padding: 14px !important;
+    animation: mobileSheetRise 190ms cubic-bezier(0.2, 0.86, 0.2, 1) both !important;
+  }
+
+  .settingsChooser {
+    gap: 8px !important;
+  }
+
+  .settingsChoiceCard {
+    min-height: 66px !important;
+    border-radius: 16px !important;
+    padding: 9px !important;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .settingsChoiceCard small {
+    display: none !important;
+  }
+
+  .profileLayout,
+  .settingsGrid,
+  .settingsGrid.twoColumns,
+  .communityContentGrid,
+  .communityHeroGrid,
+  .progressHeroGrid,
+  .learnLayout,
+  .libraryContentGrid {
+    gap: 10px !important;
+  }
+
+  .profileCard,
+  .settingsGroup,
+  .communityPanel,
+  .progressStatCard,
+  .learningPathCard,
+  .libraryBookCard,
+  .tutorialBook {
+    border-radius: 16px !important;
+    padding: 12px !important;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .chatCallScreen {
+    position: fixed !important;
+    z-index: 2600 !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    border-radius: 0 !important;
+  }
+
+  .chatCameraCallHeader {
+    min-height: 58px !important;
+    padding: 8px !important;
+  }
+
+  .chatCameraBrand span,
+  .chatCameraLiveStatus b,
+  .chatCameraHeaderActions {
+    display: none !important;
+  }
+
+  .chatCameraCallFrame,
+  .chatCameraVideo {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .chatCallCaptionDock {
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(86px + env(safe-area-inset-bottom)) !important;
+    width: auto !important;
+  }
+
+  .premiumDarkMode {
+    --mobile-sheet-bg: rgba(15, 25, 38, 0.97);
+    --mobile-sheet-line: rgba(112, 151, 177, 0.38);
+  }
+
+  .premiumDarkMode .chatComposer,
+  .premiumDarkMode .appRail,
+  .premiumDarkMode .headerChatActionMenu,
+  .premiumDarkMode .signovaAttachMenu,
+  .premiumDarkMode .composerPickerPanel,
+  .premiumDarkMode .scheduleSendPanel,
+  .premiumDarkMode .messageReactionWindow,
+  .premiumDarkMode .messageToolWindow,
+  .premiumDarkMode .messageEmojiPicker,
+  .premiumDarkMode .messageInfoPopover,
+  .premiumDarkMode .messageTranslatePopover {
+    background: var(--mobile-sheet-bg) !important;
+    border-color: var(--mobile-sheet-line) !important;
+  }
+
+  @keyframes mobileSheetRise {
+    from {
+      opacity: 0;
+      transform: translateY(18px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}
+
+@media (max-width: 430px) {
+  .signovaAttachMenu {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+
+  .headerChatActionMenu {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .messageToolWindow {
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+
+  .messageReactionWindow,
+  .messageEmojiPicker {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+
+  .composerPickerTabs button strong {
+    display: none !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .headerActions .videoSignChatButton {
+    display: none !important;
+  }
+
+  .chatComposer {
+    grid-template-columns: 36px 38px minmax(70px, 1fr) 42px !important;
+  }
+
+  .voiceComposerButton {
+    display: none !important;
+  }
+
+  .signovaAttachMenu {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .chatMode .chatSidebar,
+  .conversationHistoryMode .chatSidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    height: var(--mobile-page-height) !important;
+    padding: 12px !important;
+    gap: 10px !important;
+    overflow: hidden !important;
+    background:
+      radial-gradient(circle at 12% 0%, rgba(22, 198, 217, 0.12), transparent 32%),
+      linear-gradient(180deg, rgba(248, 252, 255, 0.96), rgba(238, 244, 248, 0.9)) !important;
+  }
+
+  .chatSidebarResizeHandle {
+    display: none !important;
+  }
+
+  .mobileChatRoomOpen.chatMode .chatSidebar {
+    display: none !important;
+  }
+
+  .mobileChatListOpen.chatMode .chatSidebar,
+  .conversationHistoryMode .chatSidebar {
+    display: flex !important;
+  }
+
+  .chatSidebarTop,
+  .conversationHistoryTop {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 58px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  .chatSidebarActions {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    gap: 8px !important;
+  }
+
+  .searchBox,
+  .conversationHistoryMode .searchBox {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+  }
+
+  .chatCategoryRow,
+  .conversationHistoryCategories {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+  }
+
+  .categoryComposerCard,
+  .chatSidebarOptionsMenu {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    max-height: 42dvh !important;
+    overflow-y: auto !important;
+  }
+
+  .chatList,
+  .conversationHistoryList {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 2px 0 12px !important;
+  }
+
+  .conversationHistoryItem,
+  .chatListItem {
+    width: 100% !important;
+    grid-template-columns: 54px minmax(0, 1fr) !important;
+    align-items: center !important;
+  }
+
+  .conversationPresence,
+  .chatBadges {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+    max-width: 100% !important;
+  }
+
+  .libraryTopBar,
+  .communityTopBar,
+  .communityGroupsPage .communityTopBar,
+  .communityGroupsPage .groupsTopBar {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 70 !important;
+    width: calc(100% + (var(--mobile-pad) * 2)) !important;
+    margin: calc(-1 * var(--mobile-pad)) calc(-1 * var(--mobile-pad)) 12px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+    border-radius: 0 0 24px 24px !important;
+    padding: 12px !important;
+    overflow: visible !important;
+  }
+
+  .libraryTopBar > div:first-child,
+  .communityTopBar > div:first-child,
+  .communityGroupsPage .communityTopBar > div:first-child,
+  .communityGroupsPage .groupsTopBar > div:first-child {
+    min-width: 0 !important;
+  }
+
+  .libraryTopBar strong,
+  .communityTopBar strong,
+  .communityGroupsPage .communityTopBar strong,
+  .communityGroupsPage .groupsTopBar strong {
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .librarySearch,
+  .communitySearch,
+  .communityGroupSearch,
+  .groupSearchBox {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 48px !important;
+  }
+
+  .libraryTopActions,
+  .communityTopActions,
+  .groupsTopActions {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    padding-bottom: 2px !important;
+  }
+
+  .libraryTopActions > *,
+  .communityTopActions > *,
+  .groupsTopActions > * {
+    flex: 0 0 auto !important;
+  }
+
+  .libraryDashboard,
+  .communityPage,
+  .communityGroupsPage {
+    display: block !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
+  .libraryContentGrid,
+  .libraryMainShelf,
+  .librarySideShelf,
+  .communityContentGrid,
+  .communityHeroGrid,
+  .communityGroupsLayout,
+  .communityGroupsSide,
+  .communityGroupList,
+  .communityGroupChat,
+  .groupChatPanel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .communityGroupChat,
+  .groupChatPanel {
+    margin-top: 12px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .railLogo,
+  .activeRailLogoTribute,
+  .activeRailLogoTribute *,
+  .activeFullSignovaIntro,
+  .activeFullSignovaIntro *,
+  .messageThread,
+  .chatComposer,
+  .signToolsPane {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Keep long Progress and Create Sign workspaces on the browser's native scroll. */
+body.signovaProgressPage .progressMode,
+body.signovaCreateSignPage .communityMode,
+body.signovaProgressPage .progressMode .signToolsPane,
+body.signovaCreateSignPage .communityMode .signToolsPane,
+body.signovaProgressPage .progressDashboard,
+body.signovaCreateSignPage .communityCreateSignPage,
+body.signovaCreateSignPage .createSignWorkspace,
+body.signovaCreateSignPage .createSignContent {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Community feed is a fixed workspace: only the post column scrolls. */
+html.signovaCommunityFeedPage,
+html.signovaCommunityFeedPage body,
+body.signovaCommunityFeedPage,
+body.signovaCommunityFeedPage #root {
+  width: 100% !important;
+  max-width: 100vw !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityFeedPage .messengerShell.communityMode {
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityFeedPage .communityMode .appRail {
+  position: relative !important;
+  top: auto !important;
+  height: 100vh !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityFeedPage .communityMode .signToolsPane {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100vh !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  padding: 4px 12px 12px !important;
+}
+
+body.signovaCommunityFeedPage .communityPage {
+  width: 100% !important;
+  max-width: 1320px !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: auto auto minmax(0, 1fr) !important;
+  gap: 10px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityFeedPage .communityTopBar {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 42px !important;
+  grid-template-columns: minmax(220px, 1fr) repeat(3, 42px) !important;
+  gap: 6px !important;
+}
+
+body.signovaCommunityFeedPage .communityTopBar > div:first-child > strong {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+body.signovaCommunityFeedPage .communitySearchFlyout {
+  width: min(420px, calc(100vw - 150px)) !important;
+}
+
+body.signovaCommunityFeedPage .communityFeedTabs {
+  position: static !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 4px 0 !important;
+  gap: 6px !important;
+}
+
+body.signovaCommunityFeedPage .communityFeedTabs button {
+  min-height: 28px !important;
+  padding-inline: 11px !important;
+  font-size: 11px !important;
+}
+
+body.signovaCommunityFeedPage .communitySocialLayout {
+  width: 100% !important;
+  max-width: 1180px !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  grid-template-columns: minmax(0, 1fr) clamp(220px, 22vw, 270px) !important;
+  justify-self: center !important;
+  align-items: stretch !important;
+  gap: clamp(10px, 1.4vw, 18px) !important;
+  overflow: hidden !important;
+}
+
+body.signovaCommunityFeedPage .communitySocialFeed {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  align-content: stretch !important;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+  padding: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityPostStream {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  display: block !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding: 0 8px 22px 0 !important;
+  overscroll-behavior: auto !important;
+  scroll-behavior: smooth !important;
+  scroll-snap-type: none !important;
+  scrollbar-gutter: stable !important;
+}
+
+body.signovaCommunityFeedPage .feedPostCard.communitySocialPost {
+  display: grid !important;
+  grid-template-rows: auto !important;
+  grid-auto-rows: auto !important;
+  align-content: start !important;
+  gap: 14px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin: 0 0 18px !important;
+  content-visibility: auto !important;
+  contain-intrinsic-size: 760px !important;
+  box-shadow: 0 10px 24px rgba(41, 74, 96, 0.08) !important;
+  backdrop-filter: none !important;
+  transition: transform 190ms ease, border-color 190ms ease, box-shadow 190ms ease !important;
+  scroll-snap-align: none !important;
+  scroll-margin-top: 8px !important;
+}
+
+body.signovaCommunityFeedPage .feedPostCard.communitySocialPost:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(14, 165, 233, 0.22) !important;
+  box-shadow: 0 14px 28px rgba(41, 74, 96, 0.1) !important;
+}
+
+body.signovaCommunityFeedPage .feedPostCard.communitySocialPost:last-child {
+  margin-bottom: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityPostMedia {
+  width: 100% !important;
+  min-height: clamp(240px, 34vw, 400px) !important;
+  overflow: hidden !important;
+  border-radius: 8px !important;
+}
+
+body.signovaCommunityFeedPage .communityPostMedia img,
+body.signovaCommunityFeedPage .communityPostMedia video {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  object-fit: contain !important;
+}
+
+body.signovaCommunityFeedPage .communityVideoPostMedia::after {
+  display: none !important;
+}
+
+body.signovaCommunityFeedPage .communityVideoPostMedia .communityMediaMeta {
+  top: 12px !important;
+  bottom: auto !important;
+  left: 12px !important;
+  width: max-content !important;
+  max-width: calc(100% - 24px) !important;
+}
+
+body.signovaCommunityFeedPage .communitySocialPost .postTags,
+body.signovaCommunityFeedPage .communitySocialPost .postActions,
+body.signovaCommunityFeedPage .communityLearningTip {
+  flex-shrink: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityDiscoveryRail {
+  position: static !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: fit-content !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  align-content: start !important;
+  gap: 8px !important;
+  overflow: visible !important;
+}
+
+body.signovaCommunityFeedPage .communityDiscoverCard,
+body.signovaCommunityFeedPage .communityCreateCta,
+body.signovaCommunityFeedPage .communityQuickComposer,
+body.signovaCommunityFeedPage .communitySocialPost {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+}
+
+body.signovaCommunityFeedPage .communityDiscoverCard {
+  padding: 10px !important;
+}
+
+body.signovaCommunityFeedPage .communityQuickComposer {
+  overflow: hidden !important;
+  padding: 10px !important;
+}
+
+body.signovaCommunityFeedPage .communityQuickComposer .postIdentity {
+  grid-template-columns: 38px minmax(0, 1fr) !important;
+  min-width: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityQuickComposer .postIdentity input {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+body.signovaCommunityFeedPage .communityQuickComposer .createPostActions {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: stretch !important;
+  overflow: visible !important;
+}
+
+body.signovaCommunityFeedPage .communityQuickComposer .createPostActions button {
+  flex: 1 1 86px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding-inline: 10px !important;
+  white-space: normal !important;
+}
+
+body.signovaCommunityFeedPage .communityCreatorSuggestion {
+  grid-template-columns: 36px minmax(0, 1fr) auto !important;
+  min-width: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityCreatorSuggestion > div,
+body.signovaCommunityFeedPage .socialPostHeader > div {
+  min-width: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityCreatorSuggestion strong,
+body.signovaCommunityFeedPage .communityCreatorSuggestion small,
+body.signovaCommunityFeedPage .socialPostHeader strong,
+body.signovaCommunityFeedPage .socialPostHeader small {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+body.signovaCommunityFeedPage .communityTrendChips {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+body.signovaCommunityFeedPage .communityTrendChips button {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+@media (max-width: 880px) {
+  body.signovaCommunityFeedPage .communitySocialLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+  }
+
+  body.signovaCommunityFeedPage .communityDiscoveryRail {
+    order: -1 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    align-items: stretch !important;
+    max-height: 172px !important;
+  }
+
+  body.signovaCommunityFeedPage .communityDiscoveryRail .communityDiscoverCard:nth-of-type(3),
+  body.signovaCommunityFeedPage .communityDiscoveryRail .communityCreateCta {
+    display: none !important;
+  }
+
+  body.signovaCommunityFeedPage .communityQuickComposer,
+  body.signovaCommunityFeedPage .communityDiscoveryRail .communityDiscoverCard:nth-of-type(2) {
+    max-height: 172px !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (max-width: 620px) {
+  body.signovaCommunityFeedPage .communityTopBar {
+    grid-template-columns: minmax(0, 1fr) repeat(3, 38px) !important;
+  }
+
+  body.signovaCommunityFeedPage .communityTopBar > div:first-child {
+    grid-column: 1 / -1 !important;
+  }
+
+  body.signovaCommunityFeedPage .communitySearchFlyout {
+    right: auto !important;
+    left: 0 !important;
+    width: min(340px, calc(100vw - 28px)) !important;
+  }
+
+  body.signovaCommunityFeedPage .communityQuickComposer .createPostActions {
+    justify-content: stretch !important;
+  }
+
+  body.signovaCommunityFeedPage .communityQuickComposer .createPostActions button {
+    flex: 1 1 120px !important;
+  }
+}
+
+html.signovaLibraryPage,
+body.signovaLibraryPage,
+body.signovaLibraryPage #root,
+body.signovaLibraryPage .messengerShell.libraryMode,
+body.signovaLibraryPage .libraryMode .signToolsPane {
+  height: auto !important;
+  min-height: 100vh !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+}
+
+body.signovaLibraryPage,
+body.signovaLibraryPage .messengerShell.libraryMode,
+body.signovaLibraryPage .libraryMode .signToolsPane,
+body.signovaLibraryPage .libraryDashboard {
+  overflow-x: hidden !important;
+}
+
+/* Final responsive authority for the WhatsApp-style Signova call workspace. */
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  overflow: hidden;
+}
+
+.messengerShell.chatMode {
+  width: 100vw !important;
+  height: 100dvh !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  grid-template-columns: 72px clamp(280px, 21vw, 320px) minmax(0, 1fr) !important;
+  overflow: hidden !important;
+}
+
+.messengerShell.chatMode > *,
+.callWorkspaceActive,
+.unifiedChatCallWindow,
+.unifiedCallLayout,
+.unifiedCallMain,
+.unifiedCallVideoStage,
+.unifiedCallInfoPanel {
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+
+.callWorkspaceActive {
+  position: relative !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  overflow: hidden !important;
+}
+
+.callWorkspaceActive > .chatHeader,
+.callWorkspaceActive > .chatHeaderSearch,
+.callWorkspaceActive > .messageThread,
+.callWorkspaceActive > .chatComposer,
+.callWorkspaceActive > .chatLockedCanvas {
+  display: none !important;
+}
+
+.callWorkspaceActive .unifiedChatCallWindow {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: grid !important;
+  grid-template-rows: 72px minmax(0, 1fr) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+
+.callWorkspaceActive .unifiedCallHeader {
+  position: relative !important;
+  z-index: 20 !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 72px !important;
+  display: grid !important;
+  grid-template-columns: minmax(160px, 0.8fr) minmax(190px, 1fr) auto !important;
+  gap: 12px !important;
+  padding: 10px 14px !important;
+  overflow: hidden !important;
+}
+
+.callWorkspaceActive .unifiedCallBrand,
+.callWorkspaceActive .unifiedCallTitle,
+.callWorkspaceActive .unifiedCallWindowActions {
+  min-width: 0 !important;
+}
+
+.callWorkspaceActive .unifiedCallBrand span,
+.callWorkspaceActive .unifiedCallTitle strong,
+.callWorkspaceActive .unifiedCallTitle small {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.callWorkspaceActive .unifiedCallLayout {
+  height: 100% !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) clamp(270px, 23vw, 340px) !important;
+  gap: 12px !important;
+  padding: 12px !important;
+  overflow: hidden !important;
+}
+
+.callWorkspaceActive .unifiedCallMain {
+  height: 100% !important;
+  display: grid !important;
+  grid-template-rows: minmax(0, 1fr) auto !important;
+  gap: 10px !important;
+  overflow: hidden !important;
+}
+
+.callWorkspaceActive .unifiedCallVideoStage {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+}
+
+.callWorkspaceActive .unifiedLocalCallVideo,
+.callWorkspaceActive .unifiedPartnerPreview video {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: cover !important;
+}
+
+.callWorkspaceActive .unifiedPartnerPreview {
+  top: 14px !important;
+  right: 14px !important;
+  width: clamp(145px, 23%, 220px) !important;
+  max-width: calc(100% - 28px) !important;
+}
+
+.callWorkspaceActive .unifiedTranslationCaption {
+  right: clamp(12px, 15%, 160px) !important;
+  bottom: 14px !important;
+  left: clamp(12px, 15%, 160px) !important;
+  max-width: none !important;
+}
+
+.callWorkspaceActive .unifiedCallControls {
+  position: relative !important;
+  z-index: 15 !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(6, minmax(62px, 1fr)) minmax(96px, 1.2fr) !important;
+  gap: 6px !important;
+  flex: none !important;
+  overflow: hidden !important;
+}
+
+.callWorkspaceActive .unifiedCallControls button {
+  min-width: 0 !important;
+  min-height: 52px !important;
+}
+
+.callWorkspaceActive .unifiedCallInfoPanel {
+  height: 100% !important;
+  display: grid !important;
+  align-content: start !important;
+  gap: 10px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  padding-right: 2px !important;
+}
+
+.unifiedCallInfoToggle {
+  display: none !important;
+}
+
+@media (max-width: 1200px) {
+  .messengerShell.chatMode {
+    grid-template-columns: 68px 92px minmax(0, 1fr) !important;
+  }
+
+  .chatMode .chatSidebar {
+    width: 92px !important;
+    min-width: 92px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 10px 8px !important;
+    overflow: hidden !important;
+  }
+
+  .chatMode .chatSidebarTop {
+    width: 100% !important;
+    min-height: 48px !important;
+    justify-content: center !important;
+    padding: 5px !important;
+  }
+
+  .chatMode .chatSidebarTop > strong,
+  .chatMode .searchBox,
+  .chatMode .chatCategoryRow,
+  .chatMode .mobileListSummary,
+  .chatMode .chatSidebarResizeHandle,
+  .chatMode .chatListItem > span,
+  .chatMode .chatSidebarActions .moreChatAction {
+    display: none !important;
+  }
+
+  .chatMode .chatSidebarActions {
+    display: grid !important;
+    place-items: center !important;
+  }
+
+  .chatMode .chatList {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 8px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 2px 0 !important;
+  }
+
+  .chatMode .chatListItem {
+    width: 64px !important;
+    min-width: 64px !important;
+    min-height: 64px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center !important;
+    padding: 6px !important;
+    border-radius: 18px !important;
+  }
+
+  .chatMode .chatListItem .avatar {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) clamp(220px, 21vw, 270px) !important;
+    gap: 9px !important;
+    padding: 9px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls {
+    display: flex !important;
+    gap: 6px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .callWorkspaceActive .unifiedCallControls button {
+    flex: 1 0 74px !important;
+  }
+
+  .callWorkspaceActive .unifiedEndCallButton {
+    flex-basis: 108px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .messengerShell.chatMode {
+    grid-template-columns: 64px 78px minmax(0, 1fr) !important;
+  }
+
+  .chatMode .appRail {
+    width: 64px !important;
+    min-width: 64px !important;
+  }
+
+  .chatMode .chatSidebar {
+    width: 78px !important;
+    min-width: 78px !important;
+    padding-inline: 6px !important;
+  }
+
+  .chatMode .chatListItem {
+    width: 58px !important;
+    min-width: 58px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallHeader {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    padding-inline: 10px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallBrand {
+    display: none !important;
+  }
+
+  .callWorkspaceActive .unifiedCallTitle {
+    justify-self: start !important;
+  }
+
+  .callWorkspaceActive .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) 210px !important;
+    padding: 8px !important;
+  }
+
+  .callWorkspaceActive .unifiedTranslationCaption {
+    right: 10px !important;
+    left: 10px !important;
+  }
+}
+
+/* Final desktop authority for Library.
+   Prevent older three-column workspace rules from reserving a hidden sidebar. */
+@media (min-width: 761px) {
+  body.signovaLibraryPage .messengerShell.libraryMode {
+    --library-rail-width: 72px;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    grid-template-columns: var(--library-rail-width) minmax(0, 1fr) !important;
+    overflow-x: hidden !important;
+  }
+
+  body.signovaLibraryPage .libraryMode .appRail {
+    grid-column: 1 !important;
+    width: var(--library-rail-width) !important;
+    min-width: var(--library-rail-width) !important;
+    max-width: var(--library-rail-width) !important;
+    padding-inline: 8px !important;
+  }
+
+  body.signovaLibraryPage .libraryMode .signToolsPane {
+    grid-column: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    padding: clamp(14px, 2vw, 26px) !important;
+  }
+
+  body.signovaLibraryPage .libraryDashboard,
+  body.signovaLibraryPage .libraryTopBar,
+  body.signovaLibraryPage .libraryHeroSpace,
+  body.signovaLibraryPage .libraryContentGrid {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  body.signovaLibraryPage .messengerShell.libraryMode {
+    --library-rail-width: 68px;
+  }
+
+  body.signovaLibraryPage .libraryTopActions {
+    grid-template-columns: minmax(0, 410px) 88px !important;
+    justify-content: end !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body.signovaLibraryPage .libraryTopBar .libraryTopIdentity > span {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  body.signovaLibraryPage .libraryTopActions .librarySearch {
+    flex: 1 1 auto !important;
+    width: auto !important;
+  }
+
+  body.signovaLibraryPage .libraryTopActions .libraryIconButton {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    flex: 0 0 44px !important;
+    margin-right: 4px !important;
+    border-radius: 48% 52% 46% 54% / 54% 45% 55% 46% !important;
+  }
+
+  body.signovaLibraryPage .libraryTopActions .libraryIconButton:hover,
+  body.signovaLibraryPage .libraryTopActions .libraryIconButton:focus-visible {
+    width: 88px !important;
+    min-width: 88px !important;
+    flex-basis: 88px !important;
+    border-radius: 18px 16px 19px 15px !important;
+  }
+
+  body.signovaLibraryPage .libraryHeroCopy {
+    max-width: 100% !important;
+  }
+
+  body.signovaLibraryPage .libraryHeroSpace::before,
+  body.signovaLibraryPage .libraryHeroSpace::after {
+    opacity: 0.18;
+  }
+}
+
+/* Essential compact dock and responsive caption position. */
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls {
+  right: max(16px, 15%) !important;
+  left: max(16px, 15%) !important;
+  min-height: 54px !important;
+  grid-template-columns: repeat(3, minmax(64px, 1fr)) minmax(104px, 1.15fr) !important;
+  gap: 6px !important;
+  border-radius: 16px !important;
+  padding: 6px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button {
+  min-height: 42px !important;
+  border-radius: 11px !important;
+  padding: 4px 7px !important;
+}
+
+.unifiedCameraStateIcon,
+.unifiedMicStateIcon {
+  position: relative;
+  grid-row: 1 / 3;
+  width: 28px;
+  height: 28px;
+  display: block;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 9px;
+  background: rgba(45, 207, 235, 0.2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.42), 0 5px 12px rgba(5, 24, 38, 0.2);
+}
+
+.unifiedCameraStateIcon i {
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  width: 13px;
+  height: 11px;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+}
+
+.unifiedCameraStateIcon b {
+  position: absolute;
+  top: 10px;
+  right: 4px;
+  width: 6px;
+  height: 7px;
+  border: 2px solid currentColor;
+  border-left: 0;
+  border-radius: 0 3px 3px 0;
+}
+
+.unifiedMicStateIcon i {
+  position: absolute;
+  top: 5px;
+  left: 9px;
+  width: 8px;
+  height: 13px;
+  border: 2px solid currentColor;
+  border-radius: 999px;
+}
+
+.unifiedMicStateIcon b {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  left: 6px;
+  height: 9px;
+  border: 2px solid currentColor;
+  border-top: 0;
+  border-radius: 0 0 999px 999px;
+}
+
+.mediaCallControlOn .unifiedCameraStateIcon,
+.mediaCallControlOn .unifiedMicStateIcon {
+  color: #7cecff;
+}
+
+.mediaCallControlOff {
+  border-color: rgba(255, 111, 120, 0.6) !important;
+  background: rgba(136, 35, 44, 0.48) !important;
+}
+
+.mediaCallControlOff .unifiedCameraStateIcon,
+.mediaCallControlOff .unifiedMicStateIcon {
+  color: #ff8a92;
+  background: rgba(255, 73, 86, 0.2);
+}
+
+.mediaCallControlOff .unifiedCameraStateIcon::after,
+.mediaCallControlOff .unifiedMicStateIcon::after {
+  position: absolute;
+  z-index: 2;
+  top: 13px;
+  left: 3px;
+  width: 21px;
+  height: 2px;
+  border-radius: 999px;
+  background: #ff5260;
+  content: "";
+  transform: rotate(-42deg);
+  box-shadow: 0 0 0 1px rgba(43, 9, 13, 0.2);
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedTranslationCaption {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: bottom 240ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 240ms ease !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAboveCallControls {
+  bottom: 82px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAtVideoBottom {
+  bottom: 14px !important;
+}
+
+@media (max-width: 900px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls {
+    right: 8px !important;
+    left: 8px !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAboveCallControls {
+    bottom: 68px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAtVideoBottom {
+    bottom: 8px !important;
+  }
+}
+
+/* Final layout guardrails for Learn and Community.
+   These pages previously inherited conflicting rail widths and rigid header
+   columns from older desktop redesigns, which made the rail expand and pushed
+   header actions outside the viewport at scaled/medium desktop widths. */
+@media (min-width: 761px) {
+  body.signovaLearnPage .messengerShell.learnMode,
+  body.signovaCommunityFeedPage .messengerShell.communityMode {
+    --section-rail-width: 72px;
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    grid-template-columns: var(--section-rail-width) minmax(0, 1fr) !important;
+  }
+
+  body.signovaLearnPage .learnMode .appRail,
+  body.signovaCommunityFeedPage .communityMode .appRail {
+    grid-column: 1 !important;
+    width: var(--section-rail-width) !important;
+    min-width: var(--section-rail-width) !important;
+    max-width: var(--section-rail-width) !important;
+    padding-inline: 8px !important;
+    overflow: visible !important;
+  }
+
+  body.signovaLearnPage .learnMode .signToolsPane,
+  body.signovaCommunityFeedPage .communityMode .signToolsPane {
+    grid-column: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar,
+  body.signovaCommunityFeedPage .communityTopBar {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar > div:first-child,
+  body.signovaCommunityFeedPage .communityTopBar > div:first-child {
+    min-width: 0 !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar > div:first-child strong,
+  body.signovaCommunityFeedPage .communityTopBar > div:first-child > strong {
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  body.signovaCommunityFeedPage .communityNotificationWrap,
+  body.signovaCommunityFeedPage .communityAvatarWrap,
+  body.signovaCommunityFeedPage .communityIconButton,
+  body.signovaCommunityFeedPage .communityCreateSignButton,
+  body.signovaCommunityFeedPage .communityAvatar {
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    height: 46px !important;
+    min-height: 46px !important;
+  }
+
+  body.signovaCommunityFeedPage .communityTopBar {
+    grid-template-columns: minmax(180px, 1fr) repeat(3, 40px) !important;
+    gap: 6px !important;
+  }
+
+  body.signovaCommunityFeedPage .communitySocialLayout,
+  body.signovaCommunityFeedPage .communitySocialFeed,
+  body.signovaCommunityFeedPage .communityDiscoveryRail,
+  body.signovaCommunityFeedPage .communityPostStream {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 1180px) {
+  body.signovaLearnPage .messengerShell.learnMode,
+  body.signovaCommunityFeedPage .messengerShell.communityMode {
+    --section-rail-width: 68px;
+  }
+
+  body.signovaLearnPage .learnMode .signToolsPane,
+  body.signovaCommunityFeedPage .communityMode .signToolsPane {
+    padding: 4px 10px 10px !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar {
+    grid-template-columns: minmax(170px, 1fr) auto !important;
+    gap: 6px !important;
+    min-height: 40px !important;
+    padding: 0 !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar > div:first-child {
+    grid-column: auto !important;
+  }
+
+  body.signovaLearnPage .gestureLearnTopBar > div:first-child > strong {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+
+  body.signovaLearnPage .gestureTopStats {
+    width: auto !important;
+    min-width: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+  }
+
+  body.signovaLearnPage .gestureTopStats span {
+    min-width: 0 !important;
+    padding-inline: 8px !important;
+  }
+
+  body.signovaLearnPage .learnCornerAction {
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 78px !important;
+    min-height: 38px !important;
+    overflow: visible !important;
+  }
+
+  body.signovaLearnPage .learnCornerAction > small {
+    display: block !important;
+  }
+
+  body.signovaLearnPage .learnCornerAction:hover,
+  body.signovaLearnPage .learnCornerAction:focus-visible {
+    width: 78px !important;
+    min-width: 78px !important;
+  }
+
+  body.signovaCommunityFeedPage .communityTopBar > div:first-child > strong {
+    font-size: 24px !important;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 960px) {
+  body.signovaCommunityFeedPage .communityTopBar {
+    grid-template-columns: minmax(0, 1fr) repeat(3, 38px) !important;
+    gap: 6px !important;
+  }
+
+  body.signovaCommunityFeedPage .communityNotificationWrap,
+  body.signovaCommunityFeedPage .communityAvatarWrap,
+  body.signovaCommunityFeedPage .communityIconButton,
+  body.signovaCommunityFeedPage .communityCreateSignButton,
+  body.signovaCommunityFeedPage .communityAvatar {
+    width: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    height: 42px !important;
+    min-height: 42px !important;
+    border-radius: 14px !important;
+  }
+
+  body.signovaCommunityFeedPage .communitySocialLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  body.signovaCommunityFeedPage .communityDiscoveryRail {
+    display: none !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .messengerShell.chatMode {
+    width: 100vw !important;
+    height: 100dvh !important;
+    display: grid !important;
+    grid-template-columns: 58px 68px minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+  }
+
+  .chatMode .appRail {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 58px !important;
+    height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    border-radius: 0 !important;
+    padding: 8px 5px !important;
+    overflow: hidden !important;
+  }
+
+  .chatMode .railNav {
+    width: 100% !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 4px 0 !important;
+  }
+
+  .chatMode .railButton,
+  .chatMode .railLogoButton,
+  .chatMode .profileButton {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    flex: 0 0 44px !important;
+  }
+
+  .chatMode .railProfileSection {
+    margin-top: auto !important;
+  }
+
+  .chatMode .chatSidebar {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 68px !important;
+    min-width: 68px !important;
+    height: 100dvh !important;
+    padding: 7px 5px !important;
+  }
+
+  .chatMode .conversationPane {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    display: grid !important;
+  }
+
+  .callWorkspaceActive .unifiedChatCallWindow {
+    grid-template-rows: 58px minmax(0, 1fr) !important;
+  }
+
+  .callWorkspaceActive .unifiedCallHeader {
+    min-height: 58px !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallTitle > span,
+  .callWorkspaceActive .unifiedCallTitle small,
+  .callWorkspaceActive .unifiedCallExpandButton {
+    display: none !important;
+  }
+
+  .callWorkspaceActive .unifiedCallWindowActions {
+    gap: 2px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallWindowActions button {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+  }
+
+  .unifiedCallInfoToggle {
+    display: grid !important;
+  }
+
+  .callWorkspaceActive .unifiedCallLayout {
+    position: relative !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 6px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallMain {
+    gap: 6px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallVideoStage {
+    border-radius: 15px !important;
+  }
+
+  .callWorkspaceActive .unifiedPartnerPreview {
+    top: 8px !important;
+    right: 8px !important;
+    width: min(42%, 150px) !important;
+  }
+
+  .callWorkspaceActive .unifiedTranslationCaption {
+    right: 7px !important;
+    bottom: 7px !important;
+    left: 7px !important;
+    border-radius: 12px !important;
+    padding: 7px 8px !important;
+  }
+
+  .callWorkspaceActive .unifiedTranslationCaption strong {
+    font-size: clamp(12px, 4vw, 17px) !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    overflow: hidden !important;
+    padding: 4px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls button {
+    min-width: 0 !important;
+    min-height: 44px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center !important;
+    padding: 4px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls button .railIcon3d {
+    grid-row: auto !important;
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .callWorkspaceActive .unifiedCallControls button > span:not(.railIcon3d),
+  .callWorkspaceActive .unifiedCallControls button > small,
+  .callWorkspaceActive .unifiedEndCallButton > b {
+    display: none !important;
+  }
+
+  .callWorkspaceActive .unifiedEndCallButton {
+    min-width: 0 !important;
+    flex-basis: auto !important;
+  }
+
+  .callWorkspaceActive .unifiedCallInfoPanel {
+    position: absolute !important;
+    z-index: 50 !important;
+    top: 6px !important;
+    right: 6px !important;
+    bottom: 6px !important;
+    width: min(280px, calc(100% - 12px)) !important;
+    height: auto !important;
+    display: grid !important;
+    padding: 8px !important;
+    border: 1px solid rgba(191, 211, 222, 0.82) !important;
+    border-radius: 16px !important;
+    background: rgba(248, 252, 255, 0.96) !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2) !important;
+    backdrop-filter: blur(20px) saturate(145%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(18px) scale(0.98) !important;
+    transition: opacity 180ms ease, transform 180ms ease !important;
+  }
+
+  .callWorkspaceActive .callInfoDrawerOpen .unifiedCallInfoPanel {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transform: translateX(0) scale(1) !important;
+  }
+}
+
+/* Keep the live call identity visually centered regardless of side actions. */
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallHeader {
+  position: relative !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallTitle {
+  position: absolute !important;
+  z-index: 2 !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: min(420px, 42vw) !important;
+  justify-content: center !important;
+  justify-self: auto !important;
+  transform: translate(-50%, -50%) !important;
+  text-align: left !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallTitle > span {
+  grid-row: 1 / 4 !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallWindowActions {
+  grid-column: 3 !important;
+  justify-self: end !important;
+}
+
+.unifiedCallConnectionBar {
+  min-width: 0;
+  display: flex;
+  grid-column: 2;
+  align-items: center;
+  gap: 3px;
+  justify-self: start;
+  color: #4c6078;
+}
+
+.unifiedCallConnectionBar i {
+  width: 3px;
+  border-radius: 999px;
+  background: #17b86b;
+  box-shadow: 0 0 8px rgba(23, 184, 107, 0.28);
+}
+
+.unifiedCallConnectionBar i:nth-child(1) { height: 4px; }
+.unifiedCallConnectionBar i:nth-child(2) { height: 7px; }
+.unifiedCallConnectionBar i:nth-child(3) { height: 10px; }
+.unifiedCallConnectionBar i:nth-child(4) { height: 13px; }
+
+.unifiedCallConnectionBar em {
+  margin-left: 5px;
+  overflow: hidden;
+  color: #4c6078;
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unifiedCallConnectionBar.connectingCallSignal i {
+  background: #f2a72e;
+  animation: callSignalPulse 900ms ease-in-out infinite alternate;
+}
+
+@keyframes callSignalPulse {
+  to { opacity: 0.35; transform: scaleY(0.72); }
+}
+
+.unifiedHandTrackerOverlay {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.unifiedHandTrackerOverlay.trackerPointsHidden {
+  opacity: 0;
+}
+
+.unifiedPartnerPreview .unifiedPreviewHandTrackerOverlay {
+  z-index: 3;
+  border-radius: inherit;
+}
+
+.unifiedPartnerPreview > span,
+.unifiedPartnerPreview > b {
+  z-index: 5 !important;
+}
+
+.unifiedMoreCallWrap {
+  position: relative;
+  min-width: 0;
+  display: grid;
+}
+
+.unifiedMoreCallWrap > .unifiedMoreCallControl {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.unifiedMoreCallPopover {
+  position: absolute;
+  z-index: 3400;
+  right: 0;
+  bottom: calc(100% + 10px);
+  width: 260px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(187, 213, 229, 0.92);
+  border-radius: 16px;
+  padding: 13px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 20px 50px rgba(28, 67, 100, 0.2);
+  backdrop-filter: blur(18px);
+}
+
+.unifiedMoreCallPopover > span {
+  color: #19304d;
+  font-size: 11px;
+  font-weight: 1000;
+}
+
+.unifiedCallLanguageGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.unifiedCallControls .unifiedMoreCallPopover button {
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 34px !important;
+  height: auto !important;
+  display: block !important;
+  border-radius: 9px !important;
+  padding: 7px !important;
+  font-size: 9px !important;
+}
+
+.unifiedCallControls .unifiedMoreCallPopover .activeCallLanguage {
+  border-color: #79c7ff !important;
+  background: #e5f5ff !important;
+  color: #0878ea !important;
+}
+
+.unifiedMoreCallPopover label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #334a65;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.unifiedMoreCallPopover input {
+  width: 15px;
+  height: 15px;
+}
+
+.unifiedCallTemporaryHistory {
+  min-height: 0;
+  display: grid !important;
+  align-content: start;
+  gap: 8px !important;
+}
+
+.unifiedCallTemporaryHistory > div {
+  display: grid;
+  gap: 3px;
+  border: 1px solid #dceaf3;
+  border-radius: 10px;
+  padding: 9px;
+  background: #f7fbff;
+}
+
+.unifiedCallTemporaryHistory p {
+  color: #74869a;
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.dedicatedChatCallWindow .unifiedLocalCallVideo,
+.dedicatedChatCallWindow .unifiedPartnerPreview video {
+  image-rendering: auto;
+  filter: contrast(1.025) saturate(1.025);
+}
+
+@media (max-width: 900px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallTitle {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    width: auto !important;
+    justify-content: flex-start !important;
+    transform: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallWindowActions {
+    grid-column: auto !important;
+  }
+
+  .unifiedCallConnectionBar {
+    display: none;
+  }
+}
+
+/* Primary chat-call experience: structured dedicated window matching the desktop call design. */
+.callWorkspaceActive .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow),
+.dedicatedChatCallWindow.expandedUnifiedChatCallWindow:not(.minimizedUnifiedChatCallWindow) {
+  position: fixed !important;
+  z-index: 3000 !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  max-width: none !important;
+  max-height: none !important;
+  grid-template-rows: 72px minmax(0, 1fr) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #f7fbff !important;
+  box-shadow: none !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallHeader {
+  min-height: 72px !important;
+  grid-template-columns: minmax(190px, 0.8fr) minmax(280px, 1fr) auto !important;
+  padding: 9px 22px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 1px 0 rgba(190, 210, 224, 0.72) !important;
+  -webkit-app-region: drag;
+}
+
+.dedicatedChatCallWindow .unifiedCallHeader button,
+.dedicatedChatCallWindow .unifiedCallHeader .unifiedCallTitle,
+.dedicatedChatCallWindow .unifiedCallHeader .unifiedCallBrand {
+  -webkit-app-region: no-drag;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+  width: 100% !important;
+  height: 100% !important;
+  grid-template-columns: clamp(190px, 15vw, 250px) minmax(0, 1fr) clamp(250px, 20vw, 320px) !important;
+  gap: 14px !important;
+  padding: 14px !important;
+  background: #f7fbff !important;
+}
+
+.unifiedCallModeRail {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid rgba(198, 218, 231, 0.82);
+  border-radius: 20px;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 16px 40px rgba(38, 82, 120, 0.08);
+  overflow: hidden;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallBrand {
+  min-width: 0 !important;
+  justify-self: start !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallBrand img {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallBrand strong,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallBrand small {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.unifiedCallModeBrand {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 3px 7px 14px;
+  border-bottom: 1px solid rgba(210, 225, 234, 0.76);
+}
+
+.unifiedCallModeBrand img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+}
+
+.unifiedCallModeBrand span {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.unifiedCallModeBrand strong {
+  color: #10213b;
+  font-size: 15px;
+}
+
+.unifiedCallModeBrand small {
+  overflow: hidden;
+  color: #71839a;
+  font-size: 8px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unifiedCallModeRail nav {
+  min-height: 0;
+  display: grid;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.unifiedCallModeRail nav button,
+.unifiedCallRailProfile {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 7px 9px;
+  background: transparent;
+  color: #243853;
+  box-shadow: none;
+  text-align: left;
+}
+
+.unifiedCallModeRail nav button::after,
+.unifiedCallRailProfile::after {
+  display: grid;
+  place-items: center;
+  color: #0878ea;
+  content: "›";
+  font-size: 20px;
+  font-weight: 900;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.unifiedCallModeRail nav button:hover::after,
+.unifiedCallModeRail nav button:focus-visible::after,
+.unifiedCallRailProfile:hover::after,
+.unifiedCallRailProfile:focus-visible::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.unifiedCallModeRail nav button:hover,
+.unifiedCallModeRail .activeCallModeRailItem {
+  border-color: #cce7fb;
+  background: #eaf6ff;
+  color: #0878ea;
+}
+
+.unifiedCallModeRail .railIcon3d {
+  width: 34px;
+  height: 34px;
+}
+
+.unifiedCallModeRail nav button > span:not(.railIcon3d),
+.unifiedCallRailProfile > span {
+  overflow: hidden;
+  font-size: 11px;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unifiedCallRailProfile {
+  margin-top: auto;
+}
+
+.unifiedCallRailProfile b {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e5f3ff;
+  color: #0878ea;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallMain {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  grid-template-rows: minmax(0, 1fr) 76px !important;
+  gap: 12px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallVideoStage {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border: 10px solid rgba(255, 255, 255, 0.98) !important;
+  border-radius: 24px !important;
+  background: #dceaf1 !important;
+  box-shadow: 0 16px 46px rgba(35, 75, 107, 0.12) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedPartnerPreview {
+  appearance: none !important;
+  top: 18px !important;
+  right: 18px !important;
+  width: clamp(170px, 25%, 260px) !important;
+  aspect-ratio: 16 / 10 !important;
+  overflow: hidden !important;
+  border: 5px solid rgba(255, 255, 255, 0.94) !important;
+  border-radius: 18px !important;
+  padding: 0 !important;
+  background: #eaf4f8 !important;
+  box-shadow: 0 12px 32px rgba(20, 55, 85, 0.22) !important;
+  cursor: pointer !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedPartnerPreview:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedTranslationCaption {
+  right: clamp(18px, 17%, 190px) !important;
+  bottom: 18px !important;
+  left: clamp(18px, 17%, 190px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
+  border-radius: 18px !important;
+  background: rgba(24, 32, 48, 0.58) !important;
+  box-shadow: 0 14px 36px rgba(10, 20, 35, 0.18) !important;
+  backdrop-filter: blur(16px) saturate(135%) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls {
+  min-width: 0 !important;
+  min-height: 76px !important;
+  grid-template-columns: repeat(6, minmax(62px, 1fr)) minmax(112px, 1.25fr) !important;
+  gap: 7px !important;
+  border: 1px solid rgba(198, 218, 231, 0.82) !important;
+  border-radius: 18px !important;
+  padding: 7px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  box-shadow: 0 12px 32px rgba(38, 82, 120, 0.08) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallInfoPanel {
+  min-width: 0 !important;
+  min-height: 0 !important;
+  align-content: start !important;
+  border: 1px solid rgba(198, 218, 231, 0.82) !important;
+  border-radius: 20px !important;
+  padding: 12px !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: 0 16px 40px rgba(38, 82, 120, 0.08) !important;
+}
+
+@media (max-width: 1180px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: 76px minmax(0, 1fr) 230px !important;
+  }
+
+  .unifiedCallModeBrand span,
+  .unifiedCallModeRail nav button > span:not(.railIcon3d),
+  .unifiedCallRailProfile > span {
+    display: none !important;
+  }
+
+  .unifiedCallModeRail nav button,
+  .unifiedCallRailProfile {
+    grid-template-columns: 1fr;
+    place-items: center;
+    padding: 6px !important;
+  }
+
+  .unifiedMoreCallPopover {
+    left: 96px !important;
+  }
+
+  .unifiedCallModeRail nav button::after,
+  .unifiedCallRailProfile::after {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 900px) {
+  .unifiedMoreCallPopover {
+    top: auto !important;
+    right: 10px !important;
+    bottom: 76px !important;
+    left: auto !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: 70px minmax(0, 1fr) !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallInfoPanel {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallInfoToggle {
+    display: grid !important;
+  }
+
+  .dedicatedChatCallWindow.callInfoDrawerOpen:not(.minimizedUnifiedChatCallWindow) .unifiedCallInfoPanel {
+    position: fixed !important;
+    z-index: 3200 !important;
+    top: 84px !important;
+    right: 12px !important;
+    bottom: 12px !important;
+    width: min(310px, calc(100vw - 24px)) !important;
+    display: grid !important;
+  }
+}
+
+@media (max-width: 650px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallHeader {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallBrand,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    padding: 6px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallMain {
+    grid-template-rows: minmax(0, 1fr) 58px !important;
+  }
+}
+
+/* Mobile inbox refinement: natural-height rows instead of stretched empty cards. */
+.mobileListSummary {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .chatMode .chatSidebar,
+  .conversationHistoryMode .chatSidebar {
+    gap: 8px !important;
+    padding: 10px 10px 8px !important;
+  }
+
+  .chatSidebarTop,
+  .conversationHistoryTop {
+    min-height: 52px !important;
+    border-radius: 18px !important;
+    padding: 8px 10px !important;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .chatSidebarTop strong,
+  .conversationHistoryTop strong {
+    font-size: 23px !important;
+  }
+
+  .chatSidebarActions button {
+    width: 38px !important;
+    min-height: 38px !important;
+    border-radius: 13px !important;
+    box-shadow: 0 5px 12px rgba(15, 23, 42, 0.07) !important;
+  }
+
+  .chatMode .searchBox,
+  .conversationHistoryMode .searchBox {
+    min-height: 44px !important;
+    border-radius: 15px !important;
+    box-shadow: none !important;
+  }
+
+  .chatCategoryRow,
+  .conversationHistoryCategories {
+    min-height: 36px !important;
+    gap: 6px !important;
+    padding: 0 1px 2px !important;
+  }
+
+  .chatCategoryRow button,
+  .conversationHistoryCategories button {
+    min-height: 34px !important;
+    border-radius: 12px !important;
+    padding-inline: 12px !important;
+    box-shadow: none !important;
+    font-size: 10px !important;
+  }
+
+  .mobileListSummary {
+    flex: 0 0 auto;
+    min-height: 28px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 2px 4px 0;
+  }
+
+  .mobileListSummary span {
+    color: var(--ink);
+    font-size: 12px;
+    font-weight: 1000;
+  }
+
+  .mobileListSummary small {
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 850;
+  }
+
+  .chatList,
+  .conversationHistoryList {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    align-content: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 7px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding: 0 1px calc(72px + env(safe-area-inset-bottom)) !important;
+    background: transparent !important;
+    scroll-padding-bottom: 88px;
+  }
+
+  .chatListItem,
+  .conversationHistoryItem {
+    flex: 0 0 auto !important;
+    align-self: stretch !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 68px !important;
+    max-height: none !important;
+    grid-template-columns: 48px minmax(0, 1fr) !important;
+    align-items: center !important;
+    gap: 9px !important;
+    border: 1px solid rgba(190, 211, 222, 0.74) !important;
+    border-radius: 16px !important;
+    padding: 9px 10px !important;
+    background: rgba(255, 255, 255, 0.78) !important;
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.055) !important;
+    transform: none !important;
+  }
+
+  .chatListItem.activeChat,
+  .conversationHistoryItem.activeChat {
+    border-color: rgba(22, 198, 217, 0.5) !important;
+    background: linear-gradient(135deg, rgba(235, 251, 254, 0.96), rgba(245, 249, 255, 0.92)) !important;
+    box-shadow: inset 3px 0 0 #18bcd0, 0 7px 18px rgba(14, 165, 233, 0.09) !important;
+  }
+
+  .chatListItem .avatar,
+  .conversationHistoryItem .avatar {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .chatListItem > span,
+  .conversationHistoryItem > span {
+    min-width: 0 !important;
+    display: grid !important;
+    gap: 3px !important;
+  }
+
+  .chatListItem strong,
+  .conversationHistoryItem strong {
+    font-size: 14px !important;
+    line-height: 1.15 !important;
+  }
+
+  .chatListMetaActivity,
+  .conversationHistoryItem small {
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: 10px !important;
+    line-height: 1.25 !important;
+  }
+
+  .chatListMetaActivity .headerActivityTicker {
+    min-width: 72px !important;
+    max-width: 118px !important;
+    height: 14px !important;
+  }
+
+  .conversationPresence,
+  .chatBadges {
+    margin-top: 1px !important;
+    gap: 4px !important;
+  }
+
+  .conversationPresence b,
+  .chatBadges b {
+    border-radius: 999px !important;
+    padding: 2px 6px !important;
+    font-size: 8px !important;
+  }
+
+  .emptyChatState {
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 132px !important;
+    display: grid !important;
+    place-items: center !important;
+    margin: 0 !important;
+    border: 1px dashed rgba(148, 177, 195, 0.72) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    background: rgba(255, 255, 255, 0.42) !important;
+    color: var(--muted) !important;
+    font-size: 11px !important;
+    font-weight: 850 !important;
+    text-align: center !important;
+  }
+
+  .premiumDarkMode .chatListItem,
+  .premiumDarkMode .conversationHistoryItem {
+    border-color: rgba(112, 151, 177, 0.32) !important;
+    background: rgba(20, 34, 49, 0.82) !important;
+  }
+
+  .premiumDarkMode .chatListItem.activeChat,
+  .premiumDarkMode .conversationHistoryItem.activeChat {
+    background: rgba(18, 53, 67, 0.92) !important;
+  }
+
+  .gestureLearnStudio {
+    display: block !important;
+    min-height: auto !important;
+    background: transparent !important;
+  }
+
+  html.signovaLearnPage,
+  body.signovaLearnPage,
+  body.signovaLearnPage #root,
+  body.signovaLearnPage .messengerShell.learnMode,
+  body.signovaLearnPage .learnMode .signToolsPane {
+    height: auto !important;
+    min-height: 100vh !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  body.signovaLearnPage {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .gestureLearnTopBar {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    gap: 6px !important;
+    padding-top: 0 !important;
+  }
+
+  .gestureLearnTopBar > div:first-child strong {
+    font-size: 24px !important;
+  }
+
+  .learnHeaderActions {
+    gap: 2px !important;
+  }
+
+  .gestureLearnTopBar .learnCornerAction {
+    width: 36px !important;
+    min-width: 36px !important;
+    min-height: 36px !important;
+  }
+
+  .gestureLearnTopBar .learnCornerAction:hover,
+  .gestureLearnTopBar .learnCornerAction:focus-visible {
+    width: 36px !important;
+    min-width: 36px !important;
+    padding: 0 !important;
+  }
+
+  .gestureLearnTopBar .learnCornerAction > small {
+    display: none !important;
+  }
+
+  .gestureLearnTopBar > div:first-child small {
+    display: none !important;
+  }
+
+  .gestureTopStats {
+    grid-column: 1 / -1;
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .gestureTopStats span {
+    min-width: 0 !important;
+    padding: 6px 7px !important;
+  }
+
+  .gestureLearnLayout {
+    display: grid !important;
+    gap: 10px !important;
+    overflow: visible !important;
+    padding: 0 0 calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .gestureMissionStage,
+  .gesturePracticeGrid,
+  .gestureRecallStrip {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gestureMissionStage,
+  .gestureLoopSection,
+  .gesturePracticeModes,
+  .gestureCoachScore,
+  .gestureMissionShelf,
+  .gestureRecallStrip {
+    gap: 10px !important;
+    border-radius: 18px !important;
+    padding: 11px !important;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.06) !important;
+  }
+
+  .gestureMissionCopy {
+    gap: 8px !important;
+    padding: 5px !important;
+  }
+
+  .gestureMissionCopy h2 {
+    max-width: none !important;
+    font-size: clamp(32px, 11vw, 48px) !important;
+  }
+
+  .missionActions {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    width: 100% !important;
+  }
+
+  .missionActions .primaryMissionAction {
+    grid-column: 1 / -1 !important;
+    width: 100% !important;
+  }
+
+  .gestureCoachPreview {
+    min-height: 330px !important;
+    border-radius: 16px !important;
+  }
+
+  .gestureAvatarStage {
+    width: 92% !important;
+    min-height: 320px !important;
+  }
+
+  .gestureCoachAvatar {
+    bottom: -6% !important;
+    width: min(100%, 360px) !important;
+  }
+
+  .gestureCoachSignal {
+    padding: 5px 7px !important;
+  }
+
+  .gestureCoachSignalHand {
+    left: 0 !important;
+  }
+
+  .gestureCoachSignalMotion {
+    right: 0 !important;
+  }
+
+  .gestureCoachSignalFace {
+    display: none !important;
+  }
+
+  .gestureSectionHeading {
+    align-items: start !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+  }
+
+  .gestureSectionHeading strong {
+    font-size: 16px !important;
+  }
+
+  .gestureLoopTrack {
+    display: flex !important;
+    gap: 7px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 3px !important;
+  }
+
+  .gestureLoopTrack button {
+    flex: 0 0 min(230px, 76vw) !important;
+    min-height: 112px !important;
+    scroll-snap-align: start;
+  }
+
+  .gestureModeGrid,
+  .gestureMissionCards {
+    grid-template-columns: 1fr !important;
+  }
+
+  .gestureModeGrid button {
+    min-height: 76px !important;
+  }
+
+  .gestureMissionCards {
+    display: flex !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+  }
+
+  .gestureMissionCards button {
+    flex: 0 0 min(280px, 82vw) !important;
+    min-height: 142px !important;
+    scroll-snap-align: start;
+  }
+
+  .coachScoreList > span {
+    grid-template-columns: 94px minmax(0, 1fr) 34px !important;
+  }
+
+  .gestureRecallStrip button {
+    width: 100% !important;
+  }
+}
+
+/* Mobile Video Sign Chat: preserve the call-first layout and compact controls. */
+@media (max-width: 760px) {
+  .practiceMode .signToolsPane {
+    display: block !important;
+    overflow-y: auto !important;
+    padding: 8px !important;
+  }
+
+  .partnerVideoPreview {
+    width: 38% !important;
+    border-radius: 12px !important;
+  }
+
+  .practiceRemoteCaption {
+    display: none !important;
+  }
+}
+
+/* Final authority for the desktop-style call window across every viewport. */
+
+/* Keep compact chat calls responsive after all legacy mobile inbox rules. */
+@media (max-width: 650px) {
+  html,
+  body,
+  #root {
+    width: 100% !important;
+    max-width: 100vw !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .messengerShell.chatMode {
+    width: 100vw !important;
+    height: 100dvh !important;
+    min-width: 0 !important;
+    display: grid !important;
+    grid-template-columns: 58px 68px minmax(0, 1fr) !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+  }
+
+  .chatMode .appRail {
+    position: relative !important;
+    inset: auto !important;
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 58px !important;
+    height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-radius: 0 !important;
+    padding: 8px 5px !important;
+  }
+
+  .chatMode .railNav {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    grid-auto-flow: row !important;
+    gap: 5px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+  }
+
+  .chatMode .chatSidebar {
+    position: relative !important;
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 68px !important;
+    min-width: 68px !important;
+    height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 7px !important;
+    padding: 7px 5px !important;
+    overflow: hidden !important;
+  }
+
+  .chatMode .chatSidebarTop {
+    width: 100% !important;
+    min-height: 46px !important;
+    display: grid !important;
+    place-items: center !important;
+    padding: 4px !important;
+  }
+
+  .chatMode .chatSidebarTop > strong,
+  .chatMode .searchBox,
+  .chatMode .chatCategoryRow,
+  .chatMode .mobileListSummary,
+  .chatMode .chatSidebarResizeHandle,
+  .chatMode .chatListItem > span,
+  .chatMode .chatSidebarActions .moreChatAction {
+    display: none !important;
+  }
+
+  .chatMode .chatList {
+    width: 100% !important;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 7px !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    padding: 0 !important;
+  }
+
+  .chatMode .chatListItem {
+    width: 56px !important;
+    min-width: 56px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center !important;
+    padding: 5px !important;
+  }
+
+  .chatMode .chatListItem .avatar {
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .chatMode .conversationPane {
+    position: relative !important;
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    overflow: hidden !important;
+  }
+
+  .callWorkspaceActive {
+    grid-template-rows: minmax(0, 1fr) !important;
+  }
+
+  .callWorkspaceActive .unifiedChatCallWindow {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    grid-template-rows: 58px minmax(0, 1fr) !important;
+    border-radius: 0 !important;
+  }
+
+  .callWorkspaceActive .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+  }
+
+  .callWorkspaceActive .unifiedCallInfoPanel {
+    display: grid !important;
+  }
+}
+
+/* Exact minimized unified call window. Keep this as the single compact-call authority. */
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow {
+  position: fixed !important;
+  z-index: 3200 !important;
+  inset: var(--chat-call-y, 18px) auto auto var(--chat-call-x, 18px) !important;
+  width: min(500px, calc(100vw - 20px)) !important;
+  height: min(285px, calc(100dvh - 20px)) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  max-width: none !important;
+  max-height: none !important;
+  display: grid !important;
+  grid-template-rows: 62px minmax(0, 1fr) !important;
+  border: 1px solid rgba(67, 211, 238, 0.62) !important;
+  border-radius: 22px !important;
+  background: #071c2a !important;
+  box-shadow: 0 24px 70px rgba(2, 15, 25, 0.36) !important;
+  color: #ffffff !important;
+  overflow: hidden !important;
+  cursor: grab !important;
+  touch-action: none !important;
+  -webkit-app-region: drag;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedCallHeader {
+  height: 62px !important;
+  min-height: 62px !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  padding: 9px 12px 7px 16px !important;
+  border: 0 !important;
+  background: rgba(7, 28, 42, 0.96) !important;
+  cursor: grab !important;
+}
+
+.minimizedUnifiedChatCallWindow .unifiedCallHeader:active {
+  cursor: grabbing !important;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedCallTitle {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: center !important;
+  justify-content: stretch !important;
+  transform: none !important;
+  align-content: center !important;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedCallLayout {
+  display: none !important;
+}
+
+.minimizedUnifiedChatCallWindow .unifiedCallTitle strong {
+  color: #ffffff !important;
+}
+
+.minimizedUnifiedChatCallWindow .unifiedCallTitle small {
+  color: #a9c4d4 !important;
+}
+
+.minimizedUnifiedChatCallWindow .unifiedCallTitle > span {
+  border-color: rgba(66, 211, 237, 0.38) !important;
+  background: rgba(10, 43, 60, 0.8) !important;
+  color: #50e5f5 !important;
+}
+
+.unifiedMinimizedCallBody {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 54px;
+  gap: 10px;
+  padding: 0 12px 12px;
+  overflow: hidden;
+}
+
+.unifiedMinimizedParticipants {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  overflow: hidden;
+}
+
+.unifiedMinimizedParticipant {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(92, 202, 226, 0.32);
+  border-radius: 16px;
+  padding: 0;
+  background: #0a2433;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.unifiedMinimizedParticipant:hover {
+  border-color: rgba(85, 228, 245, 0.7);
+}
+
+.unifiedMinimizedParticipant video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.unifiedMinimizedParticipant > span:not(.unifiedMinimizedCameraOffAvatar) {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 999px;
+  padding: 4px 7px;
+  background: rgba(5, 25, 37, 0.66);
+  color: #ffffff;
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.unifiedMinimizedParticipant > span:not(.unifiedMinimizedCameraOffAvatar) i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #35d68b;
+}
+
+.unifiedMinimizedCameraOffAvatar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 7px;
+  background: radial-gradient(circle at 50% 35%, rgba(62, 166, 202, 0.24), rgba(5, 25, 37, 0.96) 68%);
+}
+
+.unifiedMinimizedCameraOffAvatar > img,
+.unifiedMinimizedCameraOffAvatar > b,
+.unifiedMinimizedProfileAvatar {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 2px solid rgba(116, 229, 245, 0.68);
+  border-radius: 50%;
+  background: rgba(220, 246, 255, 0.94);
+  color: #1375b5;
+  box-shadow: 0 10px 25px rgba(0, 12, 22, 0.34);
+  font-size: 15px;
+  font-weight: 1000;
+}
+
+.unifiedMinimizedCameraOffAvatar > img,
+.unifiedMinimizedProfileAvatar img {
+  object-fit: cover;
+}
+
+.unifiedMinimizedProfileAvatar em,
+.unifiedMinimizedProfileAvatar i {
+  display: none;
+}
+
+.unifiedMinimizedCameraOffAvatar > small {
+  color: #c5e6ef;
+  font-size: 7px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.unifiedMinimizedStatusNotices {
+  position: absolute;
+  z-index: 8;
+  top: 8px;
+  right: 76px;
+  width: min(190px, calc(100% - 100px));
+  display: grid;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.unifiedMinimizedStatusNotices span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 9px;
+  padding: 5px 7px;
+  background: rgba(4, 24, 36, 0.78);
+  color: #d7edf5;
+  box-shadow: 0 6px 16px rgba(0, 10, 18, 0.22);
+  font-size: 6px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  backdrop-filter: blur(12px);
+}
+
+.unifiedMinimizedStatusNotices b {
+  border-radius: 999px;
+  padding: 2px 4px;
+  background: rgba(255, 111, 126, 0.18);
+  color: #ff9ca8;
+  font-size: 6px;
+  text-transform: uppercase;
+}
+
+.unifiedMinimizedTranslation {
+  position: absolute;
+  z-index: 5;
+  right: 82px;
+  bottom: 24px;
+  left: 34px;
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 15px;
+  padding: 9px 12px;
+  background: rgba(255, 255, 255, 0.24);
+  color: #ffffff;
+  box-shadow: 0 14px 34px rgba(7, 28, 42, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  text-align: center;
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+.unifiedMinimizedTranslation span {
+  color: #5ce1f2;
+  font-size: 8px;
+  font-weight: 1000;
+  text-transform: uppercase;
+}
+
+.unifiedMinimizedTranslation span b {
+  border-radius: 999px;
+  padding: 2px 6px;
+  background: rgba(92, 225, 242, 0.14);
+}
+
+.unifiedMinimizedTranslation strong {
+  overflow: hidden;
+  font-size: clamp(15px, 3vw, 23px);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.unifiedMinimizedTranslation small {
+  color: #b4d0dc;
+  font-size: 7px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.unifiedMinimizedCallControls {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  gap: 5px;
+}
+
+.unifiedMinimizedCallControls button {
+  width: 44px;
+  height: 31px;
+  min-width: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(167, 211, 229, 0.2);
+  border-radius: 11px;
+  padding: 0;
+  background: rgba(11, 43, 59, 0.9);
+  color: #d9edf6;
+  box-shadow: none;
+  font-size: 15px;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  perspective: 300px;
+}
+
+.unifiedMinimizedCallControls .mini3dCallControl:hover {
+  transform: translateY(-2px) rotateX(8deg) rotateY(-7deg);
+  border-color: rgba(82, 224, 244, 0.62);
+  box-shadow: 0 7px 16px rgba(0, 8, 16, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.unifiedMinimizedCallControls .mini3dCallControl:active {
+  transform: translateY(1px) scale(0.94);
+}
+
+.unifiedMinimizedCallControls .mini3dCallControl .railIcon3d {
+  width: 27px;
+  height: 27px;
+  animation: miniCallIconFloat 2200ms ease-in-out infinite alternate;
+}
+
+.miniWindowGlyph {
+  display: block;
+  font-size: 16px;
+  font-weight: 1000;
+  line-height: 1;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  animation: miniCallIconFloat 2200ms ease-in-out infinite alternate;
+}
+
+@keyframes miniCallIconFloat {
+  from { transform: translateY(1px) rotateY(-5deg); }
+  to { transform: translateY(-2px) rotateY(7deg); }
+}
+
+.unifiedMinimizedCallControls .activeMiniCallControl {
+  border-color: rgba(78, 220, 240, 0.55);
+  color: #55e4f5;
+}
+
+.unifiedMinimizedCallControls .unifiedMiniEndCall {
+  border-color: rgba(255, 88, 107, 0.62);
+  background: #e94759;
+  color: #ffffff;
+}
+
+.unifiedMinimizedCallControls .miniCloseCallControl {
+  color: #ff7b8b;
+}
+
+.premiumDarkMode .minimizedUnifiedChatCallWindow {
+  background: #071c2a !important;
+}
+
+.premiumDarkMode .unifiedMinimizedTranslation {
+  border-color: rgba(161, 222, 236, 0.28);
+  background: rgba(6, 30, 44, 0.62);
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow {
+  border-color: rgba(110, 199, 226, 0.72) !important;
+  background: rgba(235, 248, 255, 0.94) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow .unifiedCallHeader {
+  background: rgba(245, 252, 255, 0.88) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow .unifiedCallTitle strong {
+  color: #10213b !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow .unifiedCallTitle small {
+  color: #6f8297 !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCallControls button {
+  border-color: rgba(100, 177, 210, 0.42);
+  background: rgba(243, 251, 255, 0.84);
+  color: #23415d;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedTranslation {
+  border-color: rgba(255, 255, 255, 0.88);
+  background: rgba(21, 50, 68, 0.48);
+}
+
+.unifiedMinimizedVoicePulse {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.unifiedMinimizedVoicePulse i {
+  width: 4px;
+  height: 28px;
+  border-radius: 999px;
+  background: #55e4f5;
+  animation: desktopVoiceWave 900ms ease-in-out infinite alternate;
+}
+
+@media (max-width: 560px) {
+  .minimizedUnifiedChatCallWindow {
+    width: calc(100vw - 16px) !important;
+    height: 240px !important;
+  }
+
+  .unifiedMinimizedTranslation {
+    right: 75px;
+    left: 14px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .createSignContent {
+    grid-template-columns: minmax(0, 1.3fr) minmax(245px, .8fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .communityTopBar {
+    grid-template-columns: minmax(0, 1fr) repeat(3, 48px) !important;
+  }
+
+  .communityTopBar .communitySearch {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .communityCreateSignButton,
+  .communityNotificationWrap,
+  .communityAvatarWrap,
+  .communityIconButton,
+  .communityAvatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .createSignContent {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .createSignPreviewRail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .createSignPreviewCard {
+    grid-row: span 2;
+  }
+
+  .createSignChoiceCards {
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 650px) {
+  .createSignWorkspace {
+    padding: 10px;
+  }
+
+  .createSignTopBar {
+    align-items: flex-start;
+  }
+
+  .createSignTopBar > div:last-child button:first-child {
+    display: none;
+  }
+
+  .createSignSteps {
+    grid-template-columns: repeat(4, minmax(38px, 1fr));
+  }
+
+  .createSignSteps button {
+    justify-content: center;
+  }
+
+  .createSignSteps button span {
+    display: none;
+  }
+
+  .createSignFormGrid,
+  .createSignPreviewRail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .createSignChoiceCards,
+  .createSignUploadSlots,
+  .createSignThumbnailSelect > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .createSignActionBar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .createSignActionBar button {
+    padding: 0 6px;
+  }
+
+  .createSignActionBar button:first-child {
+    margin-right: 0;
+  }
+}
+
+/* Mini-call controls and dedicated camera glyph. */
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow:active {
+  cursor: grabbing !important;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow button,
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow input,
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow select,
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow a {
+  -webkit-app-region: no-drag;
+}
+
+.miniCamera3dIcon {
+  position: relative;
+  width: 27px;
+  height: 20px;
+  display: block;
+  border: 1px solid currentColor;
+  border-radius: 7px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.32), rgba(39, 160, 213, 0.2));
+  box-shadow: 0 5px 9px rgba(0, 15, 28, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  animation: miniCameraFloat 1900ms ease-in-out infinite alternate;
+}
+
+.miniCamera3dIcon::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.miniCamera3dIcon::after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  right: -6px;
+  width: 7px;
+  height: 10px;
+  border: 1px solid currentColor;
+  border-left: 0;
+  border-radius: 0 5px 5px 0;
+  background: rgba(41, 171, 219, 0.28);
+}
+
+.miniCamera3dIcon i {
+  position: absolute;
+  top: -4px;
+  left: 5px;
+  width: 9px;
+  height: 4px;
+  border-radius: 3px 3px 0 0;
+  background: currentColor;
+  opacity: 0.75;
+}
+
+.miniCamera3dIcon b {
+  display: none;
+}
+
+.inactiveMiniCallControl .miniCamera3dIcon b {
+  position: absolute;
+  z-index: 3;
+  top: 8px;
+  left: -2px;
+  width: 31px;
+  height: 2px;
+  display: block;
+  border-radius: 999px;
+  background: #ff6576;
+  box-shadow: 0 0 5px rgba(255, 101, 118, 0.7);
+  transform: rotate(-36deg);
+}
+
+@keyframes miniCameraFloat {
+  from { transform: translateY(1px) rotateY(-8deg); }
+  to { transform: translateY(-2px) rotateY(9deg); }
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow {
+  border-color: rgba(137, 199, 226, 0.88) !important;
+  background: rgba(241, 250, 255, 0.96) !important;
+  box-shadow: 0 22px 60px rgba(39, 83, 114, 0.2) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .minimizedUnifiedChatCallWindow .unifiedCallHeader {
+  background: rgba(241, 250, 255, 0.96) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCallBody {
+  background: rgba(231, 246, 253, 0.72);
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedParticipant {
+  border-color: rgba(116, 188, 218, 0.72);
+  background: #dceef6;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCameraOffAvatar {
+  background: radial-gradient(circle at 50% 35%, rgba(174, 229, 248, 0.9), rgba(49, 95, 119, 0.92) 72%);
+}
+
+.unifiedLargeCameraOffFallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 15px;
+  background: radial-gradient(circle at 50% 38%, #d9f3f7, #a9c8ce 72%);
+}
+
+.unifiedLargeCameraOffFallback > img,
+.unifiedLargeCameraOffFallback > b,
+.unifiedLargeProfileAvatar {
+  width: clamp(100px, 16vw, 180px);
+  height: clamp(100px, 16vw, 180px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 5px solid rgba(255, 255, 255, 0.88);
+  border-radius: 50%;
+  background: rgba(238, 250, 255, 0.96);
+  color: #1679bd;
+  box-shadow: 0 22px 60px rgba(26, 79, 102, 0.22);
+  font-size: clamp(24px, 4vw, 48px);
+  font-weight: 1000;
+}
+
+.unifiedLargeCameraOffFallback > img,
+.unifiedLargeProfileAvatar img,
+.unifiedLargePreviewCameraOff > img,
+.unifiedLargePreviewProfileAvatar img {
+  object-fit: cover;
+}
+
+.unifiedLargeProfileAvatar em,
+.unifiedLargeProfileAvatar i,
+.unifiedLargePreviewProfileAvatar em,
+.unifiedLargePreviewProfileAvatar i {
+  display: none;
+}
+
+.unifiedLargeCameraOffFallback > strong {
+  color: #28495d;
+  font-size: clamp(11px, 1.4vw, 18px);
+}
+
+.unifiedLargePreviewCameraOff {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #d9f3f7, #7799a5);
+}
+
+.unifiedLargePreviewCameraOff > img,
+.unifiedLargePreviewCameraOff > b,
+.unifiedLargePreviewProfileAvatar {
+  width: clamp(48px, 8vw, 82px);
+  height: clamp(48px, 8vw, 82px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  background: #effaff;
+  color: #1679bd;
+  box-shadow: 0 10px 26px rgba(20, 55, 74, 0.24);
+  font-size: 16px;
+  font-weight: 1000;
+}
+
+.unifiedLargeStatusNotices {
+  position: absolute;
+  z-index: 8;
+  top: 18px;
+  left: 18px;
+  width: min(270px, calc(100% - 300px));
+  display: grid;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.unifiedLargeStatusNotices span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 11px;
+  padding: 7px 9px;
+  background: rgba(20, 38, 51, 0.62);
+  color: #f0fbff;
+  box-shadow: 0 10px 26px rgba(15, 45, 61, 0.16);
+  font-size: 8px;
+  font-weight: 850;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  backdrop-filter: blur(14px) saturate(135%);
+}
+
+.unifiedLargeStatusNotices b {
+  border-radius: 999px;
+  padding: 3px 6px;
+  background: rgba(255, 101, 118, 0.22);
+  color: #ffc0c7;
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCallControls button {
+  border-color: rgba(101, 177, 208, 0.55);
+  background: rgba(249, 253, 255, 0.92);
+  color: #176b9b;
+  box-shadow: 0 6px 14px rgba(56, 112, 148, 0.12);
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCallControls .unifiedMiniEndCall {
+  border-color: rgba(237, 73, 91, 0.72);
+  background: #ef4659;
+  color: #ffffff;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedTranslation {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(25, 53, 70, 0.52);
+  box-shadow: 0 14px 34px rgba(36, 79, 106, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.premiumDarkMode .minimizedUnifiedChatCallWindow,
+.premiumDarkMode .minimizedUnifiedChatCallWindow .unifiedCallHeader,
+.premiumDarkMode .unifiedMinimizedCallBody {
+  background: #071c2a !important;
+}
+
+/* Compact dedicated call: preserve the header, video participants, and side controls. */
+@media (max-width: 900px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0 !important;
+    padding: 8px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallInfoPanel {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallMain {
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 58px !important;
+    grid-template-rows: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallVideoStage {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: block !important;
+    border-width: 5px !important;
+    border-radius: 18px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedLocalCallVideo {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedPartnerPreview {
+    display: block !important;
+    top: 10px !important;
+    right: 10px !important;
+    width: min(42%, 155px) !important;
+    min-width: 92px !important;
+    border-width: 3px !important;
+    border-radius: 13px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    grid-auto-rows: minmax(48px, 1fr) !important;
+    align-content: stretch !important;
+    gap: 6px !important;
+    overflow: visible !important;
+    border-radius: 16px !important;
+    padding: 5px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls > button,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedMoreCallWrap,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedMoreCallWrap > button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    display: grid !important;
+    place-items: center !important;
+    border-radius: 11px !important;
+    padding: 3px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls > button:nth-child(4),
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls > button:nth-child(5) {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls .railIcon3d {
+    width: 30px !important;
+    height: 30px !important;
+    grid-row: auto !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls button > span:not(.railIcon3d),
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls button > small,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls .unifiedEndCallButton > b {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallControls .unifiedEndCallButton > span {
+    display: block !important;
+    font-size: 18px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedTranslationCaption {
+    right: 10px !important;
+    bottom: 10px !important;
+    left: 10px !important;
+    border-radius: 14px !important;
+    padding: 7px 9px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedTranslationCaption strong {
+    overflow: hidden !important;
+    font-size: 15px !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedMoreCallPopover {
+    position: fixed !important;
+    right: 72px !important;
+    bottom: 12px !important;
+    width: min(260px, calc(100vw - 92px)) !important;
+  }
+}
+
+/* Final compact call rail and portal settings authority. */
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+  grid-template-columns: 76px minmax(0, 1fr) clamp(250px, 20vw, 320px) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail {
+  width: 76px !important;
+  padding: 12px 8px !important;
+  overflow: visible !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav {
+  overflow: visible !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav button,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallRailProfile {
+  min-height: 52px !important;
+  grid-template-columns: 1fr !important;
+  place-items: center !important;
+  padding: 7px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav button > span:not(.railIcon3d),
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallRailProfile > span,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav button::after,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallRailProfile::after {
+  display: none !important;
+}
+
+.unifiedMoreCallPopover {
+  position: fixed !important;
+  z-index: 10000 !important;
+  top: 92px !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: 96px !important;
+  width: min(360px, calc(100vw - 116px)) !important;
+  max-height: calc(100vh - 116px) !important;
+  display: grid !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  border: 1px solid rgba(170, 211, 225, 0.92) !important;
+  border-radius: 18px !important;
+  padding: 12px !important;
+  background: rgba(249, 253, 255, 0.98) !important;
+  box-shadow: 0 22px 60px rgba(25, 67, 96, 0.3) !important;
+}
+
+.unifiedMoreCallPopover header button,
+.unifiedMoreCallPopover .unifiedCallSettingsTabs button,
+.unifiedMoreCallPopover .unifiedCallPresetGrid button {
+  min-width: 0 !important;
+  height: auto !important;
+  box-shadow: none !important;
+}
+
+.unifiedMoreCallPopover header button {
+  width: 28px !important;
+  min-height: 28px !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.unifiedMoreCallPopover .unifiedCallSettingsTabs button,
+.unifiedMoreCallPopover .unifiedCallPresetGrid button {
+  width: 100% !important;
+  min-height: 32px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1px solid #d9e8ee !important;
+  border-radius: 9px !important;
+  padding: 5px !important;
+  background: #f4f8fa !important;
+  color: #61758b !important;
+}
+
+.unifiedMoreCallPopover .unifiedCallSettingsTabs .activeCallSettingsTab,
+.unifiedMoreCallPopover .unifiedCallPresetGrid .activeCallPreset {
+  border-color: #4bc3e5 !important;
+  background: #e8f8fd !important;
+  color: #087b9c !important;
+}
+
+.unifiedMoreCallPopover .unifiedCallRange {
+  display: grid !important;
+}
+
+.unifiedMoreCallPopover .unifiedCallRange input[type="range"] {
+  width: 100% !important;
+  height: auto !important;
+}
+
+.unifiedMoreCallPopover .unifiedCallToggle input[type="checkbox"] {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+@media (max-width: 1180px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: 70px minmax(0, 1fr) 230px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail {
+    width: 70px !important;
+  }
+
+  .unifiedMoreCallPopover {
+    left: 88px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallLayout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .unifiedMoreCallPopover {
+    top: auto !important;
+    right: 10px !important;
+    bottom: 72px !important;
+    left: auto !important;
+    width: min(360px, calc(100vw - 20px)) !important;
+    max-height: calc(100vh - 150px) !important;
+  }
+}
+
+/* Final glass call surfaces and camera presentation. */
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail {
+  border: 1px solid rgba(255, 255, 255, 0.62) !important;
+  background: rgba(229, 246, 255, 0.38) !important;
+  box-shadow:
+    0 18px 44px rgba(20, 63, 91, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76) !important;
+  backdrop-filter: blur(22px) saturate(150%) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav button,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallRailProfile {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+  backdrop-filter: blur(12px) saturate(135%) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail nav button:hover,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail .activeCallModeRailItem,
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallRailProfile:hover {
+  border-color: rgba(81, 211, 244, 0.68) !important;
+  background: rgba(55, 185, 230, 0.25) !important;
+  box-shadow:
+    0 10px 22px rgba(27, 122, 165, 0.17),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail .activeCallModeRailItem .railIcon3d {
+  transform: translateY(-1px) scale(1.1) !important;
+  filter: drop-shadow(0 10px 14px rgba(16, 174, 222, 0.42)) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail .activeCallModeRailItem .railIcon3d::before {
+  opacity: 1 !important;
+  animation: railIconOrbit 2.6s linear infinite !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail .activeCallModeRailItem .railIcon3d.camera svg {
+  animation: activeCallCameraFloat 1.8s ease-in-out infinite alternate !important;
+}
+
+@keyframes activeCallCameraFloat {
+  from { transform: translateY(1px) rotateY(-5deg); }
+  to { transform: translateY(-2px) rotateY(7deg); }
+}
+
+.premiumDarkMode .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallModeRail {
+  border-color: rgba(142, 224, 242, 0.24) !important;
+  background: rgba(7, 31, 46, 0.48) !important;
+  box-shadow:
+    0 18px 44px rgba(0, 9, 18, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow {
+  border-color: rgba(134, 229, 246, 0.52) !important;
+  background: rgba(7, 28, 42, 0.72) !important;
+  box-shadow:
+    0 24px 70px rgba(2, 15, 25, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedCallHeader,
+.unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedMinimizedCallBody {
+  background: rgba(8, 31, 45, 0.45) !important;
+  backdrop-filter: blur(18px) saturate(140%) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow {
+  border-color: rgba(118, 202, 231, 0.62) !important;
+  background: rgba(235, 249, 255, 0.7) !important;
+  box-shadow:
+    0 24px 70px rgba(38, 89, 121, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedCallHeader,
+.messengerShell:not(.premiumDarkMode) .unifiedChatCallWindow.dedicatedChatCallWindow.minimizedUnifiedChatCallWindow .unifiedMinimizedCallBody {
+  background: rgba(236, 249, 255, 0.5) !important;
+}
+
+.unifiedMinimizedCallControls .mini3dCallControl {
+  border-color: rgba(171, 229, 240, 0.3) !important;
+  background: rgba(255, 255, 255, 0.09) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 6px 16px rgba(4, 24, 36, 0.16) !important;
+  backdrop-filter: blur(12px) saturate(140%) !important;
+}
+
+.messengerShell:not(.premiumDarkMode) .unifiedMinimizedCallControls .mini3dCallControl {
+  border-color: rgba(111, 192, 222, 0.48) !important;
+  background: rgba(255, 255, 255, 0.46) !important;
+}
+
+/* Calls use a natural camera view. No local or remote call video is mirrored. */
+.dedicatedChatCallWindow .unifiedLocalCallVideo,
+.dedicatedChatCallWindow .unifiedFilteredCallVideo,
+.dedicatedChatCallWindow .unifiedRemoteCallVideo,
+.dedicatedChatCallWindow .unifiedPartnerPreview video,
+.dedicatedChatCallWindow .unifiedMinimizedParticipant video {
+  transform: none !important;
+}
+
+/* Must stay last: immersive video and compact essential glass dock. */
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallMain {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-rows: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedCallVideoStage {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls {
+  position: absolute !important;
+  z-index: 40 !important;
+  right: max(16px, 15%) !important;
+  bottom: 14px !important;
+  left: max(16px, 15%) !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 54px !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(64px, 1fr)) minmax(104px, 1.15fr) !important;
+  grid-template-rows: 1fr !important;
+  gap: 6px !important;
+  overflow: visible !important;
+  border: 1px solid rgba(255, 255, 255, 0.58) !important;
+  border-radius: 16px !important;
+  padding: 6px !important;
+  background: rgba(16, 37, 53, 0.38) !important;
+  box-shadow: 0 18px 45px rgba(8, 24, 38, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  transition: opacity 220ms ease, transform 220ms ease, visibility 220ms ease !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 42px !important;
+  border-radius: 11px !important;
+  padding: 4px 7px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button small {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > .activeUnifiedCallControl {
+  border-color: rgba(103, 225, 255, 0.62) !important;
+  background: rgba(19, 166, 207, 0.28) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > .inactiveUnifiedCallControl {
+  border-color: rgba(255, 176, 92, 0.48) !important;
+  background: rgba(104, 67, 27, 0.28) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > .inactiveUnifiedCallControl .railIcon3d,
+.unifiedMinimizedCallControls .miniTranslationCallControl.inactiveMiniCallControl .railIcon3d {
+  filter: grayscale(0.72) brightness(0.78) !important;
+  opacity: 0.72 !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > .unifiedEndCallButton {
+  border-color: rgba(255, 103, 113, 0.72) !important;
+  background: rgba(239, 61, 69, 0.9) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .visibleUnifiedCallControls {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateY(0) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .hiddenUnifiedCallControls {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(16px) !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedTranslationCaption {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: bottom 240ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 240ms ease !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAboveCallControls {
+  bottom: 82px !important;
+}
+
+.dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAtVideoBottom {
+  bottom: 14px !important;
+}
+
+@media (max-width: 900px) {
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls {
+    right: 8px !important;
+    bottom: 8px !important;
+    left: 8px !important;
+    min-height: 54px !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 4px !important;
+    border-radius: 14px !important;
+    padding: 5px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button {
+    min-height: 44px !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    place-items: center !important;
+    padding: 4px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button > span:not(.railIcon3d),
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedGlassCallControls > button > small,
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .unifiedEndCallButton > b {
+    display: none !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAboveCallControls {
+    bottom: 68px !important;
+  }
+
+  .dedicatedChatCallWindow:not(.minimizedUnifiedChatCallWindow) .captionAtVideoBottom {
+    bottom: 8px !important;
+  }
+}

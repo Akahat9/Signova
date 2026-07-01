@@ -1,0 +1,18 @@
+{
+  "installs": {
+    "install-c254cacc-dfdc-4548-8211-31a6b873a561": {
+      "installId": "install-c254cacc-dfdc-4548-8211-31a6b873a561",
+      "firstSeenAt": 1780570605846,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36 Edg/148.0.0.0"
+    }
+  },
+  "activeUsers": {
+    "user-4b9a1422-7530-48d4-9fee-7f263eb720cd": {
+      "userId": "user-4b9a1422-7530-48d4-9fee-7f263eb720cd",
+      "name": "Akshat sharma",
+      "country": "IN",
+      "timezone": "Asia/Calcutta",
+      "lastSeenAt": 1780577012115
+    }
+  }
+}

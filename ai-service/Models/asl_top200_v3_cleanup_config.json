@@ -1,0 +1,30 @@
+{
+  "name": "asl_top200_v3_cleanup",
+  "reason": "Exclude Top200 v2 priority-review classes with very low recall/F1, then backfill from the next strongest ASL Citizen train+val labels.",
+  "source_report": "Models/signova_asl_top200_v2_error_report.md",
+  "exclude_labels": [
+    "depth",
+    "movie1",
+    "shortperson",
+    "sink",
+    "child",
+    "calendar1",
+    "duck2",
+    "hope",
+    "lettuce1",
+    "basket1",
+    "close",
+    "corkscrew1",
+    "bell",
+    "cancel1",
+    "deep",
+    "empty2",
+    "night1",
+    "page",
+    "beach",
+    "cross3",
+    "eggbeater",
+    "erupt2",
+    "finance"
+  ]
+}

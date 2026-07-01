@@ -1,0 +1,1134 @@
+/*
+ * Signova premium dark design system
+ * Final theme authority. This file is intentionally imported after legacy CSS.
+ * It changes presentation only; application structure and behavior remain intact.
+ */
+
+:root {
+  --snv-motion-instant: 90ms;
+  --snv-motion-fast: 150ms;
+  --snv-motion-standard: 220ms;
+  --snv-motion-emphasized: 300ms;
+  --snv-ease-standard: cubic-bezier(.2, 0, 0, 1);
+  --snv-ease-emphasized: cubic-bezier(.2, .8, .2, 1);
+}
+
+html.signovaPremiumDarkPage,
+html[data-signova-theme="dark"],
+html[data-signova-theme="dark"] body,
+html[data-signova-theme="dark"] #root,
+body.signovaPremiumDarkPage,
+body.signovaPremiumDarkPage #root,
+body.signovaPremiumDarkPage .messengerShell.premiumDarkMode {
+  --snv-dark-canvas: #0d1117;
+  --snv-dark-rail: #090d12;
+  --snv-dark-surface-1: #11161d;
+  --snv-dark-surface-2: #151b23;
+  --snv-dark-surface-3: #1a212b;
+  --snv-dark-surface-4: #202833;
+  --snv-dark-hover: #252e3a;
+  --snv-dark-selected: #183548;
+  --snv-dark-border: #29323d;
+  --snv-dark-border-soft: #202832;
+  --snv-dark-divider: rgba(255, 255, 255, 0.075);
+  --snv-dark-text: #f1f5f9;
+  --snv-dark-text-secondary: #aeb8c4;
+  --snv-dark-text-muted: #7f8a98;
+  --snv-dark-accent: #54a7d8;
+  --snv-dark-accent-strong: #68b7e2;
+  --snv-dark-accent-container: #173246;
+  --snv-dark-success: #55c99a;
+  --snv-dark-success-container: #133127;
+  --snv-dark-warning: #e7bd72;
+  --snv-dark-warning-container: #382c18;
+  --snv-dark-error: #ff8e9c;
+  --snv-dark-error-container: #3c1d24;
+  --snv-dark-info: #7eb9e8;
+  --snv-dark-info-container: #172d42;
+  --snv-dark-radius-sm: 8px;
+  --snv-dark-radius-md: 12px;
+  --snv-dark-radius-lg: 16px;
+  --snv-dark-radius-xl: 20px;
+  --snv-dark-shadow-float: 0 12px 34px rgba(0, 0, 0, 0.28);
+  color-scheme: dark;
+  background: var(--snv-dark-canvas) !important;
+  color: var(--snv-dark-text) !important;
+}
+
+body.signovaPremiumDarkPage {
+  scrollbar-color: #46515e transparent;
+}
+
+/* Authentication and pre-app loading use the same theme before a session exists. */
+body.signovaPremiumDarkPage :where(
+  .signovaAuthShell,
+  .signovaAuthPanel,
+  .signovaAuthStory
+) {
+  border-color: var(--snv-dark-border-soft) !important;
+  background: var(--snv-dark-canvas) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .signovaAuthCard,
+  .signovaAuthCardPane,
+  .authAvatarCard,
+  .signovaAuthQuote,
+  .signovaSecureNote,
+  .signovaAuthStatus,
+  .signovaAuthOptions,
+  .signovaRecoveryMethods
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: var(--snv-dark-surface-2) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .signovaAuthBrand strong,
+  .signovaAuthHeadline strong,
+  .signovaAuthCardHeader strong,
+  .signovaAuthFeatureList strong,
+  .signovaAuthForm label > span,
+  .signovaAuthStatus b,
+  .signovaAuthQuote strong
+) {
+  color: var(--snv-dark-text) !important;
+  text-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .signovaAuthBrand small,
+  .signovaAuthHeadline p,
+  .signovaAuthCardHeader small,
+  .signovaAuthFeatureList,
+  .signovaAuthForm small,
+  .signovaAuthStatus small,
+  .signovaAuthSwitch,
+  .signovaSecureNote small
+) {
+  color: var(--snv-dark-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthFeatureList span {
+  color: var(--snv-dark-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthAvatarStage::before {
+  background: var(--snv-dark-surface-3) !important;
+  opacity: 0.72;
+}
+
+body.signovaPremiumDarkPage :where(.signovaQrCard, .qrScanBox) {
+  border-color: var(--snv-dark-border) !important;
+  background: var(--snv-dark-surface-1) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .signovaQrCard strong {
+  color: var(--snv-dark-text) !important;
+}
+
+body.signovaPremiumDarkPage .signovaQrCard small {
+  color: var(--snv-dark-text-muted) !important;
+}
+
+body.signovaPremiumDarkPage .signovaQrCard button {
+  background: var(--snv-dark-accent-container) !important;
+  color: #dff3ff !important;
+}
+
+body.signovaPremiumDarkPage :where(.authRemember, .authRemember span, .authPrivacyChoice label) {
+  color: var(--snv-dark-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthForm :where(input, select, textarea) {
+  border: 1px solid var(--snv-dark-border) !important;
+  border-radius: var(--snv-dark-radius-md) !important;
+  background: var(--snv-dark-surface-1) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  caret-color: var(--snv-dark-accent-strong);
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthForm :where(input, textarea)::placeholder {
+  color: #707b88 !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthForm :where(input, select, textarea):focus {
+  border-color: var(--snv-dark-accent) !important;
+  outline: 3px solid rgba(84, 167, 216, 0.16) !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .signovaAuthTabs,
+  .signovaAuthTabs button,
+  .authBackButton,
+  .signovaAuthSwitch button
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: var(--snv-dark-text-secondary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthTabs button[aria-selected="true"],
+body.signovaPremiumDarkPage .signovaAuthTabs button.activeAuthTab {
+  border-color: var(--snv-dark-accent) !important;
+  color: var(--snv-dark-accent-strong) !important;
+}
+
+body.signovaPremiumDarkPage .signovaAuthPrimary {
+  border-color: transparent !important;
+  background: var(--snv-dark-accent-container) !important;
+  background-image: none !important;
+  color: #dff3ff !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .appStartupSkeleton {
+  background: var(--snv-dark-canvas) !important;
+  background-image: none !important;
+}
+
+body.signovaPremiumDarkPage .appStartupSkeleton :where(i, span, div)::before,
+body.signovaPremiumDarkPage .appStartupSkeleton :where(i, span, div)::after {
+  border-color: var(--snv-dark-border-soft) !important;
+  background-color: #1b232c !important;
+  background-image: none !important;
+}
+
+body.signovaPremiumDarkPage * {
+  scrollbar-width: thin;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #46515e;
+  background-clip: padding-box;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb:hover {
+  background: #5b6876;
+  background-clip: padding-box;
+}
+
+body.signovaPremiumDarkPage .messengerShell.premiumDarkMode {
+  background: var(--snv-dark-canvas) !important;
+  color: var(--snv-dark-text) !important;
+}
+
+/* Application structure */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .appRail,
+  .railNav
+) {
+  border-color: var(--snv-dark-border-soft) !important;
+  background: var(--snv-dark-rail) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatSidebar,
+  .communityGroupDirectory,
+  .settingsNavigation,
+  .settingsSidebar
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: var(--snv-dark-surface-1) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .conversationPane,
+  .signToolsPane,
+  .mainPanel,
+  .messageThread,
+  .communityPage,
+  .communityGroupsPage,
+  .communityCreateSignPage,
+  .libraryDashboard,
+  .learnStudioPage,
+  .progressDashboard,
+  .profilePage,
+  .settingsPanel,
+  .contactsPanel,
+  .conversationInfoPage
+) {
+  border-color: var(--snv-dark-border-soft) !important;
+  background: var(--snv-dark-canvas) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* App bars and anchored navigation */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatHeader,
+  .chatSidebarTop,
+  .communityTopBar,
+  .groupsTopBar,
+  .groupChatHeader,
+  .libraryTopBar,
+  .compactLibraryHeader,
+  .gestureLearnTopBar,
+  .settingsTopBar,
+  .profileTopBar,
+  .conversationInfoHeader,
+  .minimalSignCreatorHeader,
+  .chatComposer,
+  .groupComposer,
+  .cleanGroupComposer,
+  .chatCallTopBar,
+  .chatCallCommandBar,
+  .cameraControlDock
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: rgba(17, 22, 29, 0.97) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(12px) saturate(115%) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .bottomNav,
+  .mobileBottomNav,
+  .railMobileNav,
+  .appBottomNav
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: rgba(14, 19, 25, 0.96) !important;
+  background-image: none !important;
+  box-shadow: 0 -1px 0 var(--snv-dark-divider) !important;
+  backdrop-filter: blur(16px) saturate(120%) !important;
+}
+
+/* Unified surface language */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  [class*="Card"],
+  [class*="Panel"],
+  [class*="Modal"],
+  [class*="Window"],
+  [class*="Popover"],
+  [class*="Flyout"],
+  [class*="Menu"],
+  [class*="Sheet"],
+  .settingsGroup,
+  .settingsDetailGroup,
+  .settingsRow,
+  .communityPostStream,
+  .communityDiscoveryRail,
+  .communitySocialPost,
+  .communityQuickComposer,
+  .communitySignCapture,
+  .minimalSignSection,
+  .minimalSignPreview,
+  .conversationInfoStats,
+  .messageComposer,
+  .encryptionStatusPopover
+) {
+  border-color: var(--snv-dark-border) !important;
+  background-color: var(--snv-dark-surface-2) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  [class*="Modal"],
+  [class*="Window"],
+  [class*="Popover"],
+  [class*="Flyout"],
+  [class*="Menu"],
+  [class*="Sheet"],
+  .encryptionStatusPopover
+) {
+  background-color: var(--snv-dark-surface-3) !important;
+  box-shadow: var(--snv-dark-shadow-float) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .minimalSignSection.activePipelineSection,
+  .activeSettingsDetail,
+  .activeLearningBook,
+  .activeMissionCard,
+  .activeProgressMetric,
+  .activeCommunityGroup,
+  .selectedConversation,
+  .selectedContact,
+  .activeSignCard
+) {
+  border-color: #386a87 !important;
+  background-color: var(--snv-dark-selected) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .libraryHeroSpace,
+  .gestureMissionStage,
+  .gestureLearnLayout,
+  .groupChatPanel,
+  .cleanGroupWorkspace,
+  .communityPanel,
+  .profileHero,
+  .profileSection,
+  .profileFormSection,
+  .settingsDetail,
+  .settingsWorkspace,
+  .conversationInfoStats > span,
+  .metric,
+  .notificationItem,
+  .communityNotificationItem,
+  .contactRow,
+  .conversationRow,
+  .chatListItem
+) {
+  border-color: var(--snv-dark-border) !important;
+  background-color: var(--snv-dark-surface-2) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .minimalSignSection.lockedPipelineSection,
+  .minimalSignSection.completePipelineSection,
+  .communityNotificationEmpty,
+  .emptyState,
+  .settingsEmptyState
+) {
+  border-color: var(--snv-dark-border-soft) !important;
+  background-color: var(--snv-dark-surface-1) !important;
+}
+
+/* Typography and dividers */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  h1, h2, h3, h4, h5, h6,
+  strong, b,
+  .pageTitle,
+  .libraryTitle,
+  .learnTitle,
+  .settingsTitle,
+  .profileTitle,
+  .communityTitle
+) {
+  color: var(--snv-dark-text) !important;
+  text-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  p,
+  label,
+  dt,
+  dd,
+  .settingRowTitle,
+  .communityPostCopy,
+  .messageText
+) {
+  color: var(--snv-dark-text-secondary);
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  small,
+  .subtitle,
+  .helperText,
+  .hintText,
+  .settingDescription,
+  .messageMeta,
+  .communityPostMeta,
+  .profileMeta,
+  .settingsDetailSubtitle
+) {
+  color: var(--snv-dark-text-muted) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(hr, .divider, .sectionDivider) {
+  border: 0 !important;
+  border-top: 1px solid var(--snv-dark-divider) !important;
+  background: transparent !important;
+}
+
+/* Inputs, search, dropdowns */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select,
+  .chatSearch,
+  .communitySearch,
+  .communityGroupSearch,
+  .groupSearchBox,
+  .librarySearch,
+  .settingsSearch,
+  .searchBox,
+  .searchInput,
+  .chatComposerInput
+) {
+  border: 1px solid var(--snv-dark-border) !important;
+  border-radius: var(--snv-dark-radius-md) !important;
+  background: var(--snv-dark-surface-1) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text) !important;
+  caret-color: var(--snv-dark-accent-strong);
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(input, textarea)::placeholder {
+  color: #6f7b88 !important;
+  opacity: 1;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  textarea,
+  select,
+  .chatSearch,
+  .searchBox
+):focus {
+  border-color: var(--snv-dark-accent) !important;
+  outline: 3px solid rgba(84, 167, 216, 0.16) !important;
+  outline-offset: 0;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode option {
+  background: var(--snv-dark-surface-3);
+  color: var(--snv-dark-text);
+}
+
+/* Buttons, chips and tabs */
+body.signovaPremiumDarkPage .premiumDarkMode button {
+  text-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  button,
+  .button,
+  [role="button"]
+) {
+  transition:
+    background-color var(--snv-motion-fast) var(--snv-ease-standard),
+    border-color var(--snv-motion-fast) var(--snv-ease-standard),
+    color var(--snv-motion-fast) var(--snv-ease-standard),
+    transform var(--snv-motion-instant) var(--snv-ease-standard),
+    opacity var(--snv-motion-fast) var(--snv-ease-standard) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .ghostButton,
+  .secondaryButton,
+  .chatTopAction,
+  .headerChatAction,
+  .communityIconButton,
+  .railButton,
+  .iconButton,
+  .settingsChoice,
+  .communityFeedTabs button,
+  .minimalSignChoiceRow button,
+  .conversationFilterButton
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: var(--snv-dark-surface-2) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text-secondary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .communityFeedTabs button[aria-selected="true"],
+  .communityFeedTabs .active,
+  .chatFilterTabs .active,
+  .activeConversationFilter,
+  .activeCommunityTab,
+  .activeContactFilter
+) {
+  border-color: #386a87 !important;
+  background: var(--snv-dark-accent-container) !important;
+  color: #dff3ff !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .ghostButton,
+  .secondaryButton,
+  .chatTopAction,
+  .headerChatAction,
+  .communityIconButton,
+  .railButton,
+  .iconButton,
+  .settingsChoice,
+  .communityFeedTabs button,
+  .minimalSignChoiceRow button
+):hover {
+  border-color: #3a4654 !important;
+  background: var(--snv-dark-hover) !important;
+  color: var(--snv-dark-text) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  button,
+  .button,
+  [role="button"]
+):active {
+  transform: scale(0.975);
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  button:disabled,
+  .button:disabled,
+  [aria-disabled="true"]
+) {
+  cursor: not-allowed;
+  opacity: 0.45 !important;
+  transform: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .primaryButton,
+  .postButton,
+  .pipelineContinueButton,
+  .signovaAuthPrimary,
+  .communityCreateSignButton,
+  .communityCreateCta,
+  .startMeetButton,
+  .startCallButton,
+  .chatSendButton,
+  .minimalSignCreatorActions button[type="submit"],
+  .activeSettingsChoice,
+  .activeMinimalChoice,
+  .activeRailButton
+) {
+  border-color: transparent !important;
+  background: var(--snv-dark-accent-container) !important;
+  background-image: none !important;
+  color: #dff3ff !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .primaryButton,
+  .postButton,
+  .pipelineContinueButton,
+  .signovaAuthPrimary,
+  .startMeetButton,
+  .startCallButton,
+  .chatSendButton
+):hover {
+  background: #20445c !important;
+}
+
+/* Selection controls */
+body.signovaPremiumDarkPage .premiumDarkMode :where(input[type="checkbox"], input[type="radio"]) {
+  accent-color: var(--snv-dark-accent);
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode input[type="checkbox"]:not(.toggleInput) {
+  position: relative !important;
+  width: 18px !important;
+  height: 18px !important;
+  min-width: 18px !important;
+  min-height: 18px !important;
+  margin: 0 !important;
+  appearance: none !important;
+  border: 1px solid #46515e !important;
+  border-radius: 5px !important;
+  background: var(--snv-dark-surface-1) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode input[type="checkbox"]:not(.toggleInput)::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 5px !important;
+  width: 5px !important;
+  height: 9px !important;
+  border: solid #eaf7ff !important;
+  border-width: 0 2px 2px 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 0;
+  transform: rotate(45deg) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode input[type="checkbox"]:not(.toggleInput):checked {
+  border-color: var(--snv-dark-accent) !important;
+  background: var(--snv-dark-accent-container) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode input[type="checkbox"]:not(.toggleInput):checked::after {
+  opacity: 1;
+  transform: rotate(45deg) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .settingSwitch input[type="checkbox"] {
+  position: relative !important;
+  width: 44px !important;
+  height: 24px !important;
+  min-width: 44px !important;
+  min-height: 24px !important;
+  appearance: none !important;
+  border: 1px solid #414c58 !important;
+  border-radius: 999px !important;
+  background: #2a323c !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .settingSwitch input[type="checkbox"]::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #d9e0e7 !important;
+  box-shadow: none !important;
+  opacity: 1;
+  transform: translateX(0) !important;
+  transition: transform var(--snv-motion-fast) var(--snv-ease-standard), background-color var(--snv-motion-fast) var(--snv-ease-standard) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .settingSwitch input[type="checkbox"]:checked {
+  border-color: #386a87 !important;
+  background: var(--snv-dark-accent-container) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .settingSwitch input[type="checkbox"]:checked::after {
+  background: #dff3ff !important;
+  transform: translateX(20px) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode input[type="range"] {
+  accent-color: var(--snv-dark-accent);
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .settingsToggle,
+  .toggleSwitch,
+  .privacyToggle,
+  .activeSettingsToggle
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: var(--snv-dark-surface-4) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .settingsToggle.activeSettingsToggle,
+  .toggleSwitch[aria-checked="true"],
+  .privacyToggle[aria-checked="true"]
+) {
+  border-color: #386a87 !important;
+  background: var(--snv-dark-accent-container) !important;
+}
+
+/* Chats */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .incomingMessage,
+  .messageBubble:not(.ownMessage):not(.outgoingMessage),
+  .chatBubble:not(.ownMessage):not(.outgoingMessage)
+) {
+  border-color: var(--snv-dark-border-soft) !important;
+  background: var(--snv-dark-surface-3) !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .ownMessage,
+  .outgoingMessage,
+  .messageBubble.sent,
+  .chatBubble.sent
+) {
+  border-color: #28516a !important;
+  background: #17384b !important;
+  color: #ecf8ff !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatListItem:hover,
+  .conversationRow:hover,
+  .contactRow:hover
+) {
+  background: var(--snv-dark-hover) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatListItem.active,
+  .activeConversation,
+  .selectedConversation,
+  .selectedContact
+) {
+  border-color: #386a87 !important;
+  background: var(--snv-dark-selected) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .encryptionBanner,
+  .encryptionStatusNotice > summary
+) {
+  border-color: #4f4328 !important;
+  background: #292316 !important;
+  color: #e7c981 !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .chatComposer {
+  border-top: 1px solid var(--snv-dark-border) !important;
+}
+
+/* Community media and creation */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .communityPostMedia,
+  .communityVideoPostMedia,
+  .minimalSignPreviewMedia,
+  .communitySignCaptureView,
+  .cameraClipPreview,
+  .chatCameraVideo
+) {
+  background-color: #080b0f !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .railIcon3d,
+  .communityBellIcon,
+  .communityCreateSign3dIcon,
+  .expandedPanelIcon,
+  .attach3dIcon,
+  .profileIcon
+) {
+  border-color: var(--snv-dark-border) !important;
+  background-color: var(--snv-dark-surface-3) !important;
+  background-image: none !important;
+  color: var(--snv-dark-text-secondary) !important;
+  box-shadow: none !important;
+  filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode svg text {
+  fill: var(--snv-dark-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode svg :where(.chartGrid, .gridLine, [data-grid]) {
+  stroke: #2a3440 !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .communitySignPipelineTrack,
+  .progressTrack,
+  .skillTrack,
+  .callModelLine
+) {
+  background: #26303b !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .communitySignPipelineTrack i {
+  background: var(--snv-dark-accent) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .communitySignPipelineStage > span {
+  border-color: var(--snv-dark-canvas) !important;
+  background: var(--snv-dark-surface-4) !important;
+  color: var(--snv-dark-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .communitySignPipelineStage.active > span {
+  background: var(--snv-dark-accent-container) !important;
+  color: #dff3ff !important;
+  box-shadow: 0 0 0 5px rgba(84, 167, 216, 0.1) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .communitySignPipelineStage.complete > span {
+  background: var(--snv-dark-success-container) !important;
+  color: var(--snv-dark-success) !important;
+}
+
+/* Status and feedback */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .success,
+  .successMessage,
+  .cameraReady,
+  .qualityReady,
+  .communityMediaQuality.ready
+) {
+  border-color: #245443 !important;
+  background-color: var(--snv-dark-success-container) !important;
+  color: var(--snv-dark-success) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .warning,
+  .warningMessage,
+  .communityMediaQuality.review
+) {
+  border-color: #5a4725 !important;
+  background-color: var(--snv-dark-warning-container) !important;
+  color: var(--snv-dark-warning) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .error,
+  .errorMessage,
+  .communityCaptureError,
+  .dangerZone
+) {
+  border-color: #65303a !important;
+  background-color: var(--snv-dark-error-container) !important;
+  color: var(--snv-dark-error) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .info,
+  .infoMessage,
+  .communityLearningTip,
+  .createSignTip
+) {
+  border-color: #294a67 !important;
+  background-color: var(--snv-dark-info-container) !important;
+  color: var(--snv-dark-info) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .dangerButton,
+  .deleteButton,
+  .endCallButton,
+  .endChatCallButton,
+  .stopCaptureButton
+) {
+  border-color: #69313b !important;
+  background: var(--snv-dark-error-container) !important;
+  background-image: none !important;
+  color: var(--snv-dark-error) !important;
+  box-shadow: none !important;
+}
+
+/* Progress, graphs, skeletons */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .progressBar,
+  .skillBar,
+  .callQualityBar,
+  .graphTrack
+) {
+  background: #252f3a !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .progressBar > i,
+  .skillBar > i,
+  .callQualityBar > i,
+  .graphTrack > i
+) {
+  background: var(--snv-dark-accent) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .skeleton,
+  [class*="Skeleton"]
+) {
+  background: #1b232c !important;
+  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.045), transparent) !important;
+  background-size: 220% 100% !important;
+}
+
+/* Notifications and overlays */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .notificationPanel,
+  .communityNotificationPanel,
+  .communityNotificationsPanel
+)::before {
+  border-color: transparent transparent var(--snv-dark-surface-3) transparent !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .notificationDot,
+  .unreadBadge,
+  .alertBadge
+) {
+  border-color: var(--snv-dark-surface-1) !important;
+  background: #dc6674 !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .modalBackdrop,
+  .dialogBackdrop,
+  .sheetBackdrop,
+  .chatSidebarMenuLayer
+) {
+  background: rgba(2, 5, 9, 0.7) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Camera and call controls */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatCallScreen,
+  .chatCameraCallPage,
+  .chatPracticeCallPage,
+  .chatVideoCallStage,
+  .chatVoiceCallStage,
+  .chatCameraCallFrame
+) {
+  border-color: var(--snv-dark-border) !important;
+  background: #080c11 !important;
+  background-image: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatCallGlassButton,
+  .callControlButton,
+  .cameraWindowControls button,
+  .chatCameraWindowButtons button
+) {
+  border-color: #394552 !important;
+  background: rgba(27, 35, 44, 0.94) !important;
+  color: var(--snv-dark-text) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(8px) !important;
+}
+
+/* Motion: transform and opacity only on frequently interacted components. */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .railButton,
+  .communityIconButton,
+  .chatTopAction,
+  .headerChatAction,
+  .settingsRow,
+  .communityPostCard,
+  .libraryBookCard,
+  .learningPathCard,
+  .practiceModeCard,
+  .achievementCard
+) {
+  transition:
+    transform var(--snv-motion-fast) var(--snv-ease-standard),
+    background-color var(--snv-motion-standard) var(--snv-ease-standard),
+    border-color var(--snv-motion-standard) var(--snv-ease-standard) !important;
+  will-change: auto !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .settingsRow,
+  .communityPostCard,
+  .libraryBookCard,
+  .learningPathCard,
+  .practiceModeCard,
+  .achievementCard
+):hover {
+  border-color: #35414e !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :focus-visible {
+  outline: 3px solid rgba(84, 167, 216, 0.34) !important;
+  outline-offset: 2px;
+}
+
+/* Mobile comfort and safe areas */
+@media (max-width: 760px) {
+  body.signovaPremiumDarkPage .premiumDarkMode :where(
+    button,
+    [role="button"],
+    input,
+    select
+  ) {
+    min-height: 42px;
+  }
+
+  body.signovaPremiumDarkPage .premiumDarkMode :where(
+    .chatHeader,
+    .communityTopBar,
+    .groupsTopBar,
+    .gestureLearnTopBar,
+    .compactLibraryHeader
+  ) {
+    border-radius: 0 !important;
+  }
+
+  body.signovaPremiumDarkPage .premiumDarkMode :where(
+    [class*="Modal"],
+    [class*="Sheet"],
+    .contactMiniModal,
+    .groupCreateModal
+  ) {
+    width: min(100% - 16px, 520px) !important;
+    max-height: calc(100dvh - 24px) !important;
+    overflow-y: auto !important;
+    border-radius: var(--snv-dark-radius-xl) !important;
+  }
+}
+
+@media (hover: none) {
+  body.signovaPremiumDarkPage .premiumDarkMode :where(
+    .settingsRow,
+    .communityPostCard,
+    .libraryBookCard,
+    .learningPathCard
+  ):hover {
+    transform: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.signovaPremiumDarkPage .premiumDarkMode *,
+  body.signovaPremiumDarkPage .premiumDarkMode *::before,
+  body.signovaPremiumDarkPage .premiumDarkMode *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body.signovaPremiumDarkPage.signovaReduceMotion .premiumDarkMode *,
+body.signovaPremiumDarkPage.signovaReduceMotion .premiumDarkMode *::before,
+body.signovaPremiumDarkPage.signovaReduceMotion .premiumDarkMode *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Route roots remain canvas surfaces even though their names include Panel. */
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .conversationPane,
+  .signToolsPane,
+  .mainPanel,
+  .communityPage,
+  .communityGroupsPage,
+  .communityCreateSignPage,
+  .libraryDashboard,
+  .learnStudioPage,
+  .progressDashboard,
+  .profilePage,
+  .settingsPanel,
+  .contactsPanel,
+  .conversationInfoPage
+) {
+  background-color: var(--snv-dark-canvas) !important;
+  background-image: none !important;
+}
