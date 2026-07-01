@@ -1,0 +1,24 @@
+.git
+.github
+.firebase
+.vercel
+.azure
+.vs
+.vscode
+.venv
+.signova-logs
+.tmp-edge-learn-check
+
+**/node_modules
+**/.env
+**/.env.*
+!**/.env.example
+**/*.log
+**/__pycache__
+**/*.pyc
+
+ai-service
+atlas_starter_nodejs
+Frontend (React
+signova-frontend
+tempCodeRunnerFile.js
