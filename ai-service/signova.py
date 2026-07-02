@@ -653,6 +653,11 @@ class SignovaHandler(BaseHTTPRequestHandler):
 
 
 def run():
+    preload_landmarks = os.getenv("SIGNOVA_PRELOAD_LANDMARK_MODEL", "true").strip().lower() not in {"0", "false", "no"}
+    if preload_landmarks:
+        print("Preparing Signova landmark predictor before accepting traffic...", flush=True)
+        get_landmark_predictor()
+        print("Signova landmark predictor ready.", flush=True)
     try:
         server = ReusableThreadingHTTPServer((HOST, PORT), SignovaHandler)
     except OSError as exc:
