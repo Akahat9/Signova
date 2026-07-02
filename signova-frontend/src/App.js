@@ -42,10 +42,13 @@ import { conversationE2EE } from './securityCapabilities';
 const Signova3DAvatar = lazy(() => import('./Signova3DAvatar'));
 const LearnStudio = lazy(() => import('./LearnStudio'));
 
-const API_URL = process.env.REACT_APP_SIGNOVA_API_URL
-  || (process.env.NODE_ENV === 'development'
-    ? 'http://127.0.0.1:5000'
-    : 'https://signova-tdkd.onrender.com');
+const LOCAL_API_URL = 'http://127.0.0.1:5000';
+const PUBLIC_API_URL = 'https://signova-tdkd.onrender.com';
+const CONFIGURED_API_URL = String(process.env.REACT_APP_SIGNOVA_API_URL || '').trim().replace(/\/+$/, '');
+const CONFIGURED_API_IS_LOCAL = /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/i.test(CONFIGURED_API_URL);
+const API_URL = process.env.NODE_ENV === 'production'
+  ? (CONFIGURED_API_URL && !CONFIGURED_API_IS_LOCAL ? CONFIGURED_API_URL : PUBLIC_API_URL)
+  : (CONFIGURED_API_URL || LOCAL_API_URL);
 const CHAT_SIDEBAR_MIN_WIDTH = 260;
 const CHAT_SIDEBAR_MAX_WIDTH = 480;
 const CHAT_SIDEBAR_DEFAULT_WIDTH = 320;
@@ -220,7 +223,9 @@ const SCRIPTS = [
   `https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils@${MEDIAPIPE_DRAWING_VERSION}/drawing_utils.js`,
 ];
 
-const PREDICTION_INTERVAL_MS = 150;
+// MediaPipe can sample at display speed, but remote inference must remain bounded.
+// This cadence stays below the authenticated API's per-user budget.
+const PREDICTION_INTERVAL_MS = 750;
 const ACCEPT_COOLDOWN_MS = 280;
 const MIN_ACCEPT_CONFIDENCE = 0.55;
 const MIN_SIGN_STABLE_FRAMES = 3;
@@ -837,7 +842,10 @@ function loadScript(src) {
       resolve();
       return;
     }
-    if (existing) {
+    if (existing?.dataset.loadState === 'failed') {
+      existing.remove();
+    }
+    if (existing && existing.isConnected) {
       existing.addEventListener('load', resolve, { once: true });
       existing.addEventListener('error', reject, { once: true });
       return;
@@ -847,11 +855,17 @@ function loadScript(src) {
     script.src = src;
     script.async = true;
     script.crossOrigin = 'anonymous';
+    script.dataset.loadState = 'loading';
     script.onload = () => {
       script.dataset.loaded = 'true';
+      script.dataset.loadState = 'loaded';
       resolve();
     };
-    script.onerror = () => reject(new Error('Required Signova media script failed to load'));
+    script.onerror = () => {
+      script.dataset.loadState = 'failed';
+      script.remove();
+      reject(new Error('Required Signova media script failed to load'));
+    };
     document.body.appendChild(script);
   });
 }
@@ -1666,6 +1680,7 @@ function App() {
   const [sentence, setSentence] = useState('Waiting for signs');
   const [signLibrary, setSignLibrary] = useState(DEFAULT_SIGNS);
   const [signApiStatus, setSignApiStatus] = useState('Loading signs');
+  const [recognitionCapability, setRecognitionCapability] = useState('detecting');
   const [, setEngineStatus] = useState(ENGINE_NAME);
   const [aiMetrics, setAiMetrics] = useState({ status: 'Loading metrics', models: {} });
   const [apiConnection, setApiConnection] = useState({
@@ -3098,10 +3113,11 @@ function App() {
     runtimeSettingsRef.current = {
       translationMode: settings.translation.mode,
       outputLanguage: settings.translation.language,
-      recognitionModel: settings.ai.model,
+      recognitionModel: recognitionCapability === 'basic' ? 'basic' : settings.ai.model,
       storeHistory: settings.privacy.storeHistory,
     };
   }, [
+    recognitionCapability,
     settings.ai.frameRate,
     settings.ai.frameSkipping,
     settings.ai.model,
@@ -3841,12 +3857,8 @@ function App() {
       return;
     }
 
-    const now = Date.now();
-    if (now - lastSentAt.current < PREDICTION_INTERVAL_MS || predictionInFlightRef.current) return;
-    lastSentAt.current = now;
-    predictionInFlightRef.current = true;
-
     const landmarks = toPointArray(mappedHandLandmarks[0]);
+    const now = Date.now();
     temporalFramesRef.current = [
       ...temporalFramesRef.current,
       {
@@ -3856,6 +3868,10 @@ function App() {
         timestamp: now,
       },
     ].slice(-TEMPORAL_BUFFER_SIZE);
+
+    if (now - lastSentAt.current < PREDICTION_INTERVAL_MS || predictionInFlightRef.current) return;
+    lastSentAt.current = now;
+    predictionInFlightRef.current = true;
 
     try {
       const routingOptions = {
@@ -3911,7 +3927,7 @@ function App() {
             }),
           });
           const quickConfidence = Number(quickPrediction.confidence || 0);
-          if (settings.ai.model === 'basic' || quickConfidence >= sequenceConfidence || sequenceConfidence < 0.1) {
+          if (runtimeSettingsRef.current.recognitionModel === 'basic' || quickConfidence >= sequenceConfidence || sequenceConfidence < 0.1) {
             prediction = {
               ...quickPrediction,
               source: `${quickPrediction.source || 'landmarks'}_direct`,
@@ -3938,7 +3954,7 @@ function App() {
       const confidence = Number(prediction.confidence || 0);
       const callReadyContext = activePanel === 'translate' || Boolean(chatCallScreen);
       const quickFallbackActive = String(prediction.source || '').includes('landmark') || prediction.fallback_from;
-      const basicTestingMode = settings.ai.model === 'basic' && quickFallbackActive;
+      const basicTestingMode = runtimeSettingsRef.current.recognitionModel === 'basic' && quickFallbackActive;
       const threshold = basicTestingMode ? 0.03 : quickFallbackActive ? Math.min(confidenceThresholdRef.current, 0.45) : confidenceThresholdRef.current;
       const confidenceMargin = Number(prediction.confidence_margin ?? 1);
       const isTooUncertain = (!basicTestingMode && prediction.is_uncertain) || confidence < threshold || confidenceMargin < MIN_CONFIDENCE_MARGIN;
@@ -4119,39 +4135,65 @@ function App() {
     }
     if (streamRef.current) return true;
 
+    if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+      setStatus('Camera requires HTTPS or localhost');
+      setApiRecovery({ active: true, message: 'Open Signova over HTTPS to use sign translation.' });
+      return false;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setStatus('Camera is unavailable in this browser');
+      setApiRecovery({ active: true, message: 'This browser does not provide secure camera access.' });
+      return false;
+    }
+
     try {
-      await loadMediaPipeScripts();
-      setStatus('MediaPipe loaded');
       const performanceProfile = PERFORMANCE_PROFILES[settings.ai.performanceMode] || PERFORMANCE_PROFILES.balanced;
       const cameraResolution = CAMERA_RESOLUTIONS[settings.camera.resolution] || CAMERA_RESOLUTIONS['720p'];
-      const hands = new window.Hands({ locateFile: (file) => `${MEDIAPIPE_HANDS_BASE_URL}/${file}` });
-      hands.setOptions({
-        selfieMode: false,
-        maxNumHands: 2,
-        modelComplexity: 1,
-        minDetectionConfidence: performanceProfile.detection,
-        minTrackingConfidence: performanceProfile.tracking,
-      });
-      hands.onResults(handleHandsResults);
-      handsRef.current = hands;
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: cameraResolution.width },
-          height: { ideal: cameraResolution.height },
-          frameRate: { ideal: settings.camera.fps, max: Math.max(settings.camera.fps, 30) },
-          facingMode: facingModeOverride || settings.camera.facingMode,
-          aspectRatio: { ideal: 16 / 9 },
-          resizeMode: 'none',
-        },
-        audio: settings.microphone.inputDevice === 'default'
-          ? { noiseSuppression: settings.microphone.noiseSuppression }
-          : {
-            deviceId: { exact: settings.microphone.inputDevice },
-            noiseSuppression: settings.microphone.noiseSuppression,
+      const trackerLoad = loadMediaPipeScripts()
+        .then(() => ({ ready: typeof window.Hands === 'function', error: null }))
+        .catch((error) => ({ ready: false, error }));
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: cameraResolution.width },
+            height: { ideal: cameraResolution.height },
+            frameRate: { ideal: Math.min(settings.camera.fps, 60), max: Math.min(Math.max(settings.camera.fps, 30), 60) },
+            facingMode: facingModeOverride || settings.camera.facingMode,
+            aspectRatio: { ideal: 16 / 9 },
           },
-      });
-      stream.getAudioTracks().forEach((track) => { track.enabled = micEnabled; });
+          audio: false,
+        });
+      } catch (primaryCameraError) {
+        if (!['OverconstrainedError', 'ConstraintNotSatisfiedError'].includes(primaryCameraError?.name)) {
+          throw primaryCameraError;
+        }
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: facingModeOverride || settings.camera.facingMode },
+          audio: false,
+        });
+      }
+
+      if (micEnabled) {
+        try {
+          const audioStream = await navigator.mediaDevices.getUserMedia({
+            video: false,
+            audio: settings.microphone.inputDevice === 'default'
+              ? { noiseSuppression: settings.microphone.noiseSuppression }
+              : {
+                deviceId: { exact: settings.microphone.inputDevice },
+                noiseSuppression: settings.microphone.noiseSuppression,
+              },
+          });
+          audioStream.getAudioTracks().forEach((track) => {
+            track.enabled = true;
+            stream.addTrack(track);
+          });
+        } catch {
+          setStatus('Camera active · microphone unavailable');
+        }
+      }
+
       const [videoTrack] = stream.getVideoTracks();
       if (videoTrack) {
         videoTrack.contentHint = 'detail';
@@ -4183,10 +4225,32 @@ function App() {
       streamRef.current = stream;
       setCameraEnabled(true);
       setStatus('Camera active');
+      setApiRecovery({ active: false, message: '' });
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         await videoRef.current.play();
       }
+
+      const tracker = await trackerLoad;
+      if (!tracker.ready) {
+        setStatus('Camera active · hand tracker failed to load');
+        setApiRecovery({
+          active: true,
+          message: tracker.error?.message || 'Hand tracking could not load. Check the network and retry.',
+        });
+        return true;
+      }
+
+      const hands = new window.Hands({ locateFile: (file) => `${MEDIAPIPE_HANDS_BASE_URL}/${file}` });
+      hands.setOptions({
+        selfieMode: false,
+        maxNumHands: 2,
+        modelComplexity: 1,
+        minDetectionConfidence: performanceProfile.detection,
+        minTrackingConfidence: performanceProfile.tracking,
+      });
+      hands.onResults(handleHandsResults);
+      handsRef.current = hands;
 
       let sendingFrame = false;
       let frameCount = 0;
@@ -4228,7 +4292,15 @@ function App() {
       cameraLoopTimerRef.current = window.setTimeout(processFrame, 1000 / Math.max(1, settings.ai.frameRate || 30));
       return true;
     } catch (error) {
-      setStatus(error?.message === 'MediaPipe Hands unavailable' ? 'Hand tracking unavailable. Camera can still be used.' : 'Camera or MediaPipe failed to start');
+      const cameraErrors = {
+        NotAllowedError: 'Camera permission denied',
+        NotFoundError: 'No camera found',
+        NotReadableError: 'Camera is busy in another app',
+        SecurityError: 'Camera blocked by browser security',
+      };
+      const message = cameraErrors[error?.name] || error?.message || 'Camera failed to start';
+      setStatus(message);
+      setApiRecovery({ active: true, message });
       return false;
     }
   }
@@ -4345,12 +4417,25 @@ function App() {
         const data = await fetchJson('/api/signs');
         if (Array.isArray(data.signs) && data.signs.length) {
           setSignLibrary(data.signs);
-          setSignApiStatus(`Loaded ${data.signs.length} signs from ${data.apiSource}`);
+          const availableSigns = data.signs.filter((sign) => sign.recognition_status !== 'training_required');
+          const hasSequenceModel = availableSigns.some((sign) => {
+            const sources = Array.isArray(sign.sources) ? sign.sources : [sign.source];
+            return sources.some((source) => String(source || '').includes('transformer'));
+          });
+          const capability = hasSequenceModel ? 'sequence' : 'basic';
+          setRecognitionCapability(capability);
+          setSignApiStatus(
+            capability === 'basic'
+              ? `Basic live translation ready · ${availableSigns.length} signs`
+              : `Loaded ${availableSigns.length} trained signs from ${data.apiSource}`,
+          );
           return;
         }
+        setRecognitionCapability('basic');
         setSignApiStatus('Using fallback signs');
       } catch {
         setSignLibrary(DEFAULT_SIGNS);
+        setRecognitionCapability('basic');
         setSignApiStatus('Using fallback signs');
       }
     }

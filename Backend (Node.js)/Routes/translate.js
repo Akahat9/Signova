@@ -14,7 +14,7 @@ async function handleTranslate(req, res, path) {
     const token = await verifyFirebaseRequest(req);
     enforceRateLimit(req, token.uid, {
       scope: 'ai-inference',
-      maximum: Number(process.env.SIGNOVA_AI_REQUESTS_PER_MINUTE || 30),
+      maximum: Number(process.env.SIGNOVA_AI_REQUESTS_PER_MINUTE || 90),
     });
     const payload = await readJson(req);
     payload.session_id = scopedSessionId(token.uid, payload.session_id || payload.sessionId);
