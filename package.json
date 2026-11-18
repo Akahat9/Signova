@@ -1,0 +1,20 @@
+{
+  "name": "signova-platform",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": ".\\.venv\\Scripts\\python.exe ai-service\\signova.py",
+    "start:no-browser": ".\\.venv\\Scripts\\python.exe ai-service\\signova.py --no-browser",
+    "test:python": "cd ai-service && ..\\.venv\\Scripts\\python.exe -m unittest discover -s Models -p \"test_*.py\" -v",
+    "ai:check-release": "cd ai-service && ..\\.venv\\Scripts\\python.exe Models\\check_model_release.py --fail-on-unsafe --output Models\\model_release_readiness.json",
+    "ai:require-release": "cd ai-service && ..\\.venv\\Scripts\\python.exe Models\\check_model_release.py --require-ready --output Models\\model_release_readiness.json",
+    "check": "npm run check --prefix \"Backend (Node.js)\" && npm test --prefix \"Backend (Node.js)\" && npm run validate:account-deletion --prefix \"Backend (Node.js)\" && npm run test:ci --prefix signova-frontend && npm run test:rules --prefix signova-frontend && npm run test:python && npm run ai:check-release && npm run build --prefix signova-frontend",
+    "ops:smoke": "node scripts/smokeDeployment.js",
+    "ops:load": "node scripts/loadHealthEndpoint.js",
+    "ops:validate-deploy": "node scripts/validateDeploymentConfig.js",
+    "test:ops": "node --test scripts/*.test.js"
+  },
+  "dependencies": {
+    "mongodb": "^7.6.0"
+  }
+}

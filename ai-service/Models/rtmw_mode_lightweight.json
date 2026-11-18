@@ -1,0 +1,128 @@
+{
+  "engine": {
+    "enabled": true,
+    "available": true,
+    "model": "RTMW WholeBody 133",
+    "mode": "lightweight",
+    "backend": "onnxruntime",
+    "device": "cpu",
+    "requested_device": "cuda",
+    "providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "session_count": 1,
+    "max_sessions": 32,
+    "max_people": 8,
+    "signer_switching": {
+      "margin": 0.08,
+      "hold_ms": 900,
+      "minimum_active_ms": 1800,
+      "lost_grace_ms": 1200,
+      "minimum_active_score": 0.28
+    },
+    "runtime": {
+      "frames_processed": 12,
+      "average_people_per_frame": 2.0,
+      "max_people_seen": 2,
+      "max_reliable_hands_seen": 4,
+      "active_signer_switches": 0,
+      "latency_window_frames": 12,
+      "inference_mean_ms": 194.39,
+      "inference_p95_ms": 222.34,
+      "sessions": {
+        "benchmark": {
+          "people": 2,
+          "active_person_id": "person_2",
+          "switch_candidate_id": null,
+          "active_signer_switches": 0,
+          "manual_lock": null
+        }
+      }
+    },
+    "error": null,
+    "privacy": "Frames are processed in memory and are not saved."
+  },
+  "video": "Data\\call_benchmarks_synthetic\\four-hands-active__synthetic.mp4",
+  "frames": 12,
+  "average_latency_ms": 194.39,
+  "p95_latency_ms": 222.34,
+  "estimated_fps": 5.14,
+  "max_people": 2,
+  "max_detected_hands": 4,
+  "max_reliable_hands": 4,
+  "rows": [
+    {
+      "latency_ms": 208.1,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 3
+    },
+    {
+      "latency_ms": 233.73,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 2
+    },
+    {
+      "latency_ms": 214.57,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 3
+    },
+    {
+      "latency_ms": 222.34,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    },
+    {
+      "latency_ms": 205.21,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    },
+    {
+      "latency_ms": 157.33,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 3
+    },
+    {
+      "latency_ms": 201.56,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    },
+    {
+      "latency_ms": 185.88,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    },
+    {
+      "latency_ms": 181.88,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 2
+    },
+    {
+      "latency_ms": 209.68,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 3
+    },
+    {
+      "latency_ms": 158.29,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    },
+    {
+      "latency_ms": 154.12,
+      "people": 2,
+      "detected_hands": 4,
+      "reliable_hands": 4
+    }
+  ]
+}

@@ -1,0 +1,275 @@
+/* ==========================================================================
+   Signova Mobile Device Not Supported Screen (WhatsApp Web Style)
+   ========================================================================== */
+
+.signovaMobileBlockOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: radial-gradient(120% 120% at 50% 10%, #0d2238 0%, #05101a 100%);
+  color: #f1f7fc;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.signovaMobileBlockCard {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(13, 34, 56, 0.75);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(67, 211, 238, 0.28);
+  border-radius: 28px;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: signovaCardPop 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes signovaCardPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Brand header */
+.signovaMobileBlockBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.signovaMobileLogo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(67, 211, 238, 0.45));
+}
+
+.signovaMobileBrandText {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.signovaBrandName {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 30%, #43d3ee 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.signovaBrandTagline {
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(186, 215, 238, 0.75);
+  letter-spacing: 0.2px;
+}
+
+/* Device Illustration */
+.signovaMobileVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px 0 24px;
+  padding: 18px 24px;
+  background: rgba(5, 16, 26, 0.55);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.signovaDeviceBadge {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.desktopDevice {
+  background: linear-gradient(135deg, rgba(67, 211, 238, 0.2), rgba(14, 165, 233, 0.08));
+  border: 1px solid rgba(67, 211, 238, 0.45);
+  color: #43d3ee;
+  box-shadow: 0 8px 24px rgba(67, 211, 238, 0.2);
+}
+
+.mobileDevice {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.signovaDeviceCheck {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #10b981;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+}
+
+.signovaDeviceCross {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ef4444;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
+}
+
+.signovaDeviceConnector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.connectorLine {
+  width: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, #43d3ee 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-radius: 2px;
+}
+
+.connectorDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #43d3ee;
+}
+
+/* Typography */
+.signovaMobileTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 10px;
+  letter-spacing: -0.2px;
+}
+
+.signovaMobileSubtitle {
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(214, 233, 248, 0.85);
+  margin: 0 0 24px;
+}
+
+.signovaMobileSubtitle strong {
+  color: #43d3ee;
+  font-weight: 600;
+}
+
+/* Action button */
+.signovaMobileActions {
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.signovaCopyLinkBtn {
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.35);
+  transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.signovaCopyLinkBtn:active {
+  transform: scale(0.98);
+  filter: brightness(1.1);
+}
+
+/* Flutter native notice pill */
+.signovaMobileAppPill {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: rgba(14, 165, 233, 0.08);
+  border: 1px dashed rgba(67, 211, 238, 0.35);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.flutterBadge {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.signovaMobileAppPill p {
+  font-size: 12px;
+  line-height: 1.45;
+  color: rgba(186, 215, 238, 0.78);
+  margin: 0;
+}
+
+/* Bypass link */
+.signovaBypassLink {
+  background: none;
+  border: none;
+  color: rgba(186, 215, 238, 0.55);
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition: color 0.15s ease;
+}
+
+.signovaBypassLink:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+

@@ -1,0 +1,75 @@
+{
+  "production_ready": false,
+  "unsafe": [],
+  "tasks": {
+    "alphabet": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_signer_disjoint_validation_required",
+        "active_unknown_false_accept_rate_above_policy",
+        "active_unknown_recall_below_policy",
+        "vocabulary_spec_missing"
+      ]
+    },
+    "asl_primary": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_f1_below_policy",
+        "active_signer_disjoint_validation_required",
+        "active_unknown_false_accept_rate_above_policy",
+        "active_unknown_recall_below_policy",
+        "vocabulary_spec_missing"
+      ]
+    },
+    "asl_top300": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_f1_below_policy",
+        "active_signer_disjoint_validation_required",
+        "active_unknown_false_accept_rate_above_policy",
+        "active_unknown_recall_below_policy",
+        "vocabulary_spec_missing"
+      ]
+    },
+    "asl_top500": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_f1_below_policy",
+        "active_signer_disjoint_validation_required",
+        "active_unknown_false_accept_rate_above_policy",
+        "active_unknown_recall_below_policy",
+        "vocabulary_spec_missing"
+      ]
+    },
+    "isl": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_f1_below_policy",
+        "active_signer_disjoint_validation_required",
+        "active_unknown_false_accept_rate_above_policy",
+        "active_unknown_recall_below_policy",
+        "active_validation_samples_below_policy",
+        "vocabulary_spec_missing"
+      ]
+    },
+    "mixed": {
+      "ready": false,
+      "reasons": [
+        "active_checkpoint_sha256_missing_or_mismatch",
+        "active_dataset_manifest_missing",
+        "active_metrics_missing",
+        "vocabulary_spec_missing"
+      ]
+    }
+  }
+}

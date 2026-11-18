@@ -1,0 +1,44 @@
+{
+  "scenarios": [
+    {
+      "name": "single-signer-clear",
+      "video": "../Data/call_benchmarks/single_signer_clear.mp4",
+      "expected_people": 1,
+      "expected_label": "help_me",
+      "notes": "Single signer, clear lighting, hands fully visible."
+    },
+    {
+      "name": "two-people-one-signer",
+      "video": "../Data/call_benchmarks/two_people_one_signer.mp4",
+      "expected_people": 2,
+      "expected_active_person_id": "person_1",
+      "expected_signer_switches": 0,
+      "expected_label": "help_me",
+      "notes": "Second person remains present but does not sign."
+    },
+    {
+      "name": "low-light",
+      "video": "../Data/call_benchmarks/low_light.mp4",
+      "expected_people": 1,
+      "expected_label": "help_me"
+    },
+    {
+      "name": "hand-occlusion",
+      "video": "../Data/call_benchmarks/hand_occlusion.mp4",
+      "expected_people": 1,
+      "expected_label": "help_me"
+    },
+    {
+      "name": "signer-switching",
+      "video": "../Data/call_benchmarks/signer_switching.mp4",
+      "expected_people": 2,
+      "expected_signer_switches": 1
+    },
+    {
+      "name": "four-hands-active",
+      "video": "../Data/call_benchmarks/four_hands_active.mp4",
+      "expected_people": 2,
+      "expected_signer_switches": 0
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+name: Roll back Signova
+
+on:
+  workflow_dispatch:
+    inputs:
+      firebase_source_channel:
+        description: Existing verified Hosting channel, blank to skip
+        required: false
+      vercel_deployment_url:
+        description: Existing verified Vercel deployment URL, blank to skip
+        required: false
+
+concurrency:
+  group: signova-deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  rollback:
+    environment: production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate rollback selection
+        if: inputs.firebase_source_channel == '' && inputs.vercel_deployment_url == ''
+        run: echo 'Provide at least one rollback target.' >&2 && exit 1
+      - uses: google-github-actions/auth@v2
+        if: inputs.firebase_source_channel != ''
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      - name: Roll back Firebase Hosting
+        if: inputs.firebase_source_channel != ''
+        run: |
+          npm install --global firebase-tools@15.23.0
+          firebase hosting:clone "${{ vars.FIREBASE_HOSTING_SITE }}:${{ inputs.firebase_source_channel }}" "${{ vars.FIREBASE_HOSTING_SITE }}:live" --project "${{ vars.FIREBASE_PROJECT_ID }}" --non-interactive
+      - name: Roll back Vercel backend
+        if: inputs.vercel_deployment_url != ''
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: npx --yes vercel@latest rollback "${{ inputs.vercel_deployment_url }}" --token="$VERCEL_TOKEN" --yes
+      - name: Verify production
+        env:
+          SIGNOVA_FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+          SIGNOVA_BACKEND_URL: ${{ vars.BACKEND_URL }}
+          SIGNOVA_AI_URL: ${{ vars.AI_URL }}
+        run: node scripts/smokeDeployment.js

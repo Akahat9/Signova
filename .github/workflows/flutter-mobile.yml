@@ -1,0 +1,82 @@
+name: Flutter mobile verification
+
+on:
+  pull_request:
+    paths:
+      - 'mobile/signova_flutter/**'
+      - '.github/workflows/flutter-mobile.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'mobile/signova_flutter/**'
+      - '.github/workflows/flutter-mobile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: mobile/signova_flutter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.5'
+          cache: true
+      - name: Generate Android and iOS host projects
+        shell: bash
+        run: |
+          flutter create --platforms=android,ios --project-name signova_flutter --org com.signova "$RUNNER_TEMP/signova-host"
+          cp -R "$RUNNER_TEMP/signova-host/android" .
+          cp -R "$RUNNER_TEMP/signova-host/ios" .
+          sed -i 's/minSdk = flutter.minSdkVersion/minSdk = 24/' android/app/build.gradle.kts
+          printf '%s\n' '-keep class ai.onnxruntime.** { *; }' > android/app/proguard-rules.pro
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build apk --debug
+
+  ios:
+    runs-on: macos-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: mobile/signova_flutter
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.5'
+          cache: true
+      - name: Generate and configure iOS host project
+        shell: bash
+        run: |
+          flutter create --platforms=android,ios --project-name signova_flutter --org com.signova "$RUNNER_TEMP/signova-host"
+          cp -R "$RUNNER_TEMP/signova-host/android" .
+          cp -R "$RUNNER_TEMP/signova-host/ios" .
+          sed -i '' "s/platform :ios, '.*'/platform :ios, '16.0'/" ios/Podfile
+          python - <<'PY'
+          from pathlib import Path
+          podfile = Path('ios/Podfile')
+          text = podfile.read_text()
+          if 'use_frameworks! :linkage => :static' not in text:
+              text = text.replace("target 'Runner' do", "target 'Runner' do\n  use_frameworks! :linkage => :static", 1)
+          podfile.write_text(text)
+          PY
+          /usr/libexec/PlistBuddy -c 'Add :NSCameraUsageDescription string Signova uses the camera to detect signs on this device.' ios/Runner/Info.plist || true
+          /usr/libexec/PlistBuddy -c 'Add :NSMicrophoneUsageDescription string Signova uses the microphone during one-to-one calls.' ios/Runner/Info.plist || true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build ios --no-codesign

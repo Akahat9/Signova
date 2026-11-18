@@ -1,0 +1,220 @@
+/*
+ * ==========================================================================
+ * SIGNOVA SCROLLBAR & SCROLL AUTHORITY — UNIVERSAL YOUTUBE / LINEAR STANDARD
+ *
+ * This file is the LAST CSS import in App.js.
+ * It enforces:
+ * 1. ZERO GAP: The main scrollbar sits at the absolute right viewport corner (0px gap).
+ * 2. NO ARROWS: All scrollbar buttons (▲ and ▼) are completely suppressed.
+ * 3. TRANSPARENT TRACK: Invisible floating scrollbar track like YouTube / Linear.
+ * 4. SINGLE SCROLL CONTAINER: .signToolsPane / .conversationPane is the sole scroll host;
+ *    inner .workRail has overflow: visible so it NEVER creates an offset inner scrollbar.
+ * 5. MOBILE ENABLED: Vertical touch scrolling is active and fluid on phones.
+ * ==========================================================================
+ */
+
+/* ── 1. NUKE ALL GUTTER COLUMNS ─────────────────────────────────────────── */
+html,
+body,
+#root,
+*,
+*::before,
+*::after {
+  scrollbar-gutter: auto !important;
+}
+
+/* ── 2. KILL ALL ARROW BUTTONS (▲ ▼) UNIVERSALLY ───────────────────────── */
+*::-webkit-scrollbar-button,
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* ── 3. KILL SCROLLBAR CORNER ───────────────────────────────────────────── */
+*::-webkit-scrollbar-corner,
+::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* ── 4. UNIVERSAL SLIM 8px FLOATING SCROLLBAR ───────────────────────────── */
+*::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+/* Light Mode Pill */
+*::-webkit-scrollbar-thumb {
+  border-radius: 9999px !important;
+  border: 2px solid transparent !important;
+  background-color: rgba(0, 0, 0, 0.22) !important;
+  background-clip: padding-box !important;
+  min-height: 36px !important;
+  min-width: 36px !important;
+  transition: background-color 0.15s ease !important;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  background-clip: padding-box !important;
+}
+
+*::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.65) !important;
+  background-clip: padding-box !important;
+}
+
+/* Dark Mode Pill */
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb,
+html[data-signova-theme="dark"] *::-webkit-scrollbar-thumb,
+.premiumDarkMode *::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.24) !important;
+  background-clip: padding-box !important;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb:hover,
+html[data-signova-theme="dark"] *::-webkit-scrollbar-thumb:hover,
+.premiumDarkMode *::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.48) !important;
+  background-clip: padding-box !important;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb:active,
+html[data-signova-theme="dark"] *::-webkit-scrollbar-thumb:active,
+.premiumDarkMode *::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 255, 255, 0.75) !important;
+  background-clip: padding-box !important;
+}
+
+/* Firefox standard scrollbar */
+html,
+body,
+* {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 0, 0, 0.22) transparent !important;
+}
+
+body.signovaPremiumDarkPage,
+body.signovaPremiumDarkPage *,
+html[data-signova-theme="dark"],
+html[data-signova-theme="dark"] *,
+.premiumDarkMode,
+.premiumDarkMode * {
+  scrollbar-color: rgba(255, 255, 255, 0.24) transparent !important;
+}
+
+/* ── 5. SINGLE VIEWPORT & SCROLL OWNER: FLUSH AT RIGHT EDGE (0px GAP) ──── */
+/*
+   The main layout scroll hosts (.signToolsPane for pages, .conversationPane for chats)
+   MUST touch the very right edge of the viewport with 0 padding-right and 0 margin-right.
+   This guarantees that the scrollbar sits directly in the corner like YouTube.
+*/
+.messengerShell > .signToolsPane,
+.messengerShell.libraryMode > .signToolsPane,
+.messengerShell.learnMode > .signToolsPane,
+.messengerShell.progressMode > .signToolsPane,
+.messengerShell.profileMode > .signToolsPane,
+.messengerShell.settingsMode > .signToolsPane,
+.messengerShell.communityMode > .signToolsPane,
+body.signovaLibraryPage .signToolsPane,
+body.signovaLearnPage .signToolsPane,
+body.signovaProgressPage .signToolsPane,
+body.signovaSettingsPage .signToolsPane,
+body.signovaProfilePage .signToolsPane,
+body.signovaCommunityFeedPage .signToolsPane {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+}
+
+.messengerShell > .conversationPane {
+  margin-right: 0 !important;
+  padding-right: 0 !important;
+  overflow-x: hidden !important;
+}
+
+/* ── 6. INNER .workRail NEVER SCROLLS (PREVENTS OFFSET / DOUBLE SCROLLBARS) ─ */
+/*
+   Inner wrapper handles content breathing room (padding) while allowing the
+   outer .signToolsPane to provide the single edge-aligned scrollbar.
+*/
+.messengerShell .signToolsPane > .workRail,
+.workRail {
+  overflow-y: visible !important;
+  overflow-x: visible !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 16px 24px 48px 24px !important;
+  box-sizing: border-box !important;
+}
+
+/* ── 7. HORIZONTAL TABS & INTERNAL TOOLBARS AUTO-HIDE SCROLLBAR ─────────── */
+.chatCategoryRow,
+.groupTabs,
+.communityFeedTabs,
+.learnTopActions,
+.libraryTopActions,
+.progressToolbar,
+.railNav,
+.chatLiveSyncSignals {
+  scrollbar-width: none !important;
+}
+
+.chatCategoryRow::-webkit-scrollbar,
+.groupTabs::-webkit-scrollbar,
+.communityFeedTabs::-webkit-scrollbar,
+.learnTopActions::-webkit-scrollbar,
+.libraryTopActions::-webkit-scrollbar,
+.progressToolbar::-webkit-scrollbar,
+.railNav::-webkit-scrollbar,
+.chatLiveSyncSignals::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* ── 8. MOBILE PHONE SCROLLING UNLOCKED & OPTIMIZED ──────────────────────── */
+@media (max-width: 760px) {
+  html,
+  body,
+  #root {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+  }
+
+  .messengerShell {
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow-y: visible !important;
+  }
+
+  .messengerShell > .signToolsPane {
+    overflow-y: visible !important;
+    height: auto !important;
+    padding-bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .messengerShell .signToolsPane > .workRail {
+    padding: 12px 14px calc(92px + env(safe-area-inset-bottom)) 14px !important;
+  }
+
+  *::-webkit-scrollbar {
+    width: 4px !important;
+    height: 4px !important;
+  }
+}

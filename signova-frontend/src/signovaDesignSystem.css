@@ -1,0 +1,4423 @@
+/* Signova unified product design system — final visual authority. */
+:root {
+  --snv-bg: #f4f6fa;
+  --snv-surface: #ffffff;
+  --snv-surface-secondary: #f0f3f8;
+  --snv-surface-elevated: #ffffff;
+  --snv-surface-hover: #e9edf5;
+  --snv-border-subtle: rgba(20, 28, 42, 0.09);
+  --snv-border-strong: rgba(20, 28, 42, 0.16);
+  --snv-text-primary: #151922;
+  --snv-text-secondary: #596273;
+  --snv-text-muted: #7b8493;
+  --snv-text-disabled: #a1a8b4;
+  --snv-accent: #6548f2;
+  --snv-accent-hover: #7357ff;
+  --snv-accent-pressed: #553bdd;
+  --snv-accent-soft: rgba(101, 72, 242, 0.12);
+  --snv-success: #229c6d;
+  --snv-warning: #b77800;
+  --snv-error: #dc4545;
+  --snv-info: #2878d4;
+  --snv-shadow-sm: 0 1px 2px rgba(15, 18, 26, 0.06);
+  --snv-shadow-md: 0 12px 28px rgba(15, 18, 26, 0.09);
+  --snv-radius-xs: 6px;
+  --snv-radius-sm: 8px;
+  --snv-radius-md: 12px;
+  --snv-radius-lg: 16px;
+  --snv-radius-xl: 20px;
+  --snv-space-1: 4px;
+  --snv-space-2: 8px;
+  --snv-space-3: 12px;
+  --snv-space-4: 16px;
+  --snv-space-5: 20px;
+  --snv-space-6: 24px;
+  --snv-space-8: 32px;
+  --snv-font-display: clamp(1.75rem, 2vw, 2rem);
+  --snv-font-title: 1.125rem;
+  --snv-font-body: 0.9375rem;
+  --snv-font-label: 0.8125rem;
+  --snv-font-caption: 0.75rem;
+  --snv-motion-tap: 100ms;
+  --snv-motion-hover: 150ms;
+  --snv-motion-control: 200ms;
+  --snv-motion-page: 260ms;
+  --snv-ease-out: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: light;
+}
+
+html[data-signova-theme="dark"],
+body.signovaPremiumDarkPage,
+.messengerShell.premiumDarkMode {
+  --snv-bg: #090b0f;
+  --snv-surface: #10131a;
+  --snv-surface-secondary: #151922;
+  --snv-surface-elevated: #1b202b;
+  --snv-surface-hover: #222838;
+  --snv-border-subtle: rgba(255, 255, 255, 0.07);
+  --snv-border-strong: rgba(255, 255, 255, 0.12);
+  --snv-text-primary: #f5f7fa;
+  --snv-text-secondary: #a9b0be;
+  --snv-text-muted: #707887;
+  --snv-text-disabled: #505664;
+  --snv-accent: #7357ff;
+  --snv-accent-hover: #846cff;
+  --snv-accent-pressed: #6048e8;
+  --snv-accent-soft: rgba(115, 87, 255, 0.16);
+  --snv-success: #36c98f;
+  --snv-warning: #f4b740;
+  --snv-error: #ff6262;
+  --snv-info: #4d9dff;
+  --snv-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
+  --snv-shadow-md: 0 18px 48px rgba(0, 0, 0, 0.28);
+  /* Legacy theme aliases intentionally point to semantic tokens. */
+  --snv-dark-canvas: var(--snv-bg);
+  --snv-dark-rail: #0c0f15;
+  --snv-dark-surface-1: var(--snv-surface);
+  --snv-dark-surface-2: var(--snv-surface-secondary);
+  --snv-dark-surface-3: var(--snv-surface-elevated);
+  --snv-dark-surface-4: var(--snv-surface-hover);
+  --snv-dark-hover: var(--snv-surface-hover);
+  --snv-dark-selected: var(--snv-accent-soft);
+  --snv-dark-border: var(--snv-border-strong);
+  --snv-dark-border-soft: var(--snv-border-subtle);
+  --snv-dark-divider: var(--snv-border-subtle);
+  --snv-dark-text: var(--snv-text-primary);
+  --snv-dark-text-secondary: var(--snv-text-secondary);
+  --snv-dark-text-muted: var(--snv-text-muted);
+  --snv-dark-accent: var(--snv-accent);
+  --snv-dark-accent-strong: var(--snv-accent-hover);
+  --snv-dark-accent-container: var(--snv-accent-soft);
+  color-scheme: dark;
+}
+
+body.signovaPremiumDarkPage,
+body.signovaPremiumDarkPage #root,
+.messengerShell.premiumDarkMode {
+  background: var(--snv-bg) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatSidebar, .conversationPane, .signToolsPane, .panel, .communityPage,
+  .communityGroupsPage, .communityCreateSignPage, .libraryDashboard,
+  .learnStudioPage, .progressDashboard, .profilePage, .settingsPanel
+) {
+  border-color: var(--snv-border-subtle) !important;
+  background-color: var(--snv-bg) !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatListItem, .messageBubble, .communityPost, .communityGroupCard,
+  .libraryContentCard, .learningCard, .progressCard, .profileCard,
+  .metric, .emptyState, .settingsGroup, .settingField, .settingSwitch
+) {
+  border-color: var(--snv-border-subtle) !important;
+  background-color: var(--snv-surface) !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(input, select, textarea) {
+  border-color: var(--snv-border-strong) !important;
+  background-color: var(--snv-surface) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(input, textarea)::placeholder {
+  color: var(--snv-text-muted) !important;
+}
+
+.premiumDarkMode :where(button, a, input, select, textarea):focus-visible,
+.settingsPanel :where(button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--snv-accent-hover) !important;
+  outline-offset: 2px !important;
+}
+
+.settingsPanel {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding: var(--snv-space-6) !important;
+  overflow: hidden !important;
+  background: var(--snv-bg) !important;
+  color: var(--snv-text-primary);
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode .settingsPanel {
+  background: var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode .settingSwitch input[type="checkbox"]:checked {
+  border-color: var(--snv-accent) !important;
+  background: var(--snv-accent) !important;
+}
+
+.settingsPageTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--snv-space-4);
+  min-height: 60px;
+  margin: 0 0 var(--snv-space-5);
+}
+
+.settingsPageTitle h1 {
+  margin: 0;
+  color: var(--snv-text-primary);
+  font-size: var(--snv-font-display);
+  font-weight: 680;
+  letter-spacing: -0.035em;
+}
+
+.settingsPageTitle p {
+  margin: 5px 0 0;
+  color: var(--snv-text-secondary);
+  font-size: var(--snv-font-body);
+  line-height: 1.45;
+}
+
+.settingsPageActions {
+  display: flex;
+  align-items: center;
+  gap: var(--snv-space-3);
+}
+
+.settingsEncryptionBadge,
+.settingsHeaderIconButton {
+  min-height: 40px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: var(--snv-radius-md);
+  background: var(--snv-surface);
+  color: var(--snv-warning);
+}
+
+.settingsEncryptionBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: var(--snv-font-label);
+  font-weight: 650;
+}
+
+.settingsHeaderIconButton {
+  width: 40px;
+  padding: 0;
+  color: var(--snv-text-secondary);
+  cursor: pointer;
+}
+
+.settingsWorkspace {
+  display: grid;
+  grid-template-columns: minmax(248px, 292px) minmax(0, 1fr);
+  gap: 18px;
+  min-height: 0;
+  height: calc(100% - 80px);
+}
+
+.settingsDesktopSidebar,
+.settingsContent,
+.settingsContextCard {
+  min-height: 0;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: var(--snv-radius-lg);
+  background: var(--snv-surface);
+}
+
+.settingsDesktopSidebar {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settingsDesktopSearch {
+  flex: 0 0 auto;
+  margin: 12px !important;
+  width: auto !important;
+}
+
+.settingsDesktopProfile {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0 12px 8px;
+  padding: 12px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: var(--snv-radius-md);
+  background: var(--snv-surface-secondary);
+}
+
+.settingsDesktopProfile .settingsProfilePhoto {
+  flex: 0 0 38px;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  overflow: hidden;
+}
+
+.settingsDesktopProfile .settingsProfilePhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.settingsDesktopProfile > span:last-child {
+  min-width: 0;
+  display: grid;
+}
+
+.settingsDesktopProfile strong,
+.settingsDesktopProfile small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settingsDesktopProfile strong { color: var(--snv-text-primary); font-size: var(--snv-font-label); }
+.settingsDesktopProfile small { color: var(--snv-text-muted); font-size: var(--snv-font-caption); }
+
+.settingsDesktopNavigation {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 8px 14px;
+  scrollbar-gutter: auto;
+}
+
+.settingsNavItem {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) 16px;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--snv-radius-md);
+  background: transparent;
+  color: var(--snv-text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--snv-motion-hover) ease, border-color var(--snv-motion-hover) ease, color var(--snv-motion-hover) ease;
+}
+
+.settingsNavItem:hover { background: var(--snv-surface-hover); color: var(--snv-text-primary); }
+.settingsNavItem:active { transform: translateY(1px); }
+.settingsNavItem.activeSettingsNavItem {
+  border-color: rgba(115, 87, 255, 0.24);
+  background: var(--snv-accent-soft);
+  color: var(--snv-text-primary);
+}
+
+.settingsNavItem.activeSettingsNavItem::before {
+  position: absolute;
+  left: -1px;
+  width: 3px;
+  height: 28px;
+  border-radius: 0 4px 4px 0;
+  background: var(--snv-accent);
+  content: '';
+}
+
+.settingsNavItem .settingsIcon,
+.settingsGroupHeader .settingsIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: 10px;
+  background: var(--snv-surface-secondary);
+  color: var(--snv-text-secondary);
+  font-style: normal;
+}
+
+.settingsNavItem.activeSettingsNavItem .settingsIcon {
+  border-color: rgba(115, 87, 255, 0.35);
+  background: var(--snv-accent);
+  color: #fff;
+}
+
+.settingsNavItem > span:nth-child(2) { min-width: 0; display: grid; gap: 2px; }
+.settingsNavItem strong { color: inherit; font-size: var(--snv-font-label); font-weight: 640; }
+.settingsNavItem small { overflow: hidden; color: var(--snv-text-muted); font-size: var(--snv-font-caption); text-overflow: ellipsis; white-space: nowrap; }
+.settingsNavItem em { color: var(--snv-text-muted); font-size: 18px; font-style: normal; }
+
+.settingsContent {
+  overflow: auto;
+  padding: var(--snv-space-5);
+  scrollbar-gutter: auto;
+  overscroll-behavior: contain;
+}
+
+.settingsSubPageHeader {
+  position: sticky;
+  top: -20px;
+  z-index: 4;
+  margin: -20px -20px 16px !important;
+  padding: 18px 20px 14px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--snv-border-subtle) !important;
+  border-radius: 0 !important;
+  background: color-mix(in srgb, var(--snv-surface) 94%, transparent) !important;
+  backdrop-filter: blur(10px);
+  box-shadow: none !important;
+}
+
+.settingsSubPageHeader button { display: none !important; }
+.settingsSubPageHeader > div {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px;
+  width: 100%;
+  min-width: 0;
+}
+.settingsSubPageHeader span { grid-column: 1; color: var(--snv-accent-hover) !important; font-size: var(--snv-font-caption) !important; text-transform: uppercase; letter-spacing: .08em; }
+.settingsSubPageHeader strong { grid-column: 1 / -1; color: var(--snv-text-primary) !important; font-size: 1.5rem !important; letter-spacing: -.025em; }
+.settingsSubPageHeader small { grid-column: 1 / -1; color: var(--snv-text-secondary) !important; }
+
+.settingsDetailGroup {
+  display: none !important;
+  margin: 0 0 16px !important;
+  padding: 0 !important;
+  border: 1px solid var(--snv-border-subtle) !important;
+  border-radius: var(--snv-radius-lg) !important;
+  overflow: hidden;
+  background: var(--snv-surface) !important;
+  box-shadow: none !important;
+  animation: settings-section-enter var(--snv-motion-page) var(--snv-ease-out) both;
+}
+
+.settingsDetailGroup.activeSettingsDetail { display: block !important; }
+
+@keyframes settings-section-enter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.settingsGroupHeader {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 16px !important;
+  border-bottom: 1px solid var(--snv-border-subtle);
+  background: var(--snv-surface-secondary);
+}
+
+.settingsGroupHeader > div { display: grid; gap: 3px; }
+.settingsGroupHeader strong { color: var(--snv-text-primary) !important; font-size: var(--snv-font-title) !important; }
+.settingsGroupHeader small { color: var(--snv-text-secondary) !important; font-size: var(--snv-font-label) !important; line-height: 1.4; }
+
+.settingsGrid,
+.settingsGrid.twoColumns {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 0 !important;
+  padding: 0 !important;
+}
+
+.settingSwitch,
+.settingField,
+.settingRange {
+  min-width: 0;
+  min-height: 66px;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--snv-border-subtle) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.settingsGrid > :last-child { border-bottom: 0 !important; }
+.settingSwitch:hover, .settingField:hover, .settingRange:hover { background: var(--snv-surface-hover) !important; }
+
+.settingSwitch {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+  cursor: pointer;
+}
+
+.settingSwitch > span { flex: 1; min-width: 0; display: grid; gap: 2px; order: 1; }
+.settingSwitch strong, .settingField > span, .settingRange > span { color: var(--snv-text-primary) !important; font-size: var(--snv-font-label) !important; font-weight: 630 !important; }
+.settingSwitch small, .settingField small { color: var(--snv-text-secondary) !important; font-size: var(--snv-font-caption) !important; line-height: 1.4; }
+
+.settingSwitch input[type="checkbox"] {
+  position: relative !important;
+  flex: 0 0 44px !important;
+  order: 2;
+  width: 44px !important;
+  height: 24px !important;
+  margin: 0 !important;
+  border: 1px solid var(--snv-border-strong) !important;
+  border-radius: 999px !important;
+  appearance: none;
+  background: #343a46 !important;
+  cursor: pointer;
+  transition: background var(--snv-motion-control) var(--snv-ease-out), border-color var(--snv-motion-control) var(--snv-ease-out) !important;
+}
+
+.settingSwitch input[type="checkbox"]::after {
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: #a9b0be !important;
+  box-shadow: var(--snv-shadow-sm) !important;
+  content: '' !important;
+  transform: none !important;
+  transition: transform var(--snv-motion-control) var(--snv-ease-out), background var(--snv-motion-control) ease !important;
+}
+
+.settingSwitch input[type="checkbox"]:checked { border-color: var(--snv-accent) !important; background: var(--snv-accent) !important; }
+.settingSwitch input[type="checkbox"]:checked::after { background: #fff !important; transform: translateX(20px) !important; }
+
+.settingField {
+  display: grid !important;
+  grid-template-columns: minmax(140px, 1fr) minmax(180px, 44%) !important;
+  align-items: center;
+  gap: 16px;
+}
+
+.settingField :where(input, select, button),
+.settingsInlineAction {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--snv-border-strong) !important;
+  border-radius: var(--snv-radius-sm) !important;
+  background: var(--snv-surface-secondary) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+.settingsActions,
+.settingsAccountPrimaryActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 14px 16px;
+  border-top: 1px solid var(--snv-border-subtle);
+}
+
+.settingsActionButton,
+.settingsActions button,
+.settingsSupportList button {
+  min-height: 42px;
+  border-radius: var(--snv-radius-sm) !important;
+}
+
+.settingsSupportList { display: grid; }
+.settingsSupportList button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--snv-border-subtle);
+  background: transparent;
+  color: var(--snv-text-primary);
+  text-align: left;
+  cursor: pointer;
+}
+.settingsSupportList button:hover { background: var(--snv-surface-hover); }
+.settingsSupportList button:last-child { border-bottom: 0; }
+.settingsSupportList button span { color: var(--snv-text-muted); }
+
+.settingsAccountSessionCard,
+.settingsSecurityHero,
+.settingsDpdpNotice,
+.settingsLegalNotice,
+.settingsDeviceSummary,
+.settingsLockMethodGrid {
+  margin: 14px 16px !important;
+  border-color: var(--snv-border-subtle) !important;
+  border-radius: var(--snv-radius-md) !important;
+  background: var(--snv-surface-secondary) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+.settingsContextCard { display: none; }
+
+.settingsSearchBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px !important;
+  border: 1px solid var(--snv-border-subtle) !important;
+  border-radius: var(--snv-radius-md) !important;
+  background: var(--snv-surface-secondary) !important;
+  box-shadow: none !important;
+}
+.settingsSearchBar input { min-width: 0; border: 0 !important; background: transparent !important; outline: 0 !important; }
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .messengerShell.settingsMode { grid-template-columns: 72px minmax(0, 1fr) !important; }
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane {
+    grid-column: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+  html body.signovaSettingsPage .messengerShell.settingsMode .settingsPanel {
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: var(--snv-space-6) !important;
+    overflow: hidden !important;
+    background: var(--snv-bg) !important;
+  }
+  html body.signovaSettingsPage .messengerShell.settingsMode .settingsWorkspace {
+    width: 100% !important;
+    height: calc(100% - 78px) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .settingsWorkspace { grid-template-columns: 292px minmax(0, 1fr) 280px; }
+  .settingsContextCard {
+    display: flex;
+    flex-direction: column;
+    align-self: start;
+    overflow: hidden;
+    padding: 16px;
+  }
+  .settingsContextVisual { display: grid; place-items: center; min-height: 118px; margin: -16px -16px 16px; background: var(--snv-surface-secondary); }
+  .settingsContextVisual span { display: grid; place-items: center; width: 58px; height: 58px; border: 1px solid rgba(115,87,255,.35); border-radius: 18px; background: var(--snv-accent-soft); color: var(--snv-accent-hover); font-size: 28px; }
+  .settingsContextCard > strong { text-align: center; color: var(--snv-text-primary); }
+  .settingsContextCard > p { margin: 8px 0 16px; color: var(--snv-text-secondary); font-size: var(--snv-font-label); line-height: 1.55; text-align: center; }
+  .settingsContextCard ul { display: grid; gap: 0; margin: 0 -16px -16px; padding: 0; border-top: 1px solid var(--snv-border-subtle); list-style: none; }
+  .settingsContextCard li { display: flex; gap: 10px; padding: 13px 16px; border-bottom: 1px solid var(--snv-border-subtle); }
+  .settingsContextCard li > span { color: var(--snv-accent-hover); }
+  .settingsContextCard li div { display: grid; gap: 2px; }
+  .settingsContextCard li strong { color: var(--snv-text-primary); font-size: var(--snv-font-label); }
+  .settingsContextCard li small { color: var(--snv-text-muted); font-size: var(--snv-font-caption); }
+}
+
+@media (max-width: 1023px) {
+  .settingsPanel { height: auto; min-height: 100%; padding: 18px 16px calc(92px + env(safe-area-inset-bottom)) !important; overflow: visible !important; }
+  .settingsPageTitle { position: sticky; top: 0; z-index: 8; min-height: 58px; margin: -18px -16px 14px; padding: 12px 16px; border-bottom: 1px solid var(--snv-border-subtle); background: color-mix(in srgb, var(--snv-bg) 94%, transparent); backdrop-filter: blur(10px); }
+  .settingsPageTitle p, .settingsPageActions { display: none; }
+  .settingsPageTitle h1 { font-size: 1.6rem; }
+  .settingsWorkspace { display: block; height: auto; }
+  .settingsDesktopSidebar, .settingsContextCard { display: none !important; }
+  .settingsContent { overflow: visible; padding: 0; border: 0; background: transparent; }
+  .settingsPanel:not(.settingsSubPageActive) .settingsContent > .settingsSubPageHeader { display: none; }
+  .settingsSubPageHeader { top: 58px; margin: 0 0 12px !important; padding: 10px 0 12px !important; background: var(--snv-bg) !important; backdrop-filter: none; }
+  .settingsSubPageHeader button { display: grid !important; place-items: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--snv-border-subtle) !important; border-radius: 50% !important; background: var(--snv-surface) !important; color: var(--snv-text-primary) !important; }
+  .settingsSubPageHeader { display: flex !important; align-items: center; gap: 10px; }
+  .settingsSubPageHeader > div { display: grid; }
+  .settingsSubPageHeader span { display: none; }
+  .settingsSubPageHeader strong { font-size: 1.25rem !important; }
+  .settingsSearchBar { width: 100% !important; margin: 0 0 12px !important; }
+  .settingsHero { min-height: 74px !important; margin: 0 0 12px !important; padding: 12px !important; border: 1px solid var(--snv-border-subtle) !important; border-radius: var(--snv-radius-md) !important; background: var(--snv-surface) !important; box-shadow: none !important; }
+  .settingsProfileMoment { margin: 0 0 14px !important; }
+  .settingsChooser { display: grid !important; grid-template-columns: 1fr !important; gap: 12px !important; }
+  .settingsChoiceCard.settingsNavItem { min-height: 64px; border: 1px solid var(--snv-border-subtle); background: var(--snv-surface); }
+  .settingsChoiceCard.settingsNavItem:hover { background: var(--snv-surface-hover); }
+  .settingsDetailGroup { margin-bottom: 12px !important; border-radius: var(--snv-radius-md) !important; }
+  .settingSwitch, .settingField, .settingRange { min-height: 58px; padding: 11px 13px !important; }
+  .settingField { grid-template-columns: minmax(0, 1fr) auto !important; }
+  .settingField :where(input, select, button) { max-width: 48vw; }
+  .settingsGroupHeader { min-height: 64px; padding: 12px 13px !important; }
+  .settingsGrid.twoColumns { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 767px) {
+  html body.signovaSettingsPage .messengerShell.settingsMode > .appRail {
+    border-color: var(--snv-border-strong) !important;
+    background: rgba(16, 19, 26, 0.97) !important;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.34) !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .appRail .railNav {
+    border: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .appRail .railButton {
+    border-color: transparent !important;
+    background: transparent !important;
+    color: var(--snv-text-secondary) !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .appRail .railButton.activeRailButton {
+    border-color: rgba(115, 87, 255, 0.34) !important;
+    background: var(--snv-accent-soft) !important;
+    color: var(--snv-text-primary) !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .settingsPanel { padding-inline: 12px !important; }
+  .settingsPageTitle { margin-inline: -12px; padding-inline: 14px; }
+  .settingsProfileMoment { display: none !important; }
+  .settingsChooser { gap: 10px !important; }
+  .settingsChoiceCard.settingsNavItem { min-height: 62px; }
+  .settingsGroupHeader .settingsIcon { width: 36px; height: 36px; }
+  .settingField { grid-template-columns: 1fr !important; gap: 8px; }
+  .settingField :where(input, select, button) { width: 100%; max-width: none; }
+  .settingsActions { display: grid; grid-template-columns: 1fr; }
+  .settingsActions button { width: 100%; }
+  .settingsDeviceSummary { grid-template-columns: 1fr 1fr !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settingsDetailGroup { animation: none !important; }
+  .settingsNavItem, .settingSwitch input, .settingSwitch input::after { transition: none !important; }
+}
+
+.signovaRecoveryMethods .unavailableRecoveryMethod {
+  opacity: 0.58;
+  cursor: not-allowed;
+}
+
+body.signovaReduceMotion .settingsDetailGroup,
+body.signovaReduceMotion .settingsNavItem,
+body.signovaReduceMotion .settingSwitch input,
+body.signovaReduceMotion .settingSwitch input::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Settings page final composition overrides.
+   Kept at the end of the design-system file so legacy App.css cannot win. */
+html body.signovaSettingsPage {
+  background: var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode {
+  background:
+    radial-gradient(circle at top left, rgba(115, 87, 255, 0.08), transparent 34rem),
+    var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage .settingsPanel {
+  container-type: inline-size;
+}
+
+html body.signovaSettingsPage .settingsPageTitle {
+  max-width: 1480px;
+  margin-inline: auto;
+}
+
+html body.signovaSettingsPage .settingsWorkspace {
+  max-width: 1480px;
+  margin-inline: auto;
+}
+
+html body.signovaSettingsPage .settingsDesktopSidebar,
+html body.signovaSettingsPage .settingsContent,
+html body.signovaSettingsPage .settingsContextCard {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent 180px),
+    var(--snv-surface) !important;
+}
+
+.settingsCategoryGroup {
+  display: grid;
+}
+
+.settingsCategoryStack {
+  display: grid;
+}
+
+.settingsNavGroupLabel {
+  display: block;
+  margin: 14px 10px 7px;
+  color: var(--snv-text-muted);
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.settingsDesktopNavigation .settingsNavGroupLabel:first-child,
+.settingsChooser .settingsNavGroupLabel:first-child {
+  margin-top: 2px;
+}
+
+html body.signovaSettingsPage .settingsNavItem {
+  isolation: isolate;
+}
+
+html body.signovaSettingsPage .settingsNavItem::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 50%);
+  opacity: 0;
+  content: '';
+  pointer-events: none;
+  transition: opacity var(--snv-motion-hover) var(--snv-ease-out);
+  z-index: -1;
+}
+
+html body.signovaSettingsPage .settingsNavItem:hover::after,
+html body.signovaSettingsPage .settingsNavItem.activeSettingsNavItem::after {
+  opacity: 1;
+}
+
+html body.signovaSettingsPage .settingsSearchBar {
+  transition:
+    border-color var(--snv-motion-hover) var(--snv-ease-out),
+    background var(--snv-motion-hover) var(--snv-ease-out),
+    box-shadow var(--snv-motion-hover) var(--snv-ease-out);
+}
+
+html body.signovaSettingsPage .settingsSearchBar:focus-within {
+  border-color: rgba(115, 87, 255, 0.42) !important;
+  background: var(--snv-surface-elevated) !important;
+  box-shadow: 0 0 0 4px rgba(115, 87, 255, 0.12) !important;
+}
+
+html body.signovaSettingsPage .settingsContent,
+html body.signovaSettingsPage .settingsDesktopNavigation {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(132, 108, 255, 0.42) transparent;
+}
+
+html body.signovaSettingsPage .settingsContent::-webkit-scrollbar,
+html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar {
+  width: 8px;
+}
+
+html body.signovaSettingsPage .settingsContent::-webkit-scrollbar-track,
+html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html body.signovaSettingsPage .settingsContent::-webkit-scrollbar-thumb,
+html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(132, 108, 255, 0.42);
+  background-clip: content-box;
+}
+
+html body.signovaSettingsPage .settingsGroupHeader .settingsIcon {
+  background: var(--snv-accent-soft);
+  color: var(--snv-accent-hover);
+}
+
+html body.signovaSettingsPage .settingField > span {
+  display: grid;
+  gap: 2px;
+}
+
+html body.signovaSettingsPage .settingField > span::after {
+  color: var(--snv-text-muted);
+  font-size: var(--snv-font-caption);
+  font-weight: 500;
+  line-height: 1.35;
+  content: attr(data-setting-help);
+}
+
+html body.signovaSettingsPage .settingsActionButton,
+html body.signovaSettingsPage .settingsActions button,
+html body.signovaSettingsPage .settingsInlineAction {
+  transition:
+    transform var(--snv-motion-tap) var(--snv-ease-out),
+    border-color var(--snv-motion-hover) var(--snv-ease-out),
+    background var(--snv-motion-hover) var(--snv-ease-out);
+}
+
+html body.signovaSettingsPage .settingsActionButton:active,
+html body.signovaSettingsPage .settingsActions button:active,
+html body.signovaSettingsPage .settingsInlineAction:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    padding: 22px clamp(20px, 2.4vw, 34px) !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-columns: minmax(248px, 292px) minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    padding: 18px;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup {
+    max-width: 780px;
+  }
+
+  html body.signovaSettingsPage .settingsContent .settingsDetailGroup:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-columns: 300px minmax(0, 1fr) 292px;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup {
+    max-width: 820px;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body.signovaSettingsPage .settingsPanel {
+    background: var(--snv-bg) !important;
+  }
+
+  html body.signovaSettingsPage .settingsChooser {
+    display: grid !important;
+    gap: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryGroup {
+    display: grid;
+  }
+
+  html body.signovaSettingsPage .settingsNavGroupLabel {
+    margin: 18px 6px 8px;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryStack {
+    overflow: hidden;
+    border: 1px solid var(--snv-border-subtle);
+    border-radius: var(--snv-radius-md);
+    background: var(--snv-surface);
+  }
+
+  html body.signovaSettingsPage .settingsChoiceCard.settingsNavItem {
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    min-height: 58px;
+    margin-bottom: 0;
+    border: 0 !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryStack .settingsChoiceCard.settingsNavItem:last-child {
+    border-bottom: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsHero {
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    min-height: 64px !important;
+  }
+
+  html body.signovaSettingsPage .settingsHero::after {
+    color: var(--snv-text-muted);
+    content: '›';
+    font-size: 1.2rem;
+  }
+
+  html body.signovaSettingsPage .settingsProfilePhoto {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader {
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 520px) {
+  html body.signovaSettingsPage .settingsPageTitle h1 {
+    font-size: 1.4rem;
+  }
+
+  html body.signovaSettingsPage .settingsSearchBar {
+    min-height: 42px;
+  }
+
+  html body.signovaSettingsPage .settingsChoiceCard.settingsNavItem {
+    padding: 9px 10px !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem .settingsIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  html body.signovaSettingsPage .settingSwitch input[type="checkbox"] {
+    flex-basis: 42px !important;
+    width: 42px !important;
+  }
+}
+
+/* Settings navbar, scroll and performance repair — 2026-07-14.
+   This intentionally overrides older full-page layout rules that clipped content
+   and made the settings page feel heavy on desktop. */
+html body.signovaSettingsPage,
+html body.signovaSettingsPage #root {
+  min-height: 100dvh;
+  overflow: hidden;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode {
+  min-height: 100dvh !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane {
+  min-height: 0 !important;
+  height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsPanel {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 18px;
+  box-sizing: border-box !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsPageTitle {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  width: 100%;
+  min-height: 66px;
+  margin: 0 auto !important;
+  padding: 10px 14px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: var(--snv-radius-xl);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.045), transparent 52%),
+    color-mix(in srgb, var(--snv-surface) 96%, transparent) !important;
+  box-shadow: var(--snv-shadow-sm);
+  backdrop-filter: none !important;
+}
+
+html body.signovaSettingsPage .settingsPageTitle h1 {
+  font-size: clamp(1.55rem, 2.1vw, 2rem);
+  line-height: 1.05;
+}
+
+html body.signovaSettingsPage .settingsPageTitle p {
+  max-width: 54ch;
+  margin-top: 6px;
+}
+
+html body.signovaSettingsPage .settingsPageActions {
+  justify-self: end;
+}
+
+html body.signovaSettingsPage .settingsEncryptionBadge,
+html body.signovaSettingsPage .settingsHeaderIconButton {
+  background: var(--snv-surface-elevated);
+  box-shadow: none;
+}
+
+html body.signovaSettingsPage .settingsHeaderIconButton {
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+html body.signovaSettingsPage .settingsWorkspace {
+  width: 100%;
+  box-sizing: border-box !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopSidebar,
+html body.signovaSettingsPage .settingsContent,
+html body.signovaSettingsPage .settingsContextCard {
+  min-height: 0 !important;
+  max-height: 100% !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopSidebar {
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopNavigation,
+html body.signovaSettingsPage .settingsContent {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+html body.signovaSettingsPage .settingsContent {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding-bottom: 24px !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopNavigation {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup {
+  animation: none !important;
+  transform: none !important;
+}
+
+html body.signovaSettingsPage :where(
+  .settingsNavItem,
+  .settingsSearchBar,
+  .settingSwitch,
+  .settingField,
+  .settingRange,
+  .settingsActionButton,
+  .settingsActions button,
+  .settingsInlineAction,
+  .settingSwitch input,
+  .settingSwitch input::after
+) {
+  transition-duration: 90ms !important;
+}
+
+html body.signovaSettingsPage .settingsNavItem::after {
+  transition-duration: 90ms !important;
+}
+
+html body.signovaSettingsPage :where(
+  .settingsHero,
+  .settingsChoiceCard,
+  .settingsSubPageHeader,
+  .settingsGroup,
+  .settingsDetailGroup
+) {
+  animation: none !important;
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    padding-block: 18px !important;
+    height: calc(var(--snv-app-height, 100dvh) - 24px) !important;
+    max-height: calc(var(--snv-app-height, 100dvh) - 24px) !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-rows: minmax(0, 1fr);
+    height: calc(var(--snv-app-height, 100dvh) - 120px) !important;
+    max-height: calc(var(--snv-app-height, 100dvh) - 120px) !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body.signovaSettingsPage,
+  html body.signovaSettingsPage #root,
+  html body.signovaSettingsPage .messengerShell.settingsMode,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane {
+    min-height: 100dvh !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage {
+    overflow: auto;
+  }
+
+  html body.signovaSettingsPage .settingsPanel {
+    display: block !important;
+    height: auto !important;
+    min-height: 100dvh !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    margin: -18px -16px 14px !important;
+    border-width: 0 0 1px;
+    border-radius: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+/* Premium dark-mode product polish — 2026-07-14.
+   Presentation-only: keeps existing routes, state, APIs, forms, chat, calls,
+   camera, learning, community, library, and settings behavior intact. */
+html[data-signova-theme="dark"],
+html[data-signova-theme="dark"] body,
+body.signovaPremiumDarkPage {
+  --snv-bg: #090b0f;
+  --snv-surface: #10131a;
+  --snv-surface-secondary: #151922;
+  --snv-surface-elevated: #1b202b;
+  --snv-surface-hover: #222838;
+  --snv-card: #121720;
+  --snv-card-muted: #171d27;
+  --snv-appbar: #0d1016;
+  --snv-bottom-nav: #0f131a;
+  --snv-dialog: #151a23;
+  --snv-divider: rgba(255, 255, 255, 0.07);
+  --snv-border-subtle: rgba(255, 255, 255, 0.07);
+  --snv-border-strong: rgba(255, 255, 255, 0.12);
+  --snv-text-primary: #f5f7fa;
+  --snv-text-secondary: #a9b0be;
+  --snv-text-muted: #788190;
+  --snv-text-disabled: #505664;
+  --snv-accent: #7357ff;
+  --snv-accent-hover: #846cff;
+  --snv-accent-pressed: #6048e8;
+  --snv-accent-soft: rgba(115, 87, 255, 0.16);
+  --snv-success: #36c98f;
+  --snv-warning: #f4b740;
+  --snv-error: #ff6262;
+  --snv-info: #4d9dff;
+  --snv-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.22);
+  --snv-shadow-md: 0 14px 34px rgba(0, 0, 0, 0.26);
+  --snv-shadow-lg: 0 24px 72px rgba(0, 0, 0, 0.36);
+  --snv-radius-sm: 10px;
+  --snv-radius-md: 14px;
+  --snv-radius-lg: 18px;
+  --snv-radius-xl: 24px;
+  --snv-motion-tap: 80ms;
+  --snv-motion-hover: 120ms;
+  --snv-motion-control: 160ms;
+  --snv-motion-page: 210ms;
+  --snv-ease-out: cubic-bezier(.2, .8, .2, 1);
+  background: var(--snv-bg) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode,
+body.signovaPremiumDarkPage .messengerShell {
+  background:
+    radial-gradient(circle at 6% -8%, rgba(115, 87, 255, 0.08), transparent 28rem),
+    radial-gradient(circle at 96% 12%, rgba(77, 157, 255, 0.05), transparent 24rem),
+    var(--snv-bg) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .panel,
+  .chatSidebar,
+  .conversationPane,
+  .signToolsPane,
+  .communityPage,
+  .communityGroupsPage,
+  .communityCreateSignPage,
+  .libraryDashboard,
+  .learnStudioPage,
+  .progressDashboard,
+  .profilePage,
+  .settingsPanel,
+  .callHistoryPanel
+) {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .appRail,
+  .railNav,
+  .chatHeader,
+  .panelHeader,
+  .communityTopBar,
+  .groupsTopBar,
+  .libraryHeader,
+  .learnHeader,
+  .progressHeader,
+  .profileHeader,
+  .settingsPageTitle,
+  .chatComposer,
+  .chatCallBottomMiniBar
+) {
+  border-color: var(--snv-border-subtle) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+    var(--snv-appbar) !important;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(.railLogo, .railTributeCopy) {
+  border-color: var(--snv-border-subtle) !important;
+  background: var(--snv-surface-elevated) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode .railLogo {
+  padding: 3px;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatListItem,
+  .communityPost,
+  .communitySocialPost,
+  .communityGroupCard,
+  .communityQuickComposer,
+  .createPostCard,
+  .libraryContentCard,
+  .libraryBookCard,
+  .learningCard,
+  .lessonCard,
+  .progressCard,
+  .metric,
+  .profileCard,
+  .settingsGroup,
+  .settingsDetailGroup,
+  .settingsChoiceCard,
+  .settingsDesktopSidebar,
+  .settingsContent,
+  .settingsContextCard,
+  .callQualityInfoCard,
+  .callCameraPrompt,
+  .textToSignBox,
+  .cameraPlaceholder,
+  .gestureRecallStrip,
+  .emptyState
+) {
+  border: 1px solid var(--snv-border-subtle) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.028), transparent 140px),
+    var(--snv-card) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .chatListItem:hover,
+  .activeChat,
+  .communityGroupCard:hover,
+  .libraryContentCard:hover,
+  .learningCard:hover,
+  .progressCard:hover,
+  .profileCard:hover,
+  .settingsChoiceCard:hover,
+  .settingsNavItem:hover
+) {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: var(--snv-surface-hover) !important;
+  transform: translateY(-1px);
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  input,
+  select,
+  textarea,
+  .signSearch,
+  .searchBox,
+  .chatHeaderSearch,
+  .communitySearch,
+  .librarySearch,
+  .learnSearch,
+  .groupSearchBox,
+  .settingsSearchBar
+) {
+  border-color: var(--snv-border-strong) !important;
+  background-color: var(--snv-surface-secondary) !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(input, textarea)::placeholder {
+  color: var(--snv-text-muted) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(input, select, textarea):focus,
+body.signovaPremiumDarkPage .premiumDarkMode :where(.searchBox, .settingsSearchBar, .chatHeaderSearch):focus-within {
+  border-color: rgba(132, 108, 255, 0.55) !important;
+  outline: 0 !important;
+  box-shadow: 0 0 0 3px rgba(115, 87, 255, 0.14) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  button,
+  .railButton,
+  .headerAction,
+  .communityIconButton,
+  .libraryIconButton,
+  .settingsHeaderIconButton,
+  .settingsActionButton,
+  .secondaryButton,
+  .ghostCommunityButton,
+  .cameraControlDock button,
+  .cameraWindowControls button,
+  .unifiedCallControls button,
+  .callHoverPanel button
+) {
+  transition:
+    transform var(--snv-motion-tap) var(--snv-ease-out),
+    background var(--snv-motion-hover) var(--snv-ease-out),
+    border-color var(--snv-motion-hover) var(--snv-ease-out),
+    color var(--snv-motion-hover) var(--snv-ease-out),
+    opacity var(--snv-motion-hover) var(--snv-ease-out) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  button,
+  .railButton,
+  .headerAction,
+  .communityIconButton,
+  .libraryIconButton,
+  .settingsActionButton,
+  .secondaryButton,
+  .cameraControlDock button,
+  .cameraWindowControls button
+):active {
+  transform: translateY(1px) scale(0.985) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .primaryButton,
+  .signovaAuthPrimary,
+  .settingsActionButton.primaryButton,
+  .communityPublishButton,
+  .createSignPublishButton
+) {
+  border-color: transparent !important;
+  background: var(--snv-accent) !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .secondaryButton,
+  .ghostCommunityButton,
+  .settingsInlineAction,
+  .settingsActionButton,
+  .headerAction,
+  .communityIconButton,
+  .libraryIconButton
+) {
+  border-color: var(--snv-border-strong) !important;
+  background: var(--snv-surface-secondary) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .dangerButton,
+  .endCallButton,
+  .cameraControlDock .endCallButton
+) {
+  border-color: rgba(255, 98, 98, 0.34) !important;
+  background: rgba(255, 98, 98, 0.14) !important;
+  color: #ffd7d7 !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .messageBubble,
+  .incomingMessage,
+  .outgoingMessage
+) {
+  border: 1px solid var(--snv-border-subtle) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(.messageBubble.incomingMessage, .incomingMessage) {
+  background: var(--snv-surface-elevated) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(.messageBubble.outgoingMessage, .outgoingMessage) {
+  border-color: rgba(115, 87, 255, 0.26) !important;
+  background: linear-gradient(135deg, #6048e8, #7357ff) !important;
+  color: #ffffff !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(.messageBubble p, .messageBubble strong) {
+  color: inherit !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .messageBubble small,
+  .panelHeader small,
+  .chatListItem small,
+  .communityPost small,
+  .libraryContentCard small,
+  .learningCard small,
+  .progressCard small,
+  .profileCard small,
+  .settingsGroup small,
+  .settingSwitch small,
+  .settingField small,
+  .metric small,
+  .emptyState small
+) {
+  color: var(--snv-text-secondary) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .panelHeader strong,
+  .chatListItem strong,
+  .communityPost strong,
+  .libraryContentCard strong,
+  .learningCard strong,
+  .progressCard strong,
+  .profileCard strong,
+  .settingsGroup strong,
+  .metric strong,
+  .emptyState strong
+) {
+  color: var(--snv-text-primary) !important;
+  text-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .contactMiniOverlay,
+  .signsBookOverlay,
+  .guidedTrainerOverlay,
+  .serviceRecoveryBanner
+) {
+  background-color: rgba(0, 0, 0, 0.58) !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage :where(
+  .contactMiniModal,
+  .attachMiniModal,
+  .groupCreateModal,
+  .communityGroupMiniWindow,
+  .callHoverPanel,
+  .messageToolWindow,
+  .messageReactionWindow,
+  .communityPostOptionsMenu,
+  .scheduleSendPanel,
+  .signsBookPanel
+) {
+  border: 1px solid var(--snv-border-strong) !important;
+  background: var(--snv-dialog) !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: var(--snv-shadow-lg) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .cameraControlDock,
+  .cameraWindowControls,
+  .expandedVideoPanel,
+  .minimizedCameraWindow,
+  .unifiedCallControls,
+  .unifiedCallSettingsPane,
+  .callHealthGrid,
+  .callStatePill
+) {
+  border-color: var(--snv-border-subtle) !important;
+  background: rgba(16, 19, 26, 0.96) !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .libraryStats span,
+  .libraryHeroStats span,
+  .libraryBookStats span,
+  .libraryBookSign em,
+  .learningBookCover em,
+  .bookCoverLabel,
+  .learningBookHint,
+  .snvModeTabs,
+  .snvModeTabs button,
+  .signova2dPoseLabel,
+  .signova3DAvatarLoading
+) {
+  border-color: var(--snv-border-subtle) !important;
+  background: var(--snv-surface-elevated) !important;
+  background-image: none !important;
+  color: var(--snv-text-primary) !important;
+  box-shadow: none !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(.snvModeTabs button[aria-selected="true"], .snvModeTabs .active) {
+  background: var(--snv-accent-soft) !important;
+  color: var(--snv-accent-hover) !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .skeletonBlock,
+  .skeletonLine,
+  .appStartupSkeleton i,
+  .appStartupSkeleton span
+) {
+  background:
+    linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.055), transparent),
+    var(--snv-surface-elevated) !important;
+  border-color: var(--snv-border-subtle) !important;
+}
+
+body.signovaPremiumDarkPage :where(.premiumDarkMode *) {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(132, 108, 255, 0.32) transparent;
+}
+
+body.signovaPremiumDarkPage :where(.premiumDarkMode *)::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+body.signovaPremiumDarkPage :where(.premiumDarkMode *)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.signovaPremiumDarkPage :where(.premiumDarkMode *)::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(132, 108, 255, 0.42);
+  background-clip: content-box;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .communityPost,
+  .communitySocialPost,
+  .learningCard,
+  .progressCard,
+  .profileCard,
+  .libraryContentCard,
+  .messageBubble,
+  .settingsNavItem
+) {
+  will-change: auto !important;
+}
+
+body.signovaPremiumDarkPage.signovaReduceMotion *,
+body.signovaPremiumDarkPage .premiumDarkMode.signovaReduceMotion *,
+body.signovaPremiumDarkPage .premiumDarkMode * {
+  scroll-behavior: auto !important;
+}
+
+body.signovaPremiumDarkPage .premiumDarkMode :where(
+  .communityPostSoftIn,
+  .railLogoTributeMode .railNav .railButton,
+  .activeFullSignovaIntro *,
+  .openingSettingsIcon,
+  .callWave,
+  .gestureRecallStrip,
+  .settingsHero,
+  .settingsChoiceCard,
+  .settingsDetailGroup,
+  .communitySocialPost
+) {
+  animation-duration: 140ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.signovaPremiumDarkPage *,
+  body.signovaPremiumDarkPage *::before,
+  body.signovaPremiumDarkPage *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (max-width: 767px) {
+  body.signovaPremiumDarkPage .premiumDarkMode :where(.appRail, .railNav) {
+    background: var(--snv-bottom-nav) !important;
+  }
+
+  body.signovaPremiumDarkPage .premiumDarkMode :where(
+    .chatListItem,
+    .communityPost,
+    .libraryContentCard,
+    .learningCard,
+    .progressCard,
+    .profileCard,
+    .settingsChoiceCard
+  ) {
+    border-radius: var(--snv-radius-lg) !important;
+  }
+
+  body.signovaPremiumDarkPage .premiumDarkMode :where(button, .railButton, .settingsNavItem) {
+    min-height: 44px;
+  }
+}
+
+/* Settings full-page redesign — 2026-07-14.
+   Turns Settings into one cohesive product surface instead of a centered card
+   cluster, while keeping all existing controls and behavior intact. */
+html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane {
+  background:
+    radial-gradient(circle at 16% 0%, rgba(115, 87, 255, 0.12), transparent 32rem),
+    radial-gradient(circle at 92% 6%, rgba(77, 157, 255, 0.07), transparent 28rem),
+    var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage .settingsPanel {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+
+html body.signovaSettingsPage .settingsPageTitle,
+html body.signovaSettingsPage .settingsWorkspace {
+  width: min(100%, 1720px) !important;
+  max-width: none !important;
+}
+
+html body.signovaSettingsPage .settingsPageTitle {
+  grid-template-columns: auto minmax(360px, 560px) auto !important;
+  min-height: 72px;
+  padding: 12px 18px !important;
+  border-radius: 20px !important;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 58%),
+    rgba(16, 19, 26, 0.94) !important;
+}
+
+html body.signovaSettingsPage .settingsPageTitle > div:first-child {
+  min-width: 210px;
+}
+
+html body.signovaSettingsPage .settingsPageActions {
+  display: grid !important;
+  grid-template-columns: minmax(320px, 560px) 42px 42px auto;
+  align-items: center;
+  gap: 10px;
+}
+
+html body.signovaSettingsPage .settingsGlobalSearch {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 10px 0 12px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: 13px;
+  background: var(--snv-surface-secondary);
+  color: var(--snv-text-muted);
+}
+
+html body.signovaSettingsPage .settingsGlobalSearch input {
+  width: 100%;
+  min-width: 0;
+  border: 0 !important;
+  background: transparent !important;
+  color: var(--snv-text-primary) !important;
+  outline: 0 !important;
+}
+
+html body.signovaSettingsPage .settingsGlobalSearch kbd {
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 22px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: 7px;
+  color: var(--snv-text-muted);
+  background: var(--snv-surface);
+  font: inherit;
+  font-size: 12px;
+}
+
+html body.signovaSettingsPage .settingsProfileMenu {
+  display: grid;
+  grid-template-columns: 30px minmax(0, auto) 14px;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 5px 10px 5px 6px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: 14px;
+  background: var(--snv-surface-secondary);
+  color: var(--snv-text-primary);
+}
+
+html body.signovaSettingsPage .settingsProfileMenu span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--snv-accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+html body.signovaSettingsPage .settingsProfileMenu strong {
+  max-width: 128px;
+  overflow: hidden;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html body.signovaSettingsPage .settingsProfileMenu em {
+  color: var(--snv-text-muted);
+  font-style: normal;
+}
+
+html body.signovaSettingsPage .settingsPageTitle h1 {
+  font-size: clamp(1.65rem, 2.15vw, 2.35rem) !important;
+  letter-spacing: -0.045em;
+}
+
+html body.signovaSettingsPage .settingsPageTitle p {
+  color: var(--snv-text-secondary) !important;
+}
+
+html body.signovaSettingsPage .settingsWorkspace {
+  grid-template-columns: minmax(260px, 320px) minmax(560px, 1fr) minmax(280px, 340px) !important;
+  gap: clamp(16px, 1.4vw, 24px) !important;
+  background: transparent !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopSidebar,
+html body.signovaSettingsPage .settingsContent,
+html body.signovaSettingsPage .settingsContextCard {
+  border-radius: 22px !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopSidebar {
+  padding: 10px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 18rem),
+    rgba(16, 19, 26, 0.96) !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopSearch {
+  margin: 0 0 12px !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopProfile {
+  margin: 0 0 12px !important;
+  min-height: 76px;
+  background: var(--snv-surface-secondary) !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopNavigation {
+  margin-inline: -2px;
+  padding: 0 2px 8px !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopNavigation .settingsNavItem {
+  min-height: 54px;
+  border-radius: 14px;
+}
+
+html body.signovaSettingsPage .settingsContent {
+  padding: clamp(18px, 1.6vw, 28px) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 16rem),
+    rgba(16, 19, 26, 0.96) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup {
+  max-width: none !important;
+  border-radius: 20px !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup + .settingsDetailGroup.activeSettingsDetail {
+  margin-top: 14px !important;
+}
+
+html body.signovaSettingsPage .settingsSubPageHeader {
+  margin: calc(-1 * clamp(18px, 1.6vw, 28px)) calc(-1 * clamp(18px, 1.6vw, 28px)) 18px !important;
+  padding: 20px clamp(18px, 1.6vw, 28px) 16px !important;
+}
+
+html body.signovaSettingsPage .settingsGroupHeader {
+  min-height: 76px;
+}
+
+html body.signovaSettingsPage .settingSwitch,
+html body.signovaSettingsPage .settingField,
+html body.signovaSettingsPage .settingRange {
+  min-height: 64px;
+}
+
+html body.signovaSettingsPage .settingsContextCard {
+  align-self: stretch !important;
+  min-height: 0;
+  background:
+    linear-gradient(180deg, rgba(115, 87, 255, 0.09), transparent 17rem),
+    rgba(16, 19, 26, 0.96) !important;
+}
+
+html body.signovaSettingsPage .settingsContextCard li {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+}
+
+html body.signovaSettingsPage .settingsContextCard li em {
+  color: var(--snv-warning);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 750;
+}
+
+html body.signovaSettingsPage .settingsContextCard li span:has(+ div + em) {
+  color: var(--snv-accent-hover);
+}
+
+html body.signovaSettingsPage .settingsContextAction {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  margin-top: 14px;
+  padding: 0 12px;
+  border: 1px solid var(--snv-border-subtle);
+  border-radius: 13px;
+  background: var(--snv-surface-secondary);
+  color: var(--snv-text-primary);
+}
+
+html body.signovaSettingsPage .settingsContextVisual {
+  border-bottom: 1px solid var(--snv-border-subtle);
+  background:
+    radial-gradient(circle, rgba(115, 87, 255, 0.16), transparent 62%),
+    var(--snv-surface-secondary) !important;
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    padding: clamp(14px, 1.5vw, 22px) clamp(14px, 1.8vw, 28px) !important;
+    gap: clamp(14px, 1.3vw, 20px) !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    height: calc(var(--snv-app-height, 100dvh) - 118px) !important;
+    max-height: calc(var(--snv-app-height, 100dvh) - 118px) !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-columns: minmax(240px, 286px) minmax(0, 1fr) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body.signovaSettingsPage .settingsPanel {
+    padding: 0 16px calc(96px + env(safe-area-inset-bottom)) !important;
+    background: var(--snv-bg) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    top: 0;
+    grid-template-columns: minmax(0, 1fr) !important;
+    margin: 0 -16px 14px !important;
+    padding: 14px 16px !important;
+    border-radius: 0 !important;
+    border-inline: 0 !important;
+    background: rgba(9, 11, 15, 0.98) !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace,
+  html body.signovaSettingsPage .settingsContent {
+    width: 100% !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    padding: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    grid-template-columns: minmax(0, 1fr) 42px 42px !important;
+    margin-top: 10px;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  html body.signovaSettingsPage .settingsPanel {
+    padding-inline: 12px !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    margin-inline: -12px !important;
+  }
+}
+
+/* Reference-aligned desktop Settings correction — keeps Settings visually dark
+   even if the saved app theme is light, avoiding the mixed white-frame bug. */
+html body.signovaSettingsPage {
+  --snv-bg: #090b0f;
+  --snv-surface: #10131a;
+  --snv-surface-secondary: #151922;
+  --snv-surface-elevated: #1b202b;
+  --snv-surface-hover: #222838;
+  --snv-card: #121720;
+  --snv-card-muted: #171d27;
+  --snv-appbar: #0d1016;
+  --snv-dialog: #151a23;
+  --snv-divider: rgba(255, 255, 255, 0.07);
+  --snv-border-subtle: rgba(255, 255, 255, 0.07);
+  --snv-border-strong: rgba(255, 255, 255, 0.12);
+  --snv-text-primary: #f5f7fa;
+  --snv-text-secondary: #a9b0be;
+  --snv-text-muted: #788190;
+  --snv-text-disabled: #505664;
+  --snv-accent: #7357ff;
+  --snv-accent-hover: #846cff;
+  --snv-accent-pressed: #6048e8;
+  --snv-accent-soft: rgba(115, 87, 255, 0.16);
+  --snv-success: #36c98f;
+  --snv-warning: #f4b740;
+  --snv-error: #ff6262;
+  --snv-info: #4d9dff;
+  color-scheme: dark;
+  background: var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage #root,
+html body.signovaSettingsPage .messengerShell.settingsMode,
+html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane,
+html body.signovaSettingsPage .settingsPanel {
+  background:
+    radial-gradient(circle at 18% -10%, rgba(115, 87, 255, 0.08), transparent 28rem),
+    var(--snv-bg) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .messengerShell.settingsMode {
+    grid-template-columns: 72px minmax(0, 1fr) !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+  }
+
+  html body.signovaSettingsPage .settingsPanel {
+    grid-template-rows: 72px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle,
+  html body.signovaSettingsPage .settingsWorkspace {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    height: 72px !important;
+    min-height: 72px !important;
+    padding: 10px 22px !important;
+    border-width: 0 0 1px !important;
+    border-radius: 0 !important;
+    background: var(--snv-appbar) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle h1 {
+    font-size: 1.42rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle p {
+    margin-top: 3px !important;
+    font-size: 0.78rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    grid-template-columns: minmax(300px, 520px) 38px 38px auto !important;
+    gap: 8px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch,
+  html body.signovaSettingsPage .settingsHeaderIconButton,
+  html body.signovaSettingsPage .settingsProfileMenu {
+    min-height: 36px !important;
+    border-radius: 10px !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-columns: 292px minmax(520px, 1fr) 306px !important;
+    gap: 18px !important;
+    height: calc(100dvh - 84px) !important;
+    max-height: calc(100dvh - 84px) !important;
+    min-height: 0 !important;
+    padding: 0 18px 18px 0 !important;
+    align-items: stretch !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    border-width: 0 1px 0 0 !important;
+    border-radius: 0 !important;
+    padding: 18px 14px !important;
+    background: #0c1016 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent,
+  html body.signovaSettingsPage .settingsContextCard {
+    margin-top: 0 !important;
+    border-radius: 16px !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    align-self: stretch !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    padding: 16px !important;
+    background: var(--snv-surface) !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader {
+    margin: -16px -16px 14px !important;
+    padding: 16px !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader strong {
+    font-size: 1.22rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup {
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader {
+    min-height: 58px !important;
+    padding: 11px 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch,
+  html body.signovaSettingsPage .settingField,
+  html body.signovaSettingsPage .settingRange {
+    min-height: 54px !important;
+    padding: 10px 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    padding: 0 !important;
+    overflow: hidden auto !important;
+    background: var(--snv-surface) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextVisual {
+    min-height: 126px !important;
+    margin: 0 0 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard > strong,
+  html body.signovaSettingsPage .settingsContextCard > p {
+    padding-inline: 16px;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard ul {
+    margin: 14px 0 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextAction {
+    margin: 14px 14px 16px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSearch {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard::-webkit-scrollbar,
+  html body.signovaSettingsPage .settingsContent::-webkit-scrollbar,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+
+/* Global service recovery stays visible without covering page navigation. */
+.serviceRecoveryBanner {
+  position: fixed;
+  z-index: 1400;
+  top: max(12px, env(safe-area-inset-top));
+  left: 50%;
+  width: min(620px, calc(100vw - 32px));
+  min-height: 56px;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  color: var(--text-primary, #f5f7fa);
+  background: var(--surface-elevated, #1b202b);
+  border: 1px solid var(--border-strong, rgba(255, 255, 255, 0.12));
+  border-radius: var(--radius-lg, 14px);
+  box-shadow: var(--shadow-elevated, 0 12px 32px rgba(0, 0, 0, 0.28));
+}
+
+.serviceRecoveryBanner > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #090b0f;
+  background: var(--warning, #f4b740);
+  font-weight: 800;
+}
+
+.serviceRecoveryBanner div { min-width: 0; }
+.serviceRecoveryBanner strong,
+.serviceRecoveryBanner small { display: block; }
+.serviceRecoveryBanner small {
+  margin-top: 2px;
+  color: var(--text-secondary, #a9b0be);
+  overflow-wrap: anywhere;
+}
+
+.serviceRecoveryBanner button {
+  min-height: 40px;
+  padding: 0 14px;
+  color: #fff;
+  background: var(--accent, #7357ff);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md, 10px);
+  cursor: pointer;
+}
+
+.serviceRecoveryBanner button:hover { background: var(--accent-hover, #846cff); }
+.serviceRecoveryBanner button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent, #7357ff) 45%, transparent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .serviceRecoveryBanner {
+    top: max(8px, env(safe-area-inset-top));
+    width: calc(100vw - 24px);
+    min-height: 60px;
+    grid-template-columns: 28px minmax(0, 1fr) auto;
+    gap: 10px;
+    padding: 8px 10px;
+  }
+
+  .serviceRecoveryBanner button {
+    grid-column: 3;
+    width: auto;
+    height: auto;
+    min-height: 44px !important;
+    padding-inline: 12px;
+  }
+
+  .serviceRecoveryBanner strong { font-size: 14px; }
+  .serviceRecoveryBanner small { font-size: 12px; }
+}
+
+@media (max-width: 380px) {
+  .serviceRecoveryBanner { grid-template-columns: 28px minmax(0, 1fr); }
+  .serviceRecoveryBanner button { grid-column: 1 / -1; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceRecoveryBanner,
+  .serviceRecoveryBanner * { transition: none !important; }
+}
+
+/* Absolute final Settings desktop layout authority.
+   Must remain last: fills the desktop viewport like the supplied reference. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    display: grid !important;
+    grid-template-rows: 72px minmax(0, 1fr) !important;
+    gap: 12px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    height: 72px !important;
+    min-height: 72px !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-row: 2 !important;
+    align-self: stretch !important;
+    height: calc(100dvh - 110px) !important;
+    max-height: calc(100dvh - 110px) !important;
+    min-height: 0 !important;
+    padding: 0 18px 18px 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar,
+  html body.signovaSettingsPage .settingsContent,
+  html body.signovaSettingsPage .settingsContextCard {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    align-self: stretch !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .settingsPanel.panel > .settingsWorkspace {
+    height: calc(100dvh - 110px) !important;
+    max-height: calc(100dvh - 110px) !important;
+    min-height: calc(100dvh - 110px) !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace {
+    height: calc(100dvh - 110px) !important;
+    max-height: calc(100dvh - 110px) !important;
+    min-height: calc(100dvh - 110px) !important;
+    padding: 0 18px 0 0 !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .settingsPanel.panel > .settingsWorkspace > .settingsDesktopSidebar,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .settingsPanel.panel > .settingsWorkspace > .settingsContent,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .settingsPanel.panel > .settingsWorkspace > .settingsContextCard {
+    height: calc(100dvh - 128px) !important;
+    max-height: calc(100dvh - 128px) !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsDesktopSidebar,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsContent,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsContextCard {
+    height: calc(100dvh - 110px) !important;
+    max-height: calc(100dvh - 110px) !important;
+  }
+}
+
+/* Settings theme + navbar repair.
+   This deliberately stays last so the page follows the app theme selector
+   instead of being hard-forced to the previous dark reference state. */
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) {
+  --snv-bg: #f4f6fb;
+  --snv-surface: #ffffff;
+  --snv-surface-secondary: #f7f9fc;
+  --snv-surface-elevated: #ffffff;
+  --snv-surface-hover: #eef2f7;
+  --snv-card: #ffffff;
+  --snv-card-muted: #f5f7fb;
+  --snv-appbar: #ffffff;
+  --snv-dialog: #ffffff;
+  --snv-divider: rgba(15, 23, 42, 0.09);
+  --snv-border-subtle: rgba(15, 23, 42, 0.1);
+  --snv-border-strong: rgba(15, 23, 42, 0.16);
+  --snv-text-primary: #0f172a;
+  --snv-text-secondary: #475569;
+  --snv-text-muted: #64748b;
+  --snv-text-disabled: #94a3b8;
+  --snv-accent: #7357ff;
+  --snv-accent-hover: #846cff;
+  --snv-accent-pressed: #6048e8;
+  --snv-accent-soft: rgba(115, 87, 255, 0.13);
+  color-scheme: light;
+  background: var(--snv-bg) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) #root,
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .messengerShell.settingsMode,
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .messengerShell.settingsMode > .signToolsPane,
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsPanel {
+  background:
+    radial-gradient(circle at 18% -10%, rgba(115, 87, 255, 0.08), transparent 28rem),
+    var(--snv-bg) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) :where(
+  .settingsPageTitle,
+  .settingsDesktopSidebar,
+  .settingsContent,
+  .settingsContextCard,
+  .settingsDetailGroup,
+  .settingsNavItem,
+  .settingsSearchBar,
+  .settingsGlobalSearch,
+  .settingsHeaderIconButton,
+  .settingsProfileMenu,
+  .settingField select,
+  .settingField input,
+  .settingsContextAction
+) {
+  background-color: var(--snv-surface) !important;
+  border-color: var(--snv-border-subtle) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsDesktopSidebar {
+  background: color-mix(in srgb, var(--snv-surface) 92%, var(--snv-bg)) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) :where(
+  .settingsNavItem:hover,
+  .settingsHeaderIconButton:hover,
+  .settingsProfileMenu:hover,
+  .settingsContextAction:hover
+) {
+  background-color: var(--snv-surface-hover) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .activeSettingsNavItem {
+  background: linear-gradient(90deg, rgba(115, 87, 255, 0.16), rgba(115, 87, 255, 0.07)) !important;
+  border-color: rgba(115, 87, 255, 0.34) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) :where(
+  .settingsGlobalSearch input,
+  .settingsSearchBar input,
+  .settingsPageTitle p,
+  .settingsNavItem small,
+  .settingsContextCard p,
+  .settingsContextCard small,
+  .settingSwitch small,
+  .settingField small,
+  .settingRange small
+) {
+  color: var(--snv-text-secondary) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsContextVisual {
+  background:
+    radial-gradient(circle at 50% 24%, rgba(115, 87, 255, 0.14), transparent 11rem),
+    linear-gradient(180deg, #f7f9ff, #eef2f8) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingSwitch input[type="checkbox"] {
+  background: #d7e0ea !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingSwitch input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--snv-accent), #19b8c7) !important;
+}
+
+html body.signovaSettingsPage .settingsDesktopProfile {
+  display: none !important;
+}
+
+html body.signovaSettingsPage .settingsHeaderIconButton {
+  display: inline-grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  line-height: 1 !important;
+}
+
+html body.signovaSettingsPage .settingsHeaderIconButton span {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  color: currentColor;
+  font-size: 0.92rem;
+  font-weight: 800;
+}
+
+html body.signovaSettingsPage .settingsPageTitle > div:first-child p {
+  display: none !important;
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPageTitle {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 30 !important;
+    display: grid !important;
+    grid-template-columns: minmax(150px, 260px) minmax(0, 1fr) !important;
+    align-items: center !important;
+    column-gap: clamp(18px, 3vw, 46px) !important;
+    padding-inline: 22px !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle > div:first-child {
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    justify-self: end !important;
+    width: min(100%, 680px) !important;
+    display: grid !important;
+    grid-template-columns: minmax(280px, 1fr) 38px 38px minmax(112px, auto) !important;
+    align-items: center !important;
+    gap: 10px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu {
+    justify-content: start !important;
+    max-width: 150px !important;
+    min-width: 112px !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu strong {
+    max-width: 72px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPageActions {
+    grid-template-columns: minmax(220px, 1fr) 38px 38px 46px !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu strong,
+  html body.signovaSettingsPage .settingsProfileMenu em {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu {
+    min-width: 46px !important;
+    max-width: 46px !important;
+    justify-content: center !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel {
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace {
+    height: calc(100dvh - 84px) !important;
+    max-height: calc(100dvh - 84px) !important;
+    min-height: calc(100dvh - 84px) !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsDesktopSidebar,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsContent,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail > .settingsPanel.panel > .settingsWorkspace > .settingsContextCard {
+    height: calc(100dvh - 84px) !important;
+    max-height: calc(100dvh - 84px) !important;
+  }
+}
+
+/* Final Settings control polish: premium, reference-aligned switches that old
+   page-fix layers cannot override. */
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch,
+html body.signovaSettingsPage .settingSwitch {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 44px !important;
+  align-items: center !important;
+  gap: 18px !important;
+  min-height: 58px !important;
+  padding: 11px 14px !important;
+  border-color: var(--snv-border-subtle) !important;
+  background: transparent !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch:hover,
+html body.signovaSettingsPage .settingSwitch:hover {
+  background: color-mix(in srgb, var(--snv-surface-hover) 42%, transparent) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch > span,
+html body.signovaSettingsPage .settingSwitch > span {
+  grid-column: 1 !important;
+  min-width: 0 !important;
+  display: grid !important;
+  gap: 3px !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch strong,
+html body.signovaSettingsPage .settingSwitch strong {
+  color: var(--snv-text-primary) !important;
+  font-size: 13.5px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.01em !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch small,
+html body.signovaSettingsPage .settingSwitch small {
+  max-width: 56ch !important;
+  color: var(--snv-text-secondary) !important;
+  font-size: 11.5px !important;
+  line-height: 1.42 !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"],
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"] {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  justify-self: end !important;
+  position: relative !important;
+  width: 44px !important;
+  height: 24px !important;
+  min-width: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 1px solid var(--snv-border-strong) !important;
+  border-radius: 999px !important;
+  appearance: none !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0)),
+    #2b313d !important;
+  box-shadow:
+    inset 0 1px 1px rgba(0, 0, 0, 0.28),
+    0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  cursor: pointer !important;
+  transition:
+    background-color 170ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 170ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 170ms cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]::after,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]::after {
+  content: "" !important;
+  position: absolute !important;
+  top: 2px !important;
+  left: 2px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 999px !important;
+  background: #f5f7fa !important;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 1px rgba(0, 0, 0, 0.2) !important;
+  transform: translateX(0) !important;
+  transition:
+    transform 180ms cubic-bezier(0.2, 0, 0, 1),
+    width 180ms cubic-bezier(0.2, 0, 0, 1),
+    background-color 180ms cubic-bezier(0.2, 0, 0, 1) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:checked,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]:checked {
+  border-color: color-mix(in srgb, var(--snv-accent) 78%, white 10%) !important;
+  background:
+    linear-gradient(135deg, var(--snv-accent), var(--snv-accent-hover)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 22px color-mix(in srgb, var(--snv-accent) 28%, transparent) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:checked::after,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]:checked::after {
+  background: #ffffff !important;
+  transform: translateX(22px) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:active::after,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]:active::after {
+  width: 20px !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:focus-visible,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--snv-accent) 32%, transparent) !important;
+  outline-offset: 3px !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:disabled,
+html body.signovaSettingsPage .settingSwitch input[type="checkbox"]:disabled {
+  cursor: not-allowed !important;
+  opacity: 0.58 !important;
+  background: color-mix(in srgb, var(--snv-surface-hover) 78%, #6b7280 22%) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch:has(input:disabled),
+html body.signovaSettingsPage .settingSwitch:has(input:disabled) {
+  cursor: not-allowed !important;
+  opacity: 0.72 !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"],
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingSwitch input[type="checkbox"] {
+  background: #dbe3ec !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.12) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]::after,
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingSwitch input[type="checkbox"]::after {
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.22) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"]:checked,
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .settingSwitch input[type="checkbox"]:checked {
+  background: linear-gradient(135deg, var(--snv-accent), var(--snv-accent-hover)) !important;
+}
+
+html body.signovaPremiumDarkPage.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"],
+html body.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"] {
+  width: 44px !important;
+  height: 24px !important;
+  min-width: 44px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0)),
+    #2b313d !important;
+  border-color: var(--snv-border-strong) !important;
+}
+
+html body.signovaPremiumDarkPage.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]::after,
+html body.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]::after {
+  top: 2px !important;
+  left: 2px !important;
+  width: 18px !important;
+  height: 18px !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+html body.signovaPremiumDarkPage.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]:checked,
+html body.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]:checked {
+  border-color: color-mix(in srgb, var(--snv-accent) 76%, white 12%) !important;
+  background: linear-gradient(135deg, var(--snv-accent), var(--snv-accent-hover)) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 8px 22px color-mix(in srgb, var(--snv-accent) 28%, transparent) !important;
+}
+
+html body.signovaPremiumDarkPage.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]:checked::after,
+html body.signovaSettingsPage .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"]:checked::after {
+  transform: translateX(22px) !important;
+}
+
+html body.signovaSettingsPage:not(.signovaPremiumDarkPage) .messengerShell.settingsMode .settingsDetailGroup.activeSettingsDetail label.settingSwitch input[type="checkbox"] {
+  background: #dbe3ec !important;
+}
+
+/* Absolute final pass for Settings switches. A few legacy desktop/mobile layers
+   still target raw checkbox inputs, so keep the actual settings toggle locked to
+   a compact reference-aligned 44 × 24 control. */
+html body.signovaSettingsPage .messengerShell.settingsMode label.settingSwitch input[type="checkbox"] {
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 24px !important;
+  min-height: 24px !important;
+  max-height: 24px !important;
+  border-radius: 999px !important;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode label.settingSwitch input[type="checkbox"]::after {
+  top: 2px !important;
+  left: 2px !important;
+  width: 18px !important;
+  min-width: 18px !important;
+  max-width: 18px !important;
+  height: 18px !important;
+  min-height: 18px !important;
+  max-height: 18px !important;
+  border-radius: 50% !important;
+}
+
+html body.signovaSettingsPage .messengerShell.settingsMode label.settingSwitch input[type="checkbox"]:checked::after {
+  transform: translateX(22px) !important;
+}
+
+/* Settings full-page audit fix.
+   This is the final authority for layout, scrolling, sizing, and form polish.
+   It intentionally comes after the older rescue layers so Settings does not
+   inherit stale desktop/mobile dimensions. */
+html body.signovaSettingsPage,
+html body.signovaSettingsPage * {
+  box-sizing: border-box;
+}
+
+html body.signovaSettingsPage {
+  overflow-x: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsPanel :where(input, select, textarea, button) {
+  font: inherit;
+  min-width: 0;
+}
+
+html body.signovaSettingsPage .settingsPanel :where(input, textarea)::placeholder {
+  color: color-mix(in srgb, var(--snv-text-muted) 76%, transparent) !important;
+  opacity: 1 !important;
+}
+
+html body.signovaSettingsPage .settingsPanel :where(input, select, textarea) {
+  min-height: 38px !important;
+  border-radius: 11px !important;
+}
+
+html body.signovaSettingsPage .settingsPanel :where(select, input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea) {
+  border: 1px solid var(--snv-border-subtle) !important;
+  background: var(--snv-surface-secondary) !important;
+  color: var(--snv-text-primary) !important;
+}
+
+html body.signovaSettingsPage .settingsPanel :where(select, input[type="text"], input[type="email"], input[type="password"], input[type="number"]) {
+  height: 38px !important;
+  padding: 0 12px !important;
+}
+
+html body.signovaSettingsPage .settingsPanel textarea {
+  padding: 10px 12px !important;
+  resize: vertical;
+}
+
+html body.signovaSettingsPage .settingsSearchBar,
+html body.signovaSettingsPage .settingsGlobalSearch {
+  overflow: hidden !important;
+}
+
+html body.signovaSettingsPage .settingsSearchBar input,
+html body.signovaSettingsPage .settingsGlobalSearch input {
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  text-overflow: ellipsis;
+}
+
+html body.signovaSettingsPage .settingsGroupHeader,
+html body.signovaSettingsPage .settingSwitch,
+html body.signovaSettingsPage .settingField,
+html body.signovaSettingsPage .settingRange,
+html body.signovaSettingsPage .settingsNavItem {
+  max-width: 100% !important;
+}
+
+html body.signovaSettingsPage .settingField {
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 270px) !important;
+  align-items: center !important;
+  column-gap: 16px !important;
+}
+
+html body.signovaSettingsPage .settingField > :where(input, select, button, textarea),
+html body.signovaSettingsPage .settingField .settingsInlineAction {
+  justify-self: end;
+  width: min(100%, 270px) !important;
+  max-width: 270px !important;
+}
+
+html body.signovaSettingsPage .wideSetting.settingField {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+html body.signovaSettingsPage .wideSetting.settingField > :where(input, select, button, textarea),
+html body.signovaSettingsPage .wideSetting.settingField .settingsInlineAction {
+  justify-self: stretch;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+html body.signovaSettingsPage .settingsGrid:not(.compactMetrics) {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup:not(.activeSettingsDetail) {
+  display: none !important;
+}
+
+html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+  display: block !important;
+}
+
+html body.signovaSettingsPage .settingsContextCard li {
+  min-width: 0 !important;
+}
+
+html body.signovaSettingsPage .settingsContextCard li div,
+html body.signovaSettingsPage .settingsContextCard li strong,
+html body.signovaSettingsPage .settingsContextCard li small,
+html body.signovaSettingsPage .settingsNavItem strong,
+html body.signovaSettingsPage .settingsNavItem small,
+html body.signovaSettingsPage .settingSwitch strong,
+html body.signovaSettingsPage .settingSwitch small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage,
+  html body.signovaSettingsPage #root,
+  html body.signovaSettingsPage .messengerShell.settingsMode,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-width: 100vw !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode {
+    grid-template-columns: 72px minmax(0, 1fr) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPanel {
+    display: grid !important;
+    grid-template-rows: 72px minmax(0, 1fr) !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    min-height: 0 !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    position: relative !important;
+    top: auto !important;
+    z-index: 10 !important;
+    display: grid !important;
+    grid-template-columns: minmax(170px, 260px) minmax(0, 1fr) !important;
+    align-items: center !important;
+    width: 100% !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    margin: 0 !important;
+    padding: 10px 24px !important;
+    border-width: 0 0 1px !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle > div:first-child {
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle h1 {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    justify-self: end !important;
+    display: grid !important;
+    grid-template-columns: minmax(260px, 520px) 38px 38px minmax(112px, auto) !important;
+    align-items: center !important;
+    width: min(100%, 680px) !important;
+    gap: 8px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch,
+  html body.signovaSettingsPage .settingsHeaderIconButton,
+  html body.signovaSettingsPage .settingsProfileMenu {
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch {
+    grid-template-columns: 18px minmax(0, 1fr) 22px !important;
+    width: 100% !important;
+  }
+
+  html body.signovaSettingsPage .settingsHeaderIconButton {
+    width: 38px !important;
+    min-width: 38px !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu {
+    max-width: 150px !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    display: grid !important;
+    grid-template-columns: minmax(260px, 292px) minmax(0, 1fr) minmax(280px, 306px) !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    gap: 18px !important;
+    padding: 0 18px 18px 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar,
+  html body.signovaSettingsPage .settingsContent,
+  html body.signovaSettingsPage .settingsContextCard {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    scrollbar-gutter: auto;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    display: grid !important;
+    grid-template-rows: auto minmax(0, 1fr) !important;
+    gap: 12px !important;
+    padding: 18px 14px !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSearch {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    margin: 0 !important;
+    height: 44px !important;
+    min-height: 44px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    padding: 0 4px 14px 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem {
+    grid-template-columns: 34px minmax(0, 1fr) 14px !important;
+    min-height: 52px !important;
+    padding: 8px 10px !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem .settingsIcon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    display: block !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scroll-behavior: smooth;
+  }
+
+  html body.signovaSettingsPage .settingsContent > .settingsSearchBar,
+  html body.signovaSettingsPage .settingsContent > .settingsHero,
+  html body.signovaSettingsPage .settingsContent > .settingsProfileMoment,
+  html body.signovaSettingsPage .settingsContent > .settingsChooser {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader {
+    position: sticky !important;
+    top: -16px !important;
+    z-index: 3 !important;
+    margin: -16px -16px 14px !important;
+    padding: 14px 16px !important;
+    backdrop-filter: blur(10px);
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader {
+    min-height: 58px !important;
+    padding: 11px 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch,
+  html body.signovaSettingsPage .settingField,
+  html body.signovaSettingsPage .settingRange {
+    min-height: 54px !important;
+    padding: 10px 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    display: block !important;
+    border-radius: 16px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextVisual {
+    min-height: 126px !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html body.signovaSettingsPage .settingsWorkspace {
+    grid-template-columns: minmax(248px, 286px) minmax(0, 1fr) !important;
+    padding-right: 18px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    grid-template-columns: minmax(220px, 1fr) 38px 38px 46px !important;
+    width: min(100%, 520px) !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu {
+    grid-template-columns: 30px !important;
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    justify-content: center !important;
+    padding-inline: 4px !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu strong,
+  html body.signovaSettingsPage .settingsProfileMenu em {
+    display: none !important;
+  }
+}
+
+@media (max-width: 1023px) {
+  html body.signovaSettingsPage,
+  html body.signovaSettingsPage #root,
+  html body.signovaSettingsPage .messengerShell.settingsMode,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail {
+    width: 100% !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsPanel {
+    display: block !important;
+    width: 100% !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    max-height: none !important;
+    padding: 0 14px calc(92px + env(safe-area-inset-bottom)) !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    position: sticky !important;
+    top: 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 -14px 14px !important;
+    padding: 12px 14px !important;
+    border-radius: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) 40px 40px !important;
+    width: 100% !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+
+  html body.signovaSettingsPage .settingsGlobalSearch {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+
+  html body.signovaSettingsPage .settingsHeaderIconButton {
+    width: 40px !important;
+    min-width: 40px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+
+  html body.signovaSettingsPage .settingsProfileMenu,
+  html body.signovaSettingsPage .settingsDesktopSidebar,
+  html body.signovaSettingsPage .settingsContextCard {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace,
+  html body.signovaSettingsPage .settingsContent {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent > .settingsSearchBar {
+    height: 42px !important;
+    min-height: 42px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup:not(.activeSettingsDetail) {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingField {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  html body.signovaSettingsPage .settingField > :where(input, select, button, textarea),
+  html body.signovaSettingsPage .settingField .settingsInlineAction {
+    justify-self: stretch !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body.signovaSettingsPage .settingsContent {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Settings desktop sidebar first-pass hard fix.
+   The sidebar now owns the full first product column from top to bottom, while
+   the global search/top actions start to its right. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    display: grid !important;
+    grid-template-columns: 320px minmax(0, 1fr) 306px !important;
+    grid-template-rows: 72px minmax(0, 1fr) !important;
+    column-gap: 18px !important;
+    row-gap: 12px !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 0 18px 18px 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    grid-column: 2 / 4 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    height: 72px !important;
+    min-height: 72px !important;
+    max-height: 72px !important;
+    margin: 0 !important;
+    padding: 10px 0 !important;
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    align-items: center !important;
+    background: transparent !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle > div:first-child {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    justify-self: stretch !important;
+    width: 100% !important;
+    max-width: none !important;
+    display: grid !important;
+    grid-template-columns: minmax(260px, 520px) 38px 38px minmax(118px, auto) !important;
+    justify-content: end !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  html body.signovaSettingsPage .settingsWorkspace {
+    display: contents !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    grid-column: 1 !important;
+    grid-row: 1 / 3 !important;
+    display: grid !important;
+    grid-template-rows: auto auto minmax(0, 1fr) !important;
+    gap: 14px !important;
+    width: 320px !important;
+    min-width: 320px !important;
+    max-width: 320px !important;
+    height: calc(100dvh - 18px) !important;
+    max-height: calc(100dvh - 18px) !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 22px 16px 16px !important;
+    border-width: 0 1px 0 0 !important;
+    border-radius: 0 !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface) 98%, transparent), color-mix(in srgb, var(--snv-surface-secondary) 92%, transparent)) !important;
+    overflow: hidden !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsSidebarHeader {
+    display: grid !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsSidebarHeader h2 {
+    margin: 0 !important;
+    color: var(--snv-text-primary) !important;
+    font-size: 1.45rem !important;
+    line-height: 1.08 !important;
+    font-weight: 780 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSearch {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 2 !important;
+    width: 100% !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    padding: 0 12px !important;
+    border-radius: 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 4px 18px 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryGroup {
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavGroupLabel {
+    display: block !important;
+    margin: 12px 0 8px 10px !important;
+    color: var(--snv-text-muted) !important;
+    font-size: 0.68rem !important;
+    font-weight: 780 !important;
+    letter-spacing: 0.14em !important;
+    text-transform: uppercase !important;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryStack {
+    display: grid !important;
+    gap: 6px !important;
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem {
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: 36px minmax(0, 1fr) 16px !important;
+    min-height: 56px !important;
+    padding: 9px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem .settingsIcon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html body.signovaSettingsPage .settingsPanel {
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    grid-column: 2 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+  }
+}
+
+/* Settings width containment fix.
+   The app has a persistent left product rail. The Settings page must fill the
+   remaining app column, not add another 100vw beside that rail. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow: hidden !important;
+    grid-template-columns: 78px minmax(0, 1fr) !important;
+  }
+
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane,
+  html body.signovaSettingsPage .messengerShell.settingsMode > .signToolsPane > .workRail {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPanel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    grid-template-columns: 310px minmax(0, 1fr) minmax(260px, 292px) !important;
+    padding: 0 14px 0 0 !important;
+    gap: 0 16px !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    width: 310px !important;
+    min-width: 310px !important;
+    max-width: 310px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding-bottom: 22px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent,
+  html body.signovaSettingsPage .settingsContextCard {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    width: 100% !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    padding-bottom: 48px !important;
+    scrollbar-gutter: auto !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar {
+    width: 4px !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1320px) {
+  html body.signovaSettingsPage .settingsPanel {
+    grid-template-columns: 292px minmax(0, 1fr) !important;
+    padding-right: 14px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    width: 292px !important;
+    min-width: 292px !important;
+    max-width: 292px !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    grid-column: 2 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    display: none !important;
+  }
+}
+
+/* Minimal Settings refinement.
+   Reduce over-carded visuals: sidebar becomes a clean navigation list with only
+   the active row emphasized; center content becomes one sheet with grouped rows. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 22px 16px 0 !important;
+    background:
+      linear-gradient(180deg, var(--snv-surface) 0%, color-mix(in srgb, var(--snv-surface) 96%, var(--snv-bg)) 100%) !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 46px !important;
+    pointer-events: none !important;
+    background: linear-gradient(to bottom, transparent, var(--snv-surface) 82%) !important;
+    z-index: 4 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    padding: 0 5px 86px 0 !important;
+    mask-image: none !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: color-mix(in srgb, var(--snv-accent) 34%, transparent) transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar {
+    width: 4px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-thumb {
+    border-radius: 999px !important;
+    background: color-mix(in srgb, var(--snv-accent) 34%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-track,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-corner {
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavGroupLabel {
+    margin: 16px 0 6px 10px !important;
+    font-size: 0.67rem !important;
+    letter-spacing: 0.16em !important;
+  }
+
+  html body.signovaSettingsPage .settingsCategoryStack {
+    gap: 2px !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem {
+    min-height: 48px !important;
+    padding: 7px 8px !important;
+    border: 1px solid transparent !important;
+    border-radius: 13px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem .settingsIcon {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 11px !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 72%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem:hover {
+    border-color: transparent !important;
+    background: color-mix(in srgb, var(--snv-surface-hover) 56%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem.activeSettingsNavItem {
+    border-color: color-mix(in srgb, var(--snv-accent) 34%, transparent) !important;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--snv-accent) 16%, transparent), color-mix(in srgb, var(--snv-accent) 6%, transparent)) !important;
+    box-shadow: inset 3px 0 0 var(--snv-accent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem.activeSettingsNavItem .settingsIcon {
+    background: var(--snv-accent) !important;
+    color: #fff !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    padding: 20px !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 18px !important;
+    background: var(--snv-surface) !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader {
+    min-height: 66px !important;
+    padding: 0 0 16px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader .settingsIcon {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader strong {
+    font-size: 1.28rem !important;
+    font-weight: 780 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader small {
+    margin-top: 4px !important;
+    font-size: 0.82rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsGrid {
+    margin-top: 16px !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 16px !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 42%, transparent) !important;
+    overflow: hidden !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch,
+  html body.signovaSettingsPage .settingField,
+  html body.signovaSettingsPage .settingRange {
+    min-height: 58px !important;
+    padding: 12px 0 !important;
+    margin: 0 18px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch:hover,
+  html body.signovaSettingsPage .settingField:hover,
+  html body.signovaSettingsPage .settingRange:hover {
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch:last-child,
+  html body.signovaSettingsPage .settingField:last-child,
+  html body.signovaSettingsPage .settingRange:last-child {
+    border-bottom: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingField {
+    grid-template-columns: minmax(0, 1fr) minmax(160px, 248px) !important;
+  }
+
+  html body.signovaSettingsPage .settingField > :where(input, select, button, textarea),
+  html body.signovaSettingsPage .settingField .settingsInlineAction {
+    max-width: 248px !important;
+  }
+}
+
+/* Final Settings cleanup: page title owns the section identity; content is a
+   clean control surface, and sidebar scrolling is invisible but still usable. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    position: relative !important;
+    padding-bottom: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar::after {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    padding: 0 0 96px 0 !important;
+    scrollbar-width: none !important;
+    scrollbar-color: transparent transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-track,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-thumb,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-button,
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-corner {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGroupHeader {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    padding: 24px !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface-elevated) 18%, transparent), transparent 180px),
+      var(--snv-surface) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    min-height: 100% !important;
+  }
+
+  html body.signovaSettingsPage .settingsGrid {
+    position: relative !important;
+    margin-top: 0 !important;
+    padding-top: 42px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsGrid::before {
+    content: "Main settings" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    color: var(--snv-text-muted) !important;
+    font-size: 0.68rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.16em !important;
+    text-transform: uppercase !important;
+  }
+
+  html body.signovaSettingsPage .settingsGrid::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 28px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: var(--snv-border-subtle) !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch,
+  html body.signovaSettingsPage .settingField,
+  html body.signovaSettingsPage .settingRange {
+    min-height: 62px !important;
+    margin: 0 !important;
+    padding: 12px 0 !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch:hover,
+  html body.signovaSettingsPage .settingField:hover,
+  html body.signovaSettingsPage .settingRange:hover {
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch strong,
+  html body.signovaSettingsPage .settingField > span,
+  html body.signovaSettingsPage .settingRange > span {
+    font-size: 0.92rem !important;
+    font-weight: 720 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch small,
+  html body.signovaSettingsPage .settingField small,
+  html body.signovaSettingsPage .settingRange small {
+    margin-top: 3px !important;
+    font-size: 0.78rem !important;
+    line-height: 1.42 !important;
+  }
+
+  html body.signovaSettingsPage .settingField select {
+    border-radius: 14px !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface-elevated) 62%, transparent), var(--snv-surface-secondary)) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    padding-left: 0 !important;
+  }
+}
+
+/* Premium active settings section reformat.
+   Remove the large table-like box and empty bottom area. The active detail
+   section becomes a clean stack of compact, elevated control rows. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    display: block !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid {
+    display: grid !important;
+    gap: 10px !important;
+    margin: 0 !important;
+    padding: 34px 0 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid::before {
+    top: 0 !important;
+    left: 0 !important;
+    color: var(--snv-text-muted) !important;
+    font-size: 0.69rem !important;
+    font-weight: 820 !important;
+    letter-spacing: 0.17em !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid::after {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange) {
+    width: 100% !important;
+    min-height: 64px !important;
+    margin: 0 !important;
+    padding: 12px 14px !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 15px !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface-elevated) 36%, transparent), color-mix(in srgb, var(--snv-surface-secondary) 68%, transparent)) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04),
+      0 10px 28px rgba(15, 23, 42, 0.035) !important;
+    transition:
+      border-color 140ms ease,
+      background-color 140ms ease,
+      transform 140ms ease !important;
+  }
+
+  html body.signovaSettingsPage.signovaPremiumDarkPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange),
+  html body.signovaPremiumDarkPage.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange) {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.045),
+      0 12px 30px rgba(0, 0, 0, 0.16) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange):hover {
+    border-color: color-mix(in srgb, var(--snv-accent) 22%, var(--snv-border-subtle)) !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface-elevated) 48%, transparent), color-mix(in srgb, var(--snv-surface-secondary) 78%, transparent)) !important;
+    transform: translateY(-1px) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField {
+    grid-template-columns: minmax(0, 1fr) minmax(154px, 248px) !important;
+    gap: 18px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    gap: 18px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch > span, .settingField > span, .settingRange > span) {
+    min-width: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch strong, .settingField > span, .settingRange > span) {
+    color: var(--snv-text-primary) !important;
+    font-size: 0.9rem !important;
+    line-height: 1.25 !important;
+    font-weight: 720 !important;
+    letter-spacing: -0.012em !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch small, .settingField small, .settingRange small) {
+    display: block !important;
+    margin-top: 4px !important;
+    max-width: 58ch !important;
+    color: var(--snv-text-secondary) !important;
+    font-size: 0.78rem !important;
+    line-height: 1.42 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField > :where(input, select, button, textarea),
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField .settingsInlineAction {
+    width: 100% !important;
+    max-width: 248px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    border-radius: 13px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField select {
+    padding-inline: 13px 34px !important;
+    font-weight: 680 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch input[type="checkbox"] {
+    align-self: center !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsActions {
+    margin-top: 14px !important;
+  }
+}
+
+/* No-extra-card Settings detail design.
+   Normal settings should read like a polished product preference list, not a
+   stack of cards. Special action/warning blocks can still style themselves. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsContent {
+    padding: 28px 32px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    max-width: 880px !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid {
+    display: grid !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 36px 0 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid::before {
+    content: "Main settings" !important;
+    top: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsGrid::after {
+    display: block !important;
+    top: 25px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: var(--snv-border-subtle) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange) {
+    display: grid !important;
+    width: 100% !important;
+    min-height: 66px !important;
+    margin: 0 !important;
+    padding: 14px 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange):hover {
+    border-color: var(--snv-border-subtle) !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch, .settingField, .settingRange):last-child {
+    border-bottom: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField {
+    grid-template-columns: minmax(0, 1fr) minmax(170px, 260px) !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingSwitch {
+    grid-template-columns: minmax(0, 1fr) 44px !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingRange {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 280px) !important;
+    align-items: center !important;
+    gap: 24px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch strong, .settingField > span, .settingRange > span) {
+    color: var(--snv-text-primary) !important;
+    font-size: 0.92rem !important;
+    line-height: 1.22 !important;
+    font-weight: 720 !important;
+    letter-spacing: -0.012em !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail :where(.settingSwitch small, .settingField small, .settingRange small) {
+    max-width: 62ch !important;
+    margin-top: 5px !important;
+    color: var(--snv-text-secondary) !important;
+    font-size: 0.78rem !important;
+    line-height: 1.42 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField > :where(input, select, button, textarea),
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField .settingsInlineAction {
+    justify-self: end !important;
+    width: 100% !important;
+    max-width: 260px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField select,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField input {
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 13px !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 86%, transparent) !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField select:focus,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingField input:focus {
+    border-color: color-mix(in srgb, var(--snv-accent) 44%, var(--snv-border-subtle)) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsDpdpNotice,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .settingsLegalNotice,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail .metric {
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 15px !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 68%, transparent) !important;
+  }
+}
+
+/* Absolute final: do not render activeSettingsDetail as a card/wrapper.
+   SettingsContent is the only visible page container; active detail groups are
+   transparent structural wrappers used only to choose which controls appear. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsContent {
+    max-width: none !important;
+    padding: 28px 34px !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup:not(.activeSettingsDetail) {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    display: contents !important;
+    width: auto !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGroupHeader {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGrid,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsActions,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsSupportList,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsLegalNotice,
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsDeviceSummary {
+    width: min(100%, 900px) !important;
+    max-width: 900px !important;
+    margin-inline: auto !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGrid {
+    display: grid !important;
+    gap: 0 !important;
+    padding: 36px 0 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGrid::before {
+    content: "Main settings" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail > .settingsGrid::after {
+    content: "" !important;
+    position: absolute !important;
+    top: 25px !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    display: block !important;
+    background: var(--snv-border-subtle) !important;
+  }
+}
+
+/* Settings focused polish pass: sidebar bottom/scrollbar, clean page title,
+   stronger content hierarchy, and richer contextual cards. */
+@media (min-width: 1024px) {
+  html body.signovaSettingsPage .settingsPanel {
+    grid-template-columns: 318px minmax(0, 1fr) 310px !important;
+    padding: 0 18px 0 0 !important;
+    column-gap: 18px !important;
+    row-gap: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle {
+    grid-column: 2 / 4 !important;
+    height: 72px !important;
+    padding: 0 !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background: color-mix(in srgb, var(--snv-bg) 92%, var(--snv-surface)) !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle > div:first-child {
+    display: grid !important;
+    min-width: 0 !important;
+    gap: 3px !important;
+    align-content: center !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle h1 {
+    margin: 0 !important;
+    color: var(--snv-text-primary) !important;
+    font-size: 1.38rem !important;
+    line-height: 1.08 !important;
+    font-weight: 780 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageTitle p {
+    display: block !important;
+    margin: 0 !important;
+    color: var(--snv-text-secondary) !important;
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+  }
+
+  html body.signovaSettingsPage .settingsPageActions {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    width: 318px !important;
+    min-width: 318px !important;
+    max-width: 318px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    padding: 22px 16px 14px !important;
+    border-right: 1px solid var(--snv-border-subtle) !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface) 96%, transparent), color-mix(in srgb, var(--snv-surface-secondary) 94%, transparent)) !important;
+  }
+
+  html body.signovaSettingsPage .settingsSidebarHeader {
+    min-height: 30px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation {
+    padding: 0 8px 36px 0 !important;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 12px, #000 calc(100% - 22px), transparent 100%);
+    scrollbar-width: thin !important;
+    scrollbar-color: color-mix(in srgb, var(--snv-accent) 48%, transparent) transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar {
+    width: 5px !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-thumb {
+    min-height: 64px !important;
+    border: 0 !important;
+    border-radius: 999px !important;
+    background: color-mix(in srgb, var(--snv-accent) 42%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopNavigation::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem {
+    border: 1px solid var(--snv-border-subtle) !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 78%, transparent) !important;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem:hover {
+    border-color: color-mix(in srgb, var(--snv-accent) 20%, var(--snv-border-subtle)) !important;
+    background: color-mix(in srgb, var(--snv-surface-hover) 78%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsNavItem.activeSettingsNavItem {
+    border-color: color-mix(in srgb, var(--snv-accent) 48%, transparent) !important;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--snv-accent) 18%, transparent), color-mix(in srgb, var(--snv-accent) 7%, transparent)),
+      var(--snv-surface-secondary) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContent {
+    margin-top: 12px !important;
+    margin-bottom: 18px !important;
+    padding: 18px !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 18px !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-surface-elevated) 34%, transparent), transparent 170px),
+      var(--snv-surface) !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader {
+    position: relative !important;
+    top: auto !important;
+    margin: 0 0 16px !important;
+    padding: 0 0 14px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader button,
+  html body.signovaSettingsPage .settingsSubPageHeader span {
+    display: none !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader strong {
+    color: var(--snv-text-primary) !important;
+    font-size: 1.32rem !important;
+    line-height: 1.15 !important;
+    font-weight: 780 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  html body.signovaSettingsPage .settingsSubPageHeader small {
+    margin-top: 4px !important;
+    color: var(--snv-text-secondary) !important;
+    font-size: 0.82rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsDetailGroup.activeSettingsDetail {
+    overflow: hidden !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 16px !important;
+    background: color-mix(in srgb, var(--snv-surface-secondary) 52%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader {
+    min-height: 64px !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--snv-accent) 8%, transparent), transparent 56%) !important;
+  }
+
+  html body.signovaSettingsPage .settingsGroupHeader .settingsIcon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 12px !important;
+    border-color: color-mix(in srgb, var(--snv-accent) 24%, var(--snv-border-subtle)) !important;
+    background: color-mix(in srgb, var(--snv-accent) 12%, var(--snv-surface-elevated)) !important;
+    color: var(--snv-accent-hover) !important;
+  }
+
+  html body.signovaSettingsPage .settingsGrid {
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch,
+  html body.signovaSettingsPage .settingField,
+  html body.signovaSettingsPage .settingRange {
+    min-height: 60px !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background: transparent !important;
+  }
+
+  html body.signovaSettingsPage .settingSwitch:last-child,
+  html body.signovaSettingsPage .settingField:last-child,
+  html body.signovaSettingsPage .settingRange:last-child {
+    border-bottom: 0 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard {
+    margin-top: 12px !important;
+    margin-bottom: 18px !important;
+    border: 1px solid var(--snv-border-subtle) !important;
+    border-radius: 18px !important;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--snv-accent) 9%, transparent), transparent 190px),
+      var(--snv-surface) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextVisual {
+    display: grid !important;
+    place-items: center !important;
+    min-height: 132px !important;
+    border-bottom: 1px solid var(--snv-border-subtle) !important;
+    background:
+      radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--snv-accent) 28%, transparent), transparent 72%),
+      color-mix(in srgb, var(--snv-surface-elevated) 62%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextVisual span {
+    display: grid !important;
+    place-items: center !important;
+    width: 60px !important;
+    height: 60px !important;
+    border: 1px solid color-mix(in srgb, var(--snv-accent) 42%, transparent) !important;
+    border-radius: 18px !important;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--snv-accent) 26%, transparent), color-mix(in srgb, var(--snv-accent) 12%, transparent)) !important;
+    color: var(--snv-accent-hover) !important;
+    font-size: 1.45rem !important;
+    box-shadow: 0 14px 34px color-mix(in srgb, var(--snv-accent) 14%, transparent) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard > strong {
+    display: block !important;
+    padding: 16px 18px 0 !important;
+    text-align: left !important;
+    color: var(--snv-text-primary) !important;
+    font-size: 1rem !important;
+    letter-spacing: -0.015em !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard > p {
+    padding: 6px 18px 14px !important;
+    margin: 0 !important;
+    text-align: left !important;
+    color: var(--snv-text-secondary) !important;
+    line-height: 1.45 !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard ul {
+    margin: 0 !important;
+    border-top: 1px solid var(--snv-border-subtle) !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard li {
+    grid-template-columns: 22px minmax(0, 1fr) auto !important;
+    gap: 10px !important;
+    padding: 13px 18px !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard li > span {
+    display: grid !important;
+    place-items: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 8px !important;
+    background: color-mix(in srgb, var(--snv-accent) 13%, transparent) !important;
+    color: var(--snv-accent-hover) !important;
+    font-size: 0.72rem !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextCard li em {
+    max-width: 82px !important;
+    padding: 3px 7px !important;
+    border-radius: 999px !important;
+    background: color-mix(in srgb, var(--snv-warning) 12%, transparent) !important;
+    color: var(--snv-warning) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  html body.signovaSettingsPage .settingsContextAction {
+    min-height: 42px !important;
+    margin: 14px 18px 18px !important;
+    border-radius: 13px !important;
+    background: color-mix(in srgb, var(--snv-accent) 10%, var(--snv-surface-secondary)) !important;
+    color: var(--snv-text-primary) !important;
+    font-weight: 700 !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  html body.signovaSettingsPage .settingsPanel {
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+  }
+
+  html body.signovaSettingsPage .settingsDesktopSidebar {
+    width: 300px !important;
+    min-width: 300px !important;
+    max-width: 300px !important;
+  }
+}

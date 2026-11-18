@@ -1,0 +1,480 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function verifiedUser() {
+      return signedIn();
+    }
+
+    function isChatMember(chatId) {
+      return signedIn()
+        && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.memberIds;
+    }
+
+    match /users/{userId} {
+      allow read, delete: if signedIn() && request.auth.uid == userId;
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'name', 'username', 'email', 'phone', 'showNumber',
+          'communityName', 'communityUsername', 'communityBio',
+          'communityAvatarInitials', 'communityAvatarTone', 'communityAvatarMode',
+          'communityAvatarMood', 'communityAvatarAccessory', 'communityAvatarImage',
+          'profilePhotoUrl', 'profilePhotoPath',
+          'createdAt', 'updatedAt', 'schemaVersion'
+        ])
+        && (!('profilePhotoUrl' in request.resource.data)
+          || (request.resource.data.profilePhotoUrl is string
+            && request.resource.data.profilePhotoUrl.size() <= 2000
+            && request.resource.data.profilePhotoUrl.matches('^https://firebasestorage.googleapis.com/.*')))
+        && (!('profilePhotoPath' in request.resource.data)
+          || (request.resource.data.profilePhotoPath is string
+            && request.resource.data.profilePhotoPath.matches('^users/' + userId + '/profile/[A-Za-z0-9._-]{1,160}$')));
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'name', 'username', 'email', 'phone', 'showNumber',
+          'communityName', 'communityUsername', 'communityBio',
+          'communityAvatarInitials', 'communityAvatarTone', 'communityAvatarMode',
+          'communityAvatarMood', 'communityAvatarAccessory', 'communityAvatarImage',
+          'profilePhotoUrl', 'profilePhotoPath',
+          'createdAt', 'updatedAt', 'schemaVersion'
+        ])
+        && (!('profilePhotoUrl' in request.resource.data)
+          || (request.resource.data.profilePhotoUrl is string
+            && request.resource.data.profilePhotoUrl.size() <= 2000
+            && request.resource.data.profilePhotoUrl.matches('^https://firebasestorage.googleapis.com/.*')))
+        && (!('profilePhotoPath' in request.resource.data)
+          || (request.resource.data.profilePhotoPath is string
+            && request.resource.data.profilePhotoPath.matches('^users/' + userId + '/profile/[A-Za-z0-9._-]{1,160}$')));
+
+      match /{collectionId}/{document=**} {
+        allow read, write: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    match /chats/{chatId} {
+      // A transaction reads a deterministic direct-chat path before creating it.
+      // Existing rooms and queries remain member-only.
+      allow get: if signedIn()
+        && (!exists(/databases/$(database)/documents/chats/$(chatId))
+          || request.auth.uid in resource.data.memberIds);
+      allow list: if signedIn() && request.auth.uid in resource.data.memberIds;
+      allow create: if verifiedUser()
+        && request.resource.data.memberIds is list
+        && request.resource.data.memberIds.size() >= 2
+        && request.resource.data.memberIds.size() <= 50
+        && request.auth.uid in request.resource.data.memberIds
+        && request.resource.data.keys().hasOnly([
+          'memberIds', 'title', 'avatarUrl', 'createdAt', 'updatedAt',
+          'lastMessage', 'lastMessageAt'
+        ])
+        && request.resource.data.title is string
+        && request.resource.data.title.size() <= 120;
+      allow update: if signedIn()
+        && request.auth.uid in resource.data.memberIds
+        && request.resource.data.memberIds == resource.data.memberIds
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title', 'avatarUrl', 'lastMessage', 'lastMessageAt', 'updatedAt'
+        ]);
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if isChatMember(chatId);
+        allow create: if isChatMember(chatId)
+          && request.resource.data.senderUid == request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            'senderUid', 'type', 'text', 'mediaPath', 'createdAt',
+            'clientMessageId', 'replyToId', 'encryptedAttachment', 'attachment'
+          ])
+          && request.resource.data.type in ['text', 'sign', 'image', 'video', 'audio', 'document', 'system', 'encrypted_attachment']
+          && (!('text' in request.resource.data)
+            || (request.resource.data.text is string && request.resource.data.text.size() <= 4000))
+          && (!('mediaPath' in request.resource.data)
+            || (request.resource.data.mediaPath is string
+              && (request.resource.data.mediaPath.matches('users/' + request.auth.uid + '/private/.*')
+                || request.resource.data.mediaPath.matches('chatAttachments/' + chatId + '/' + request.auth.uid + '/' + messageId + '/[A-Za-z0-9._-]{1,160}'))))
+          && ((request.resource.data.type in ['image', 'audio', 'document']
+              && 'attachment' in request.resource.data
+              && 'mediaPath' in request.resource.data
+              && request.resource.data.attachment.keys().hasOnly([
+                'type', 'title', 'contentType', 'size', 'sizeBytes', 'mediaPath', 'mode', 'quality'
+              ])
+              && request.resource.data.attachment.type == request.resource.data.type
+              && request.resource.data.attachment.type in ['image', 'audio', 'document']
+              && request.resource.data.attachment.title is string
+              && request.resource.data.attachment.title.size() > 0
+              && request.resource.data.attachment.title.size() <= 160
+              && request.resource.data.attachment.contentType is string
+              && request.resource.data.attachment.contentType.size() > 0
+              && request.resource.data.attachment.contentType.size() <= 128
+              && request.resource.data.attachment.size is string
+              && request.resource.data.attachment.size.size() <= 40
+              && request.resource.data.attachment.sizeBytes is int
+              && request.resource.data.attachment.sizeBytes > 0
+              && request.resource.data.attachment.sizeBytes <= 25 * 1024 * 1024
+              && request.resource.data.attachment.mediaPath == request.resource.data.mediaPath
+              && (!('mode' in request.resource.data.attachment)
+                || request.resource.data.attachment.mode is string)
+              && (!('quality' in request.resource.data.attachment)
+                || request.resource.data.attachment.quality is string))
+            || (!(request.resource.data.type in ['image', 'audio', 'document'])
+              && !('attachment' in request.resource.data)))
+          && ((request.resource.data.type != 'encrypted_attachment'
+              && !('encryptedAttachment' in request.resource.data))
+            || (request.resource.data.type == 'encrypted_attachment'
+              && !('text' in request.resource.data)
+              && !('mediaPath' in request.resource.data)
+              && request.resource.data.encryptedAttachment.keys().hasOnly([
+                'version', 'path', 'senderUid', 'conversationId', 'attachmentId',
+                'senderDeviceId', 'senderSequence', 'contentType', 'plaintextBytes',
+                'plaintextSha256', 'ciphertextBytes', 'contentIv', 'wrapIv', 'wrappedKey'
+              ])
+              && request.resource.data.encryptedAttachment.version == 1
+              && request.resource.data.encryptedAttachment.senderUid == request.auth.uid
+              && request.resource.data.encryptedAttachment.conversationId == chatId
+              && request.resource.data.encryptedAttachment.attachmentId.matches('^[A-Za-z0-9._-]{1,128}$')
+              && request.resource.data.encryptedAttachment.senderDeviceId.matches('^[A-Za-z0-9._-]{1,128}$')
+              && request.resource.data.encryptedAttachment.path == 'encryptedChatAttachments/' + chatId + '/' + request.auth.uid + '/' + request.resource.data.encryptedAttachment.attachmentId + '.bin'
+              && request.resource.data.encryptedAttachment.senderSequence is int
+              && request.resource.data.encryptedAttachment.senderSequence > 0
+              && request.resource.data.encryptedAttachment.contentType is string
+              && request.resource.data.encryptedAttachment.contentType.size() > 0
+              && request.resource.data.encryptedAttachment.contentType.size() <= 128
+              && request.resource.data.encryptedAttachment.plaintextBytes is int
+              && request.resource.data.encryptedAttachment.plaintextBytes > 0
+              && request.resource.data.encryptedAttachment.plaintextBytes <= 25 * 1024 * 1024
+              && request.resource.data.encryptedAttachment.ciphertextBytes == request.resource.data.encryptedAttachment.plaintextBytes + 16
+              && request.resource.data.encryptedAttachment.plaintextSha256.matches('^[a-f0-9]{64}$')
+              && request.resource.data.encryptedAttachment.contentIv.matches('^[A-Za-z0-9+/]{16}$')
+              && request.resource.data.encryptedAttachment.wrapIv.matches('^[A-Za-z0-9+/]{16}$')
+              && request.resource.data.encryptedAttachment.wrappedKey.matches('^[A-Za-z0-9+/]{60,128}={0,2}$')));
+        allow update: if isChatMember(chatId)
+          && resource.data.senderUid == request.auth.uid
+          && request.resource.data.senderUid == resource.data.senderUid
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.type == resource.data.type
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'text', 'editedAt', 'deletedAt'
+          ])
+          && (resource.data.type != 'encrypted_attachment'
+            || !('text' in request.resource.data))
+          && (!('text' in request.resource.data)
+            || (request.resource.data.text is string && request.resource.data.text.size() <= 4000));
+        allow delete: if isChatMember(chatId)
+          && resource.data.senderUid == request.auth.uid;
+
+        match /reactions/{userId} {
+          allow read: if isChatMember(chatId);
+          allow create, update: if isChatMember(chatId)
+            && request.auth.uid == userId
+            && request.resource.data.keys().hasOnly([
+              'userId', 'chatId', 'messageId', 'reaction', 'updatedAt'
+            ])
+            && request.resource.data.userId == request.auth.uid
+            && request.resource.data.chatId == chatId
+            && request.resource.data.messageId == messageId
+            && request.resource.data.reaction is string
+            && request.resource.data.reaction.size() > 0
+            && request.resource.data.reaction.size() <= 32;
+          allow delete: if isChatMember(chatId)
+            && request.auth.uid == userId;
+        }
+
+        match /receipts/{userId} {
+          function parentMessage() {
+            return get(/databases/$(database)/documents/chats/$(chatId)/messages/$(messageId));
+          }
+
+          function validReceiptBinding() {
+            return request.auth.uid == userId
+              && request.resource.data.userId == request.auth.uid
+              && request.resource.data.chatId == chatId
+              && request.resource.data.messageId == messageId
+              && request.auth.uid != parentMessage().data.senderUid
+              && request.resource.data.keys().hasOnly([
+                'userId', 'chatId', 'messageId', 'deliveredAt', 'readAt', 'updatedAt'
+              ]);
+          }
+
+          allow read: if isChatMember(chatId);
+          allow create: if isChatMember(chatId)
+            && validReceiptBinding()
+            && request.resource.data.deliveredAt != null
+            && request.resource.data.updatedAt != null;
+          allow update: if isChatMember(chatId)
+            && validReceiptBinding()
+            && request.resource.data.userId == resource.data.userId
+            && request.resource.data.chatId == resource.data.chatId
+            && request.resource.data.messageId == resource.data.messageId
+            && request.resource.data.deliveredAt == resource.data.deliveredAt
+            && request.resource.data.updatedAt != null
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['readAt', 'updatedAt'])
+            && (resource.data.readAt == null || request.resource.data.readAt == resource.data.readAt);
+          allow delete: if false;
+        }
+      }
+    }
+
+    match /publicUserIdentities/{username} {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if signedIn()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /publicPhoneIdentities/{phoneNumber} {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if signedIn()
+        && resource.data.uid == request.auth.uid;
+    }
+
+    match /userPresence/{userId} {
+      allow read: if signedIn();
+      allow create, update: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'uid', 'state', 'deviceLabel', 'lastActiveAt', 'updatedAt'
+        ])
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.state in ['online', 'away', 'offline', 'hidden']
+        && request.resource.data.deviceLabel is string
+        && request.resource.data.deviceLabel.size() <= 40;
+      allow delete: if false;
+    }
+
+    match /e2eeDeviceDirectories/{userId}/devices/{deviceId} {
+      function validPublicKeyText(value, maximum) {
+        return value is string
+          && value.size() > 20
+          && value.size() <= maximum
+          && value.matches('^[A-Za-z0-9+/]+={0,2}$');
+      }
+
+      allow read: if verifiedUser();
+      allow create: if verifiedUser()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'ownerUid', 'deviceId', 'version', 'agreementPublicKey',
+          'signingPublicKey', 'agreementSignature', 'fingerprint',
+          'status', 'createdAt', 'updatedAt', 'revokedAt'
+        ])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.deviceId == deviceId
+        && deviceId.matches('^[A-Za-z0-9._-]{1,128}$')
+        && request.resource.data.version == 1
+        && validPublicKeyText(request.resource.data.agreementPublicKey, 256)
+        && validPublicKeyText(request.resource.data.signingPublicKey, 256)
+        && validPublicKeyText(request.resource.data.agreementSignature, 256)
+        && validPublicKeyText(request.resource.data.fingerprint, 128)
+        && request.resource.data.status == 'active'
+        && request.resource.data.revokedAt == null;
+      allow update: if verifiedUser()
+        && request.auth.uid == userId
+        && resource.data.ownerUid == request.auth.uid
+        && resource.data.deviceId == deviceId
+        && resource.data.status == 'active'
+        && request.resource.data.status == 'revoked'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'revokedAt', 'updatedAt'
+        ]);
+      allow delete: if false;
+    }
+
+    match /mlsKeyPackageDirectories/{userId}/devices/{deviceId}/mlsKeyPackages/{packageId} {
+      allow read: if false;
+      allow create: if verifiedUser()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly([
+          'ownerUid', 'deviceId', 'packageId', 'protocol', 'ciphersuite',
+          'keyPackageBase64', 'credentialFingerprint', 'status', 'createdAt',
+          'expiresAtMs', 'claimedAt', 'claimedBy', 'claimId'
+        ])
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.deviceId == deviceId
+        && request.resource.data.packageId == packageId
+        && deviceId.matches('^[A-Za-z0-9._-]{1,128}$')
+        && packageId.matches('^[A-Za-z0-9._-]{1,128}$')
+        && request.resource.data.protocol == 'MLS10'
+        && request.resource.data.ciphersuite == 'MLS_128_DHKEMX25519_AES128GCM_SHA256_Ed25519'
+        && request.resource.data.keyPackageBase64 is string
+        && request.resource.data.keyPackageBase64.size() >= 64
+        && request.resource.data.keyPackageBase64.size() <= 65536
+        && request.resource.data.keyPackageBase64.matches('^[A-Za-z0-9+/]+={0,2}$')
+        && request.resource.data.credentialFingerprint is string
+        && request.resource.data.credentialFingerprint.size() >= 32
+        && request.resource.data.credentialFingerprint.size() <= 128
+        && request.resource.data.status == 'available'
+        && request.resource.data.expiresAtMs is int
+        && request.resource.data.claimedAt == null
+        && request.resource.data.claimedBy == null
+        && request.resource.data.claimId == null;
+      allow update, delete: if false;
+    }
+
+    match /privateAuthIdentities/{identityId} {
+      allow read, write: if false;
+    }
+
+    match /publicStats/{document=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    match /publicCommunityPosts/{postId} {
+      allow read: if true;
+      allow create: if verifiedUser()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.keys().hasOnly([
+          'authorUid', 'text', 'name', 'username', 'stats', 'mediaPath', 'mediaUrl',
+          'thumbnailPath', 'thumbnailUrl',
+          'createdAt', 'createdAtMillis', 'updatedAt', 'tags', 'sign', 'duration',
+          'confidence', 'mediaType', 'contentKind', 'mediaName', 'learningTip',
+          'level', 'avatar', 'avatarImage', 'avatarTone', 'isPremium', 'following'
+        ])
+        && request.resource.data.text is string
+        && request.resource.data.text.size() <= 600
+        && request.resource.data.name is string
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.username is string
+        && request.resource.data.username.size() <= 40
+        && request.resource.data.mediaType in ['image', 'video']
+        && request.resource.data.contentKind in ['post', 'reel']
+        && request.resource.data.mediaUrl is string
+        && request.resource.data.mediaUrl.size() <= 2048
+        && request.resource.data.thumbnailUrl is string
+        && request.resource.data.thumbnailUrl.size() <= 2048
+        && (!('mediaPath' in request.resource.data)
+          || (request.resource.data.mediaPath == '')
+          || (request.resource.data.mediaPath is string
+            && request.resource.data.mediaPath.matches('community/' + request.auth.uid + '/.*')))
+        && (request.resource.data.thumbnailPath == ''
+          || (request.resource.data.thumbnailPath is string
+            && request.resource.data.thumbnailPath.matches('community/' + request.auth.uid + '/.*')))
+        && request.resource.data.stats.likes == 0
+        && request.resource.data.stats.comments == 0
+        && request.resource.data.stats.shares == 0;
+      allow update: if false;
+      allow delete: if signedIn()
+        && request.auth.uid == resource.data.authorUid;
+
+      match /likes/{userId} {
+        allow read: if request.auth != null && request.auth.uid == userId;
+        allow create: if verifiedUser()
+          && request.auth.uid == userId
+          && request.resource.data.userId == request.auth.uid;
+        allow delete: if verifiedUser()
+          && request.auth.uid == userId;
+        allow update: if false;
+      }
+    }
+
+    match /callRooms/{roomId} {
+      function isParticipant() {
+        return signedIn()
+          && (request.auth.uid == resource.data.callerUid
+            || request.auth.uid == resource.data.calleeUid);
+      }
+
+      function unchangedParticipants() {
+        return request.resource.data.callerUid == resource.data.callerUid
+          && request.resource.data.calleeUid == resource.data.calleeUid
+          && request.resource.data.participantUids == resource.data.participantUids
+          && request.resource.data.mediaType == resource.data.mediaType
+          && request.resource.data.createdAt == resource.data.createdAt
+          && request.resource.data.expiresAtMillis == resource.data.expiresAtMillis;
+      }
+
+      function validCallStatusTransition() {
+        return (resource.data.status == 'ringing'
+            && request.resource.data.status in ['connecting', 'rejected', 'ended', 'failed'])
+          || (resource.data.status == 'connecting'
+            && request.resource.data.status in ['connected', 'rejected', 'ended', 'failed'])
+          || (resource.data.status == 'connected'
+            && request.resource.data.status in ['reconnecting', 'ended', 'failed'])
+          || (resource.data.status == 'reconnecting'
+            && request.resource.data.status in ['connected', 'ended', 'failed']);
+      }
+
+      allow create: if verifiedUser()
+        && request.resource.data.keys().hasOnly([
+          'callerUid', 'calleeUid', 'participantUids', 'mediaType', 'status',
+          'createdAt', 'updatedAt', 'expiresAtMillis'
+        ])
+        && request.resource.data.callerUid == request.auth.uid
+        && request.resource.data.calleeUid is string
+        && request.resource.data.calleeUid != request.auth.uid
+        && request.resource.data.participantUids == [request.auth.uid, request.resource.data.calleeUid]
+        && request.resource.data.mediaType in ['video', 'voice']
+        && request.resource.data.status == 'ringing'
+        && request.resource.data.expiresAtMillis is int;
+
+      allow get: if isParticipant();
+      allow list: if signedIn()
+        && (resource.data.calleeUid == request.auth.uid
+          || resource.data.callerUid == request.auth.uid
+          || request.auth.uid in resource.data.participantUids);
+
+      allow update: if isParticipant()
+        && unchangedParticipants()
+        && validCallStatusTransition()
+        && request.resource.data.keys().hasOnly([
+          'callerUid', 'calleeUid', 'participantUids', 'mediaType', 'status',
+          'offer', 'answer', 'createdAt', 'updatedAt', 'expiresAtMillis'
+        ])
+        && request.resource.data.status in [
+          'ringing', 'connecting', 'connected', 'reconnecting',
+          'ended', 'rejected', 'failed'
+        ]
+        && (
+          (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['offer', 'status', 'updatedAt'])
+            && request.auth.uid == resource.data.callerUid
+            && resource.data.status == 'ringing'
+            && request.resource.data.status == 'connecting')
+          || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['answer', 'status', 'updatedAt'])
+            && request.auth.uid == resource.data.calleeUid
+            && resource.data.status == 'connecting'
+            && request.resource.data.status == 'connected')
+          || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt'])
+            && (request.resource.data.status != 'rejected'
+              || request.auth.uid == resource.data.calleeUid))
+        );
+
+      allow delete: if isParticipant();
+
+      match /candidates/{candidateId} {
+        function parentRoom() {
+          return get(/databases/$(database)/documents/callRooms/$(roomId));
+        }
+
+        function isRoomParticipant() {
+          return signedIn() && request.auth.uid in parentRoom().data.participantUids;
+        }
+
+        allow read: if isRoomParticipant();
+        allow create: if verifiedUser()
+          && isRoomParticipant()
+          && request.resource.data.ownerUid == request.auth.uid
+          && request.resource.data.keys().hasOnly([
+            'ownerUid', 'candidate', 'sdpMid', 'sdpMLineIndex',
+            'usernameFragment', 'createdAt'
+          ])
+          && request.resource.data.candidate is string
+          && request.resource.data.candidate.size() <= 4096;
+        allow update: if false;
+        allow delete: if isRoomParticipant();
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

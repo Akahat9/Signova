@@ -1,0 +1,140 @@
+{
+  "loss": 1.9387762546539307,
+  "accuracy": 21.4286,
+  "precision_macro": 0.2347,
+  "recall_macro": 0.2143,
+  "f1_macro": 0.1984,
+  "specificity_macro": 0.869,
+  "roc_auc_ovr_macro": 0.6131,
+  "log_loss": 1.9388,
+  "mcc": 0.0962,
+  "samples": 14,
+  "classes": 7,
+  "per_class": [
+    {
+      "label": "can_i_help_you",
+      "support": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "specificity": 1.0
+    },
+    {
+      "label": "go_and_sleep",
+      "support": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "specificity": 0.6667
+    },
+    {
+      "label": "i_enjoyed_a_lot",
+      "support": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "specificity": 1.0
+    },
+    {
+      "label": "i_like_you_i_love_you",
+      "support": 2,
+      "precision": 0.1429,
+      "recall": 0.5,
+      "f1_score": 0.2222,
+      "specificity": 0.5
+    },
+    {
+      "label": "serve_the_food",
+      "support": 2,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1_score": 0.6667,
+      "specificity": 1.0
+    },
+    {
+      "label": "speak_softly",
+      "support": 2,
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1_score": 0.5,
+      "specificity": 0.9167
+    },
+    {
+      "label": "you_are_bad",
+      "support": 2,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "specificity": 1.0
+    }
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      2,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      2,
+      0,
+      0,
+      0
+    ]
+  ],
+  "model_type": "rope_swiglu_transformer",
+  "dataset": "ai-service\\Data\\processed_sequences\\signova_sequences.npz",
+  "model_path": "ai-service\\Models\\experiments\\isl_cslrt_rope_swiglu_baseline_v1.pt",
+  "best_validation_accuracy": 35.7143
+}

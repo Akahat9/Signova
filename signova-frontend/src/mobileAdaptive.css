@@ -1,0 +1,298 @@
+/*
+ * Mobile layout authority
+ *
+ * This file loads after the legacy desktop and mobile styles.  It provides a
+ * single set of viewport and safe-area rules so individual pages do not have
+ * to guess the dimensions of a phone, tablet, browser chrome, or keyboard.
+ */
+
+:root {
+  --snv-page-gutter: clamp(12px, 3.5vw, 28px);
+  --snv-control-height: 46px;
+  --snv-sheet-gap: max(12px, env(safe-area-inset-top));
+}
+
+.messengerShell,
+.messengerShell > *,
+.messengerShell :where(section, article, aside, main, form, fieldset, .panel, .communityPanel) {
+  min-width: 0;
+}
+
+.messengerShell :where(img, video, canvas, svg) {
+  max-width: 100%;
+}
+
+.messengerShell :where(button, input, select, textarea) {
+  max-width: 100%;
+}
+
+/* Sheets and dialogs always sit above the navigation and own their scrolling. */
+.contactMiniOverlay {
+  z-index: 100010 !important;
+  box-sizing: border-box;
+  min-height: var(--snv-app-height, 100dvh);
+  padding: var(--snv-sheet-gap) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  overscroll-behavior: contain;
+}
+
+.contactMiniModal {
+  box-sizing: border-box;
+  width: min(100%, 560px) !important;
+  max-height: calc(var(--snv-app-height, 100dvh) - var(--snv-sheet-gap) - max(12px, env(safe-area-inset-bottom))) !important;
+  overflow: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 760px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-height: var(--snv-app-height, 100dvh);
+    overflow-x: clip;
+  }
+
+  .messengerShell {
+    width: 100% !important;
+    min-height: var(--snv-app-height, 100dvh) !important;
+    overflow-x: clip !important;
+  }
+
+  .messengerShell :where(input, select, textarea) {
+    font-size: max(16px, 1em) !important;
+  }
+
+  .messengerShell :where(button, input, select, textarea) {
+    min-height: var(--snv-control-height);
+    touch-action: manipulation;
+  }
+
+  .contactMiniOverlay {
+    inset: var(--snv-viewport-offset-top, 0px) 0 auto !important;
+    height: var(--snv-app-height, 100dvh) !important;
+    min-height: 0;
+    place-items: center !important;
+    align-items: center !important;
+    padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)) !important;
+  }
+
+  .contactMiniModal {
+    width: min(100%, 520px) !important;
+    max-height: calc(var(--snv-app-height, 100dvh) - max(24px, env(safe-area-inset-top) + env(safe-area-inset-bottom))) !important;
+    padding: clamp(14px, 4vw, 20px) !important;
+    gap: 12px !important;
+    border-radius: 22px !important;
+  }
+
+  .contactMiniModal .modalBrandHeader {
+    grid-template-columns: 50px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    padding-right: 38px;
+  }
+
+  .contactMiniModal .modalLogo3d {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .contactMiniModal .modalBrandHeader strong {
+    font-size: clamp(19px, 6vw, 25px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .contactMiniModal .contactForm {
+    gap: 9px !important;
+    padding-bottom: 2px;
+  }
+
+  .contactMiniModal .contactPhoneRow {
+    grid-template-columns: minmax(96px, 108px) minmax(0, 1fr) !important;
+  }
+
+  /* The former generic mobile rule forced these two compact choices into two rows. */
+  .contactMiniModal .contactAvatarOptions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .contactMiniModal .contactAvatarOptions button {
+    min-height: 62px !important;
+    padding: 7px !important;
+  }
+
+  .contactMiniModal .contactAvatarOptions .contactAvatar {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .contactMiniModal .contactVisibilityGrid {
+    grid-template-columns: 1fr !important;
+    gap: 7px !important;
+  }
+
+  .contactMiniModal .contactVisibilityGrid label {
+    min-height: 38px !important;
+  }
+
+  .contactMiniModal .contactForm > button[type='submit'] {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    min-height: 48px !important;
+    margin-top: 2px;
+    box-shadow: 0 -8px 16px color-mix(in srgb, var(--mobile-card, #fff) 88%, transparent);
+  }
+}
+
+@media (max-width: 359px) {
+  .contactMiniModal .contactAvatarOptions,
+  .contactMiniModal .contactPhoneRow {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ==========================================================================
+   UNIVERSAL YOUTUBE-STYLE SLEEK SCROLLBAR AUTHORITY (GLOBAL ACROSS ALL PAGES)
+   Eliminates clumsy arrows (▲ & ▼), resets gutter space, and unifies scrollbars.
+   ========================================================================== */
+
+/* 1. Eliminate all reserved gutter columns so scrollbars sit on the edge like YouTube */
+*,
+*::before,
+*::after,
+html,
+body,
+#root,
+.messengerShell,
+.signToolsPane,
+.workRail,
+.conversationPane,
+.chatSidebar,
+.settingsContent,
+.settingsDesktopNavigation,
+.communityPostStream {
+  scrollbar-gutter: auto !important;
+}
+
+/* 2. Hide all WebKit scrollbar buttons (removes the ▲ and ▼ triangles completely) */
+*::-webkit-scrollbar-button,
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button,
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* 3. Hide all WebKit scrollbar corners */
+*::-webkit-scrollbar-corner,
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+::-webkit-scrollbar-corner {
+  display: none !important;
+  background: transparent !important;
+}
+
+/* 4. Sleek 8px scrollbar with 100% transparent track (floats at corner edge like YouTube) */
+*::-webkit-scrollbar,
+::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+*::-webkit-scrollbar-track,
+::-webkit-scrollbar-track {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/* 5. Sleek translucent rounded-pill thumb (Light Mode) */
+*::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-radius: 9999px !important;
+  border: 2px solid transparent !important;
+  background-clip: padding-box !important;
+  transition: background-color 0.2s ease;
+}
+
+*::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-clip: padding-box !important;
+}
+
+*::-webkit-scrollbar-thumb:active,
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  background-clip: padding-box !important;
+}
+
+/* 6. Sleek translucent rounded-pill thumb (Dark Mode) */
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb,
+body.signovaPremiumDarkPage ::-webkit-scrollbar-thumb,
+html[data-signova-theme="dark"] *::-webkit-scrollbar-thumb,
+html[data-signova-theme="dark"] ::-webkit-scrollbar-thumb,
+.premiumDarkMode *::-webkit-scrollbar-thumb,
+.premiumDarkMode ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  background-clip: padding-box !important;
+}
+
+body.signovaPremiumDarkPage *::-webkit-scrollbar-thumb:hover,
+body.signovaPremiumDarkPage ::-webkit-scrollbar-thumb:hover,
+html[data-signova-theme="dark"] *::-webkit-scrollbar-thumb:hover,
+html[data-signova-theme="dark"] ::-webkit-scrollbar-thumb:hover,
+.premiumDarkMode *::-webkit-scrollbar-thumb:hover,
+.premiumDarkMode ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.45) !important;
+  background-clip: padding-box !important;
+}
+
+/* 7. Firefox scrollbar standard */
+*,
+html,
+body {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent !important;
+}
+
+body.signovaPremiumDarkPage,
+body.signovaPremiumDarkPage *,
+html[data-signova-theme="dark"],
+html[data-signova-theme="dark"] *,
+.premiumDarkMode,
+.premiumDarkMode * {
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent !important;
+}
+
+/* 8. Specific selector overrides for all page container variations */
+:where(body.signovaLibraryPage, body.signovaLearnPage, body.signovaCommunityFeedPage, body.signovaSettingsPage, body.signovaProfilePage, body.signovaProgressPage) :where(.signToolsPane, .messengerShell, .workRail, .conversationPane, .settingsContent, .communityPostStream)::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+:where(body.signovaLibraryPage, body.signovaLearnPage, body.signovaCommunityFeedPage, body.signovaSettingsPage, body.signovaProfilePage, body.signovaProgressPage) :where(.signToolsPane, .messengerShell, .workRail, .conversationPane, .settingsContent, .communityPostStream)::-webkit-scrollbar-track {
+  background: transparent !important;
+  border: none !important;
+}
+
+:where(body.signovaLibraryPage, body.signovaLearnPage, body.signovaCommunityFeedPage, body.signovaSettingsPage, body.signovaProfilePage, body.signovaProgressPage) :where(.signToolsPane, .messengerShell, .workRail, .conversationPane, .settingsContent, .communityPostStream)::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border: 2px solid transparent !important;
+  border-radius: 9999px !important;
+  background-clip: padding-box !important;
+}
+
+:where(body.signovaPremiumDarkPage, html[data-signova-theme="dark"]) :where(.signToolsPane, .messengerShell, .workRail, .conversationPane, .settingsContent, .communityPostStream)::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.22) !important;
+  border: 2px solid transparent !important;
+  border-radius: 9999px !important;
+  background-clip: padding-box !important;
+}
+

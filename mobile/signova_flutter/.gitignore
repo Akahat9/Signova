@@ -1,0 +1,20 @@
+.dart_tool/
+.idea/
+*.iml
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.metadata
+build/
+android/local.properties
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+ios/Runner/GeneratedPluginRegistrant.*
+assets/models/*.onnx
+assets/models/*.json
+!assets/models/.gitkeep
+# Widget Preview related
+.widget_preview/

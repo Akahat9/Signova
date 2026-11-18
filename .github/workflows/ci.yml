@@ -1,0 +1,142 @@
+name: Signova CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: signova-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            Backend (Node.js)/package-lock.json
+            signova-frontend/package-lock.json
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: ai-service/requirements-deploy.txt
+
+      - name: Set up Java 21 for Firebase emulators
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install JavaScript dependencies
+        shell: bash
+        run: |
+          npm ci
+          npm ci --prefix "Backend (Node.js)"
+          npm ci --prefix signova-frontend
+          npm install --global firebase-tools@15.23.0
+
+      - name: Install Python dependencies
+        run: python -m pip install -r ai-service/requirements-deploy.txt
+
+      - name: Verify backend
+        run: |
+          npm run check --prefix "Backend (Node.js)"
+          npm test --prefix "Backend (Node.js)"
+          npm run validate:account-deletion --prefix "Backend (Node.js)"
+
+      - name: Verify operations scripts
+        run: |
+          node --check scripts/smokeDeployment.js
+          node --check scripts/loadHealthEndpoint.js
+          node --check scripts/validateDeploymentConfig.js
+          npm run test:ops
+
+      - name: Verify frontend
+        env:
+          CI: 'true'
+        run: |
+          npm run test:ci --prefix signova-frontend
+          npm run build --prefix signova-frontend
+
+      - name: Install Playwright Chromium
+        run: npx --prefix signova-frontend playwright install --with-deps chromium
+
+      - name: Build browser-test shell
+        env:
+          CI: 'true'
+        run: npm run build:e2e --prefix signova-frontend
+
+      - name: Verify browser journeys
+        run: npm run test:e2e --prefix signova-frontend
+
+      - name: Upload browser failure artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-failure-${{ github.sha }}
+          path: |
+            signova-frontend/playwright-report
+            signova-frontend/test-results
+          retention-days: 14
+
+      - name: Verify Firebase security rules
+        run: npm run test:rules --prefix signova-frontend
+
+      - name: Verify Python AI service
+        working-directory: ai-service
+        run: |
+          python -m unittest discover -s Models -p "test_*.py" -v
+          python Models/manage_model_registry.py --report Models/model_promotion_report.json
+          python Models/check_model_release.py --fail-on-unsafe --output Models/model_release_readiness.json
+
+      - name: Upload AI readiness evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-readiness-${{ github.sha }}
+          path: |
+            ai-service/Models/model_promotion_report.json
+            ai-service/Models/model_release_readiness.json
+          retention-days: 90
+
+      - name: Dependency audit (high and critical)
+        shell: bash
+        run: |
+          npm audit --omit=dev --audit-level=high
+          npm audit --omit=dev --audit-level=high --prefix "Backend (Node.js)"
+          npm audit --omit=dev --audit-level=high --prefix signova-frontend
+
+      - name: Generate JavaScript SBOMs
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p artifacts/sbom
+          npm sbom --omit=dev --sbom-format=cyclonedx > artifacts/sbom/root.cdx.json
+          npm sbom --omit=dev --sbom-format=cyclonedx --prefix "Backend (Node.js)" > artifacts/sbom/backend.cdx.json
+          npm sbom --omit=dev --sbom-format=cyclonedx --prefix signova-frontend > artifacts/sbom/frontend.cdx.json
+
+      - name: Upload SBOM evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.sha }}
+          path: artifacts/sbom
+          retention-days: 90

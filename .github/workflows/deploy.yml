@@ -1,0 +1,113 @@
+name: Deploy Signova
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: GitHub environment to deploy
+        type: choice
+        options: [staging, production]
+        default: staging
+      deploy_backend:
+        description: Deploy Vercel backend
+        type: boolean
+        default: true
+
+concurrency:
+  group: signova-deploy-${{ inputs.environment }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+jobs:
+  deploy:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require main for production
+        if: inputs.environment == 'production' && github.ref != 'refs/heads/main'
+        run: echo 'Production deployments must run from the main branch.' >&2 && exit 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            Backend (Node.js)/package-lock.json
+            signova-frontend/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Validate active AI model release evidence
+        working-directory: ai-service
+        run: |
+          if [ "${{ inputs.environment }}" = "production" ]; then
+            python Models/check_model_release.py --require-ready --output Models/model_release_readiness.json
+          else
+            python Models/check_model_release.py --fail-on-unsafe --output Models/model_release_readiness.json
+          fi
+      - name: Upload AI deployment gate evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-deployment-gate-${{ inputs.environment }}-${{ github.sha }}
+          path: ai-service/Models/model_release_readiness.json
+          retention-days: 90
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm ci --prefix "Backend (Node.js)"
+          npm ci --prefix signova-frontend
+          npm install --global firebase-tools@15.23.0 vercel@latest
+      - name: Build frontend
+        env:
+          CI: 'true'
+          REACT_APP_FIREBASE_API_KEY: ${{ secrets.FIREBASE_WEB_API_KEY }}
+          REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ vars.FIREBASE_AUTH_DOMAIN }}
+          REACT_APP_FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
+          REACT_APP_FIREBASE_STORAGE_BUCKET: ${{ vars.FIREBASE_STORAGE_BUCKET }}
+          REACT_APP_FIREBASE_MESSAGING_SENDER_ID: ${{ vars.FIREBASE_MESSAGING_SENDER_ID }}
+          REACT_APP_FIREBASE_APP_ID: ${{ vars.FIREBASE_APP_ID }}
+          REACT_APP_PUBLIC_SITE_URL: ${{ vars.FRONTEND_URL }}
+          REACT_APP_SIGNOVA_API_URL: ${{ vars.BACKEND_URL }}
+          SIGNOVA_DEPLOY_ENVIRONMENT: ${{ inputs.environment }}
+        run: |
+          npm run ops:validate-deploy
+          npm run build --prefix signova-frontend
+      - name: Authenticate Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      - name: Deploy Firebase Hosting, rules, and indexes
+        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID }}" --only hosting,firestore:rules,firestore:indexes,storage
+      - name: Deploy backend to Vercel
+        if: inputs.deploy_backend
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          vercel pull --yes --environment=${{ inputs.environment == 'production' && 'production' || 'preview' }} --token="$VERCEL_TOKEN" --cwd "Backend (Node.js)"
+          vercel build ${{ inputs.environment == 'production' && '--prod' || '' }} --token="$VERCEL_TOKEN" --cwd "Backend (Node.js)"
+          vercel deploy --prebuilt ${{ inputs.environment == 'production' && '--prod' || '' }} --token="$VERCEL_TOKEN" --cwd "Backend (Node.js)"
+      - name: Post-deploy smoke checks
+        env:
+          SIGNOVA_FRONTEND_URL: ${{ vars.FRONTEND_URL }}
+          SIGNOVA_BACKEND_URL: ${{ vars.BACKEND_URL }}
+          SIGNOVA_AI_URL: ${{ vars.AI_URL }}
+        run: node scripts/smokeDeployment.js
+      - name: Release record
+        run: |
+          printf 'environment=%s\ncommit=%s\nrun=%s\n' '${{ inputs.environment }}' '$GITHUB_SHA' '$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID' > release-record.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-record-${{ inputs.environment }}-${{ github.sha }}
+          path: |
+            release-record.txt
+          retention-days: 90

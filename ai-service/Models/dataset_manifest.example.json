@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "dataset_id": "replace-with-private-dataset-version",
+  "task": "asl_primary",
+  "created_at": "2026-07-11T00:00:00Z",
+  "signers": [
+    {
+      "signer_id": "pseudonym-train-001",
+      "consent_record_id": "private-consent-reference-001",
+      "consent_for_training": true,
+      "consent_version": "2026-07",
+      "diversity_groups": ["age-adult", "skin-tone-group-a"]
+    },
+    {
+      "signer_id": "pseudonym-validation-001",
+      "consent_record_id": "private-consent-reference-002",
+      "consent_for_training": true,
+      "consent_version": "2026-07",
+      "diversity_groups": ["age-senior", "skin-tone-group-b"]
+    },
+    {
+      "signer_id": "pseudonym-test-001",
+      "consent_record_id": "private-consent-reference-003",
+      "consent_for_training": true,
+      "consent_version": "2026-07",
+      "diversity_groups": ["age-young-adult", "skin-tone-group-c"]
+    }
+  ],
+  "samples": [
+    {
+      "sample_id": "sample-train-001",
+      "signer_id": "pseudonym-train-001",
+      "label": "hello",
+      "split": "train",
+      "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+      "relative_path": "private/train/sample-train-001.npz",
+      "capture": { "lighting": "daylight", "background": "plain", "handedness": "right", "device_class": "mobile" }
+    },
+    {
+      "sample_id": "sample-validation-001",
+      "signer_id": "pseudonym-validation-001",
+      "label": "hello",
+      "split": "validation",
+      "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+      "relative_path": "private/validation/sample-validation-001.npz",
+      "capture": { "lighting": "indoor", "background": "cluttered", "handedness": "left", "device_class": "desktop" }
+    },
+    {
+      "sample_id": "sample-test-001",
+      "signer_id": "pseudonym-test-001",
+      "label": "hello",
+      "split": "test",
+      "sha256": "3333333333333333333333333333333333333333333333333333333333333333",
+      "relative_path": "private/test/sample-test-001.npz",
+      "capture": { "lighting": "low-light", "background": "outdoor", "handedness": "right", "device_class": "mobile" }
+    }
+  ]
+}

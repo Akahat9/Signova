@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "policy": {
+    "minimum_accuracy_gain": 0.25,
+    "maximum_f1_regression": 0.005,
+    "minimum_f1_macro": 0.8,
+    "minimum_unknown_recall": 0.9,
+    "maximum_unknown_false_accept_rate": 0.05,
+    "minimum_validation_samples": 50,
+    "require_equal_or_wider_vocabulary": true,
+    "require_signer_disjoint_validation": true,
+    "require_checkpoint_sha256": true,
+    "require_dataset_manifest": true,
+    "require_dataset_coverage": true,
+    "require_capture_metadata": true,
+    "require_vocabulary_spec": true,
+    "minimum_signers_per_split": 5,
+    "minimum_train_signers_per_label": 3,
+    "minimum_diversity_groups": 4,
+    "minimum_lighting_categories": 3,
+    "minimum_background_categories": 3,
+    "minimum_handedness_categories": 2,
+    "minimum_device_class_categories": 2
+  },
+  "tasks": {
+    "alphabet": {
+      "class_map": "signova_alphabet_classes.json",
+      "class_map_sha256": "fa54017c5e20c90aa04fde9ad1c8bbeca38d8669bad3c7864c8b0eade9298b00",
+      "active_checkpoint": "signova_alphabet_transformer.pt",
+      "active_metrics": "signova_alphabet_transformer.metrics.json",
+      "candidates": []
+    },
+    "asl_primary": {
+      "class_map": "signova_asl_top200_clean_trainval_v3_classes.json",
+      "class_map_sha256": "f6e870f0110aa965d2bdcda0ea71b96dbcd772e840f918e1c4886de06218820a",
+      "active_checkpoint": "signova_asl_transformer_top200_clean_trainval_v3.pt",
+      "active_metrics": "signova_asl_transformer_top200_clean_trainval_v3.metrics.json",
+      "candidates": [
+        {
+          "id": "asl-top200-cnn-v6",
+          "checkpoint": "signova_asl_cnn_transformer_top200_v6.pt",
+          "metrics": "signova_asl_cnn_transformer_top200_v6.metrics.json"
+        }
+      ]
+    },
+    "asl_top300": {
+      "class_map": "signova_asl_top300_clean_trainval_v2_classes.json",
+      "class_map_sha256": "d361c7bcedd34ed589978bcb2bcb9c0fa4d6038f0b5d5c25d173459d33e8142c",
+      "active_checkpoint": "signova_asl_transformer_top300_clean_trainval_v2.pt",
+      "active_metrics": "signova_asl_transformer_top300_clean_trainval_v2.metrics.json",
+      "candidates": []
+    },
+    "asl_top500": {
+      "class_map": "signova_asl_top500_clean_trainval_v2_classes.json",
+      "class_map_sha256": "f43f1db9cbcf204ae486a51b107a36f5269429fe90d4a0fff455735ccb9307cf",
+      "active_checkpoint": "signova_asl_transformer_top500_clean_trainval_v2.pt",
+      "active_metrics": "signova_asl_transformer_top500_clean_trainval_v2.metrics.json",
+      "candidates": [
+        {
+          "id": "asl-top500-gru-v2",
+          "checkpoint": "signova_asl_gru_top500_clean_trainval_v2.pt",
+          "metrics": "signova_asl_gru_top500_clean_trainval_v2.metrics.json"
+        }
+      ]
+    },
+    "isl": {
+      "class_map": "signova_isl_top10_classes.json",
+      "class_map_sha256": "dcbea33af8b0cb3e54695f9fc516a19d0da0ba7bd25c683ac943d6b48e8752fa",
+      "active_checkpoint": "signova_isl_transformer_top10.pt",
+      "active_metrics": "signova_isl_transformer_top10.metrics.json",
+      "candidates": [
+        {
+          "id": "isl-top30-cnn-v3",
+          "checkpoint": "signova_isl_cnn_transformer_top30_clean_v3.pt",
+          "metrics": "signova_isl_cnn_transformer_top30_clean_v3.metrics.json"
+        },
+        {
+          "id": "isl-top30-gru-v3",
+          "checkpoint": "signova_isl_gru_top30_clean_v3.pt",
+          "metrics": "signova_isl_gru_top30_clean_v3.metrics.json"
+        }
+      ]
+    },
+    "mixed": {
+      "class_map": "signova_sequence_classes.json",
+      "class_map_sha256": "1c32bbb00d28fad054198207c8cb4d88380c0fa8364c30e21adb13241d5752a9",
+      "active_checkpoint": "signova_sequence_transformer.pt",
+      "active_metrics": null,
+      "candidates": [
+        {
+          "id": "mixed-dynamic-cnn-v3",
+          "checkpoint": "signova_sequence_cnn_transformer_mixed_clean_v3.pt",
+          "metrics": "signova_sequence_cnn_transformer_mixed_clean_v3.metrics.json"
+        }
+      ]
+    }
+  }
+}
