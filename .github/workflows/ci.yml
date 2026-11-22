@@ -51,7 +51,7 @@ jobs:
           npm ci
           npm ci --prefix "Backend (Node.js)"
           npm ci --prefix signova-frontend
-          npm install --global firebase-tools@15.23.0
+          sudo npm install --global firebase-tools@15.23.0
 
       - name: Install Python dependencies
         run: python -m pip install -r ai-service/requirements-deploy.txt

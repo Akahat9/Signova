@@ -12,7 +12,8 @@
     "ops:smoke": "node scripts/smokeDeployment.js",
     "ops:load": "node scripts/loadHealthEndpoint.js",
     "ops:validate-deploy": "node scripts/validateDeploymentConfig.js",
-    "test:ops": "node --test scripts/*.test.js"
+    "test:ops": "node --test scripts/*.test.js",
+    "build": "npm run build --prefix signova-frontend"
   },
   "dependencies": {
     "mongodb": "^7.6.0"
