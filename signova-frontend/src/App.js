@@ -73,7 +73,7 @@ import { validateCommunityMediaFile } from './features/community/mediaValidation
 import { createVideoPosterBlob } from './features/community/videoPoster';
 import { cleanupCommunityMedia, uploadCommunityMedia } from './features/community/durableMediaService';
 import { normalizeUsername } from './features/auth/identityValidation';
-import { extractLookupPhoneKeys, normalizeContactPhone as normalizePhoneNumber, normalizeContactRecord, validateContactUsername as validateUsername } from './features/contacts/contactModel';
+import { areContactsDuplicate, deduplicateContacts, extractLookupPhoneKeys, normalizeContactPhone as normalizePhoneNumber, normalizeContactRecord, validateContactUsername as validateUsername } from './features/contacts/contactModel';
 import { buildSignPurpose, buildSignUsage, getSignBookType, inferSignLanguage, normalizeSignText } from './features/learning/signPresentation';
 import { formatPracticeTime, radarPolygonPoints, toPointArray } from './features/progress/progressPresentation';
 import { buildSettingsSections, buildSettingsWorkspaceRecord, createDefaultSettings, filterSettingsSections, loadPersistedSettings, resolveWorkspaceSettings, SIGNOVA_SETTINGS_STORAGE_KEY, SIGNOVA_SETTINGS_WORKSPACE_ID } from './features/settings/settingsModel';
@@ -1135,7 +1135,8 @@ function App() {
   ), [chatFlags, contacts]);
   const visibleContacts = useMemo(() => {
     const query = chatSearch.trim().toLowerCase();
-    const filtered = contacts.filter((contact, index) => {
+    const uniqueList = deduplicateContacts(contacts).uniqueContacts;
+    const filtered = uniqueList.filter((contact, index) => {
       const flags = chatFlags[contact.id] || {};
       const matchesCategory = (() => {
         if (flags.hidden && chatFilter !== 'hidden') return false;
@@ -1319,7 +1320,7 @@ function App() {
   }, [messageSearch, messages, selectedChatId]);
   const conversationHistoryContacts = useMemo(() => {
     const query = callHistorySearch.trim().toLowerCase();
-    return contacts
+    return deduplicateContacts(contacts).uniqueContacts
       .map((contact) => {
         const logs = callHistory.filter((item) => item.contactId === contact.id);
         const lastCall = logs[0] || null;
@@ -1849,11 +1850,30 @@ function App() {
         }
 
         const normalizedContacts = savedContacts.map(normalizeContactRecord);
+        const { uniqueContacts, removedDuplicates } = deduplicateContacts(normalizedContacts);
         setContacts([
-          ...normalizedContacts,
-          ...DEFAULT_SESSION_CONTACTS.filter((initial) => !normalizedContacts.some((contact) => contact.id === initial.id)),
+          ...uniqueContacts,
+          ...DEFAULT_SESSION_CONTACTS.filter((initial) => !uniqueContacts.some((contact) => areContactsDuplicate(contact, initial))),
         ]);
-        setSelectedChatId(normalizedContacts[0]?.id || DEFAULT_SESSION_CONTACTS[0]?.id || null);
+        setSelectedChatId(uniqueContacts[0]?.id || DEFAULT_SESSION_CONTACTS[0]?.id || null);
+
+        if (removedDuplicates.length > 0) {
+          for (const { duplicateId } of removedDuplicates) {
+            deleteUserDoc('contacts', duplicateId).catch(() => {});
+          }
+          const remapDuplicateId = (oldId) => {
+            const match = removedDuplicates.find((d) => d.duplicateId === oldId);
+            return match ? match.keptId : oldId;
+          };
+          setMessages((msgs) => msgs.map((m) => {
+            const nextId = remapDuplicateId(m.contactId);
+            return nextId !== m.contactId ? { ...m, contactId: nextId } : m;
+          }));
+          setCallHistory((calls) => calls.map((c) => {
+            const nextId = remapDuplicateId(c.contactId);
+            return nextId !== c.contactId ? { ...c, contactId: nextId } : c;
+          }));
+        }
 
         const messageState = savedChatState.find((item) => item.id === 'messages');
         if (mayPersistChatHistory(resolvedSettings.privacy) && Array.isArray(messageState?.items) && messageState.items.length) {
@@ -4857,9 +4877,20 @@ function App() {
       setContactFormError(phone.error);
       return;
     }
-    const alreadyExists = contacts.some((contact) => contact.username === usernameCheck.username);
-    if (alreadyExists) {
-      setContactFormError('Ye username already contact list me hai.');
+    const candidateContact = {
+      username: usernameCheck.username,
+      nationalNumber: phone.nationalNumber,
+      number: phone.fullNumber,
+      countryCode: phone.countryCode,
+    };
+    const duplicate = contacts.find((contact) => areContactsDuplicate(contact, candidateContact));
+    if (duplicate) {
+      const isUsernameDuplicate = normalizeUsername(duplicate.username) === normalizeUsername(usernameCheck.username);
+      const reason = isUsernameDuplicate
+        ? `Ye username (${usernameCheck.username})`
+        : `Ye phone number (${phone.fullNumber || phone.nationalNumber})`;
+      setContactFormError(`${reason} already "${duplicate.name}" ke naam se saved hai.`);
+      setSelectedChatId(duplicate.id);
       return;
     }
     let firebaseUid = '';
@@ -4898,7 +4929,16 @@ function App() {
         // The contact remains useful locally, but real calling requires a verified UID.
       }
     }
-    const id = `${usernameCheck.username.replace('@', 'user-')}-${Date.now()}`;
+    if (firebaseUid) {
+      const uidDuplicate = contacts.find((contact) => contact.firebaseUid && contact.firebaseUid === firebaseUid);
+      if (uidDuplicate) {
+        setContactFormError(`Ye Signova account already "${uidDuplicate.name}" ke naam se saved hai.`);
+        setSelectedChatId(uidDuplicate.id);
+        return;
+      }
+    }
+    const cleanUsername = usernameCheck.username.replace(/^@+/, '').toLowerCase();
+    const id = `user-${cleanUsername}`;
     const nextContact = normalizeContactRecord({
       id,
       firebaseUid,
@@ -4913,7 +4953,10 @@ function App() {
       showNumber: Boolean((contactForm.showNumber || contactForm.number) && phone.fullNumber),
       createdAt: Date.now(),
     });
-    setContacts((items) => [nextContact, ...items]);
+    setContacts((items) => {
+      const updated = [nextContact, ...items.filter((item) => !areContactsDuplicate(item, nextContact))];
+      return deduplicateContacts(updated).uniqueContacts;
+    });
     await saveUserDoc('contacts', nextContact).catch(() => {});
     setSelectedChatId(id);
     setContactForm(EMPTY_CONTACT_FORM);

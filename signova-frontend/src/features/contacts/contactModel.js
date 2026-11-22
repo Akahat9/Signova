@@ -69,3 +69,55 @@ export function extractLookupPhoneKeys(countryCode, number) {
   return Array.from(keys);
 }
 
+export function areContactsDuplicate(a, b) {
+  if (!a || !b) return false;
+  if (a.id && b.id && a.id === b.id) return true;
+  if (a.firebaseUid && b.firebaseUid && a.firebaseUid === b.firebaseUid) return true;
+
+  const userA = normalizeUsername(a.username || '');
+  const userB = normalizeUsername(b.username || '');
+  if (userA && userB && userA === userB) return true;
+
+  const digitsA = String(a.nationalNumber || a.number || '').replace(/\D/g, '');
+  const digitsB = String(b.nationalNumber || b.number || '').replace(/\D/g, '');
+  if (digitsA.length >= 7 && digitsB.length >= 7) {
+    if (digitsA === digitsB) return true;
+    if (digitsA.length >= 10 && digitsB.length >= 10 && digitsA.slice(-10) === digitsB.slice(-10)) return true;
+  }
+  return false;
+}
+
+export function deduplicateContacts(contactsList = []) {
+  const uniqueContacts = [];
+  const removedDuplicates = [];
+
+  for (const contact of contactsList) {
+    if (!contact) continue;
+    const existingIndex = uniqueContacts.findIndex((item) => areContactsDuplicate(item, contact));
+    if (existingIndex === -1) {
+      uniqueContacts.push(contact);
+    } else {
+      const existing = uniqueContacts[existingIndex];
+      const preferredName = (existing.name && existing.name.length > 1 && existing.name[0] === existing.name[0].toUpperCase())
+        ? existing.name
+        : (contact.name || existing.name);
+      const merged = {
+        ...contact,
+        ...existing,
+        name: preferredName,
+        firebaseUid: existing.firebaseUid || contact.firebaseUid || '',
+        number: existing.number || contact.number || '',
+        nationalNumber: existing.nationalNumber || contact.nationalNumber || '',
+        countryCode: existing.countryCode || contact.countryCode || '+91',
+        showNumber: Boolean(existing.showNumber || contact.showNumber),
+        id: existing.id || contact.id,
+      };
+      uniqueContacts[existingIndex] = merged;
+      removedDuplicates.push({ keptId: merged.id, duplicateId: contact.id });
+    }
+  }
+
+  return { uniqueContacts, removedDuplicates };
+}
+
+
