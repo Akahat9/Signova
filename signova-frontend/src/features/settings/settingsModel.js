@@ -7,7 +7,7 @@ const WORKSPACE_PREFERENCE_GROUPS = Object.freeze([
   'security', 'notifications', 'ai', 'privacy', 'feedback', 'practice', 'device',
 ]);
 const ACCOUNT_PREFERENCE_KEYS = Object.freeze([
-  'city', 'country', 'preferredLanguage', 'about', 'userType',
+  'phone', 'city', 'country', 'preferredLanguage', 'about', 'userType',
   'preferredSignLanguage', 'signSkillLevel', 'supportNotes', 'emergencyContact',
   'healthNotes', 'avatarInitials', 'avatarTone', 'avatarMode', 'avatarMood',
   'avatarAccessory',

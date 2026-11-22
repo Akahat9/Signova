@@ -1851,11 +1851,15 @@ function App() {
 
         const normalizedContacts = savedContacts.map(normalizeContactRecord);
         const { uniqueContacts, removedDuplicates } = deduplicateContacts(normalizedContacts);
-        setContacts([
-          ...uniqueContacts,
-          ...DEFAULT_SESSION_CONTACTS.filter((initial) => !uniqueContacts.some((contact) => areContactsDuplicate(contact, initial))),
-        ]);
-        setSelectedChatId(uniqueContacts[0]?.id || DEFAULT_SESSION_CONTACTS[0]?.id || null);
+        setContacts((current) => {
+          const base = uniqueContacts.length > 0 ? uniqueContacts : current;
+          const merged = deduplicateContacts(base).uniqueContacts;
+          return [
+            ...merged,
+            ...DEFAULT_SESSION_CONTACTS.filter((initial) => !merged.some((contact) => areContactsDuplicate(contact, initial))),
+          ];
+        });
+        setSelectedChatId((current) => current || uniqueContacts[0]?.id || DEFAULT_SESSION_CONTACTS[0]?.id || null);
 
         if (removedDuplicates.length > 0) {
           for (const { duplicateId } of removedDuplicates) {

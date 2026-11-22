@@ -235,7 +235,10 @@ export async function flushUserWorkspaceOutbox() {
 export async function loadUserCollection(collectionName) {
   validateWorkspaceCollectionName(collectionName);
   const session = await startDatabaseSession();
-  if (session.generation !== sessionGeneration) return [];
+  const currentFirebaseUid = firebaseAuth?.currentUser?.uid || '';
+  if (session.authenticated && currentFirebaseUid && session.uid !== currentFirebaseUid) {
+    return [];
+  }
   const readCache = () => readWorkspaceCache(getBrowserStorage(), session.uid, collectionName, { migrateLegacy: session.mode === 'local' && !session.authenticated });
   if (session.mode !== 'firestore') return readCache();
 
@@ -245,7 +248,10 @@ export async function loadUserCollection(collectionName) {
       STARTUP_NETWORK_TIMEOUT_MS,
       null,
     );
-    if (session.generation !== sessionGeneration) return [];
+    const latestFirebaseUid = firebaseAuth?.currentUser?.uid || '';
+    if (session.authenticated && latestFirebaseUid && session.uid !== latestFirebaseUid) {
+      return [];
+    }
     if (!snapshot) return readCache();
     const items = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
     if (items.length === 0) {

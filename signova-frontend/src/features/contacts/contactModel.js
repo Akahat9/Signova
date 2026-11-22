@@ -34,9 +34,16 @@ export function normalizeContactPhone(countryCode, number) {
 
 export function normalizeContactRecord(contact) {
   const phone = normalizeContactPhone(contact.countryCode || '+91', contact.nationalNumber || contact.number || '');
-  return { ...contact, countryCode: phone.countryCode, country: contact.country || phone.country, nationalNumber: phone.nationalNumber,
-    number: phone.fullNumber || contact.number || '', username: normalizeUsername(contact.username || ''), showUsername: contact.showUsername !== false,
-    showNumber: Boolean(contact.showNumber && (phone.fullNumber || contact.number)) };
+  return {
+    ...contact,
+    countryCode: phone.countryCode,
+    country: contact.country || phone.country,
+    nationalNumber: phone.nationalNumber,
+    number: phone.fullNumber || contact.number || '',
+    username: normalizeUsername(contact.username || ''),
+    showUsername: contact.showUsername !== false,
+    showNumber: contact.showNumber !== false && Boolean(phone.fullNumber || contact.number),
+  };
 }
 
 export function contactInitial(contact) {
