@@ -10742,6 +10742,25 @@ h1 {
   font-weight: 600;
 }
 
+.conversationPhoneNumberBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(100, 116, 139, 0.08);
+  border: 1px solid rgba(100, 116, 139, 0.16);
+  color: var(--muted, #475569);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.conversationPhoneNumberBadge svg {
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
 .conversationLiveIndicator {
   display: flex;
   align-items: center;

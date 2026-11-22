@@ -4910,7 +4910,7 @@ function App() {
       username: usernameCheck.username,
       avatarChoice: contactForm.avatarChoice,
       showUsername: contactForm.showUsername,
-      showNumber: contactForm.showNumber && Boolean(phone.fullNumber),
+      showNumber: Boolean((contactForm.showNumber || contactForm.number) && phone.fullNumber),
       createdAt: Date.now(),
     });
     setContacts((items) => [nextContact, ...items]);

@@ -118,8 +118,8 @@ export default function ConversationInfoView({
   const [callFilterQuery, setCallFilterQuery] = useState('');
 
   const totalCalls = selectedConversationCalls.length;
-  const videoCallsCount = selectedConversationCalls.filter((c) => c.type === 'video').length;
-  const voiceCallsCount = selectedConversationCalls.filter((c) => c.type === 'voice').length;
+  const videoCallsCount = selectedConversationCalls.filter((c) => getCallHistoryPresentation(c.type).tone === 'video').length;
+  const voiceCallsCount = selectedConversationCalls.filter((c) => getCallHistoryPresentation(c.type).tone === 'voice').length;
 
   const filteredCalls = visibleConversationCalls.filter((call) => {
     if (!callFilterQuery.trim()) return true;
@@ -132,9 +132,10 @@ export default function ConversationInfoView({
   });
 
   const handleCopySummary = (call) => {
+    const isVideoCall = getCallHistoryPresentation(call.type).tone === 'video';
     const summary = [
       `Signova Call Record: ${selectedConversation?.name || 'Contact'}`,
-      `Type: ${call.type === 'video' ? 'Video Sign Chat' : 'Voice Sign Chat'}`,
+      `Type: ${isVideoCall ? 'Video Sign Chat' : 'Voice Sign Chat'}`,
       `Started: ${call.startedLabel}`,
       `Ended: ${call.endedLabel || 'Completed'}`,
       `Duration: ${formatCallDuration(call.durationSeconds)}`,
@@ -188,6 +189,12 @@ export default function ConversationInfoView({
                 <strong>{selectedConversation.name}</strong>
                 <span className="conversationVerifiedBadge" title="Verified Assistant">✓ Verified</span>
                 <span className="conversationUsernameBadge">{selectedConversation.username}</span>
+                {selectedConversation.number ? (
+                  <span className="conversationPhoneNumberBadge" title="Saved phone number">
+                    <PhoneIcon />
+                    <span>{selectedConversation.number}</span>
+                  </span>
+                ) : null}
               </div>
               <div className="conversationLiveIndicator">
                 <span className={activeCallLog?.contactId === selectedConversation.id ? 'callLiveDot' : 'callIdleDot'} />
@@ -326,7 +333,7 @@ export default function ConversationInfoView({
               {filteredCalls.length ? (
                 filteredCalls.map((item) => {
                   const presentation = getCallHistoryPresentation(item.type);
-                  const isVideo = item.type === 'video';
+                  const isVideo = presentation.tone === 'video';
                   return (
                     <article className="conversationInfoCall enhancedCallCard" key={item.id}>
                       <div className="callCardLeading">

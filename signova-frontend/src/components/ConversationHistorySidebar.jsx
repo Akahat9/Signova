@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContactAvatar } from './AppPresentation';
+import { ContactAvatar, getCallHistoryPresentation } from './AppPresentation';
 
 function SearchIcon() {
   return (
@@ -87,7 +87,8 @@ export default function ConversationHistorySidebar({
       </div>
       <div className="chatList conversationHistoryList">
         {conversationHistoryContacts.length ? conversationHistoryContacts.map((contact) => {
-          const isVideo = contact.lastCall?.type === 'video';
+          const presentation = getCallHistoryPresentation(contact.lastCall?.type);
+          const isVideo = presentation.tone === 'video';
           return (
             <button
               className={selectedConversationId === contact.id ? 'chatListItem conversationHistoryItem activeChat' : 'chatListItem conversationHistoryItem'}
