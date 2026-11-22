@@ -1307,7 +1307,6 @@ function App() {
     }
     return ['offline'];
   }, [activeCallLog, selectedChatContact, selectedChatPresence, settings.privacy.showLastSeen, settings.privacy.showOnlineStatus, typingContactId]);
-  const incomingMessageCount = useMemo(() => 0, []);
   const visibleChatMessages = useMemo(() => {
     const conversationMessages = messagesForContact(messages, selectedChatId);
     const query = messageSearch.trim().toLowerCase();

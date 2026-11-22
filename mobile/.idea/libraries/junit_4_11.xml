@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="junit-4.11">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/signova_flutter/.dart_tool/hooks_runner/shared/dartcv4/build/158c835cd8/_deps/opencv-src/modules/java/test/pure_test/lib/junit-4.11.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

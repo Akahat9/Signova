@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="sbt-launch">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/signova_flutter/.dart_tool/hooks_runner/shared/dartcv4/build/158c835cd8/_deps/opencv-src/samples/java/sbt/sbt/sbt-launch.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
