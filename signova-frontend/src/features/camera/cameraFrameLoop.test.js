@@ -84,3 +84,46 @@ test('stops cleanly when the stream becomes inactive and skips unready video', a
   expect(harness.loop.isRunning()).toBe(false);
   expect(harness.scheduled()).toBeNull();
 });
+
+test('pauses and throttles processing in standby without terminating the loop', async () => {
+  let paused = false;
+  const harness = createHarness({ isPaused: () => paused });
+  harness.loop.start();
+  await harness.next();
+  expect(harness.processFrame).toHaveBeenCalledTimes(1);
+
+  // Enter paused / hidden tab state
+  paused = true;
+  await harness.next();
+  // Frame should not be processed
+  expect(harness.processFrame).toHaveBeenCalledTimes(1);
+  // Loop remains running with power-saving standby cadence (500ms)
+  expect(harness.loop.isRunning()).toBe(true);
+  expect(harness.loop.isPaused()).toBe(true);
+  expect(harness.scheduled().delay).toBe(500);
+
+  // Resume / tab active again
+  paused = false;
+  await harness.next();
+  expect(harness.processFrame).toHaveBeenCalledTimes(2);
+  expect(harness.loop.isPaused()).toBe(false);
+  harness.loop.stop();
+});
+
+test('supports manual pause and resume', async () => {
+  const harness = createHarness();
+  harness.loop.start();
+  await harness.next();
+  expect(harness.processFrame).toHaveBeenCalledTimes(1);
+
+  harness.loop.pause();
+  expect(harness.loop.isPaused()).toBe(true);
+  expect(harness.scheduled()).toBeNull();
+
+  harness.loop.resume();
+  expect(harness.loop.isPaused()).toBe(false);
+  expect(harness.scheduled()).not.toBeNull();
+  await harness.next();
+  expect(harness.processFrame).toHaveBeenCalledTimes(2);
+  harness.loop.stop();
+});

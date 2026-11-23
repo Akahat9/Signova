@@ -344,6 +344,8 @@ function App() {
   const chatKeyRef = useRef(null);
   const cameraControlClickTimerRef = useRef(null);
   const startCameraRef = useRef(null);
+  const activePanelRef = useRef('community');
+  const communityCaptureOpenRef = useRef(false);
   const railLogoClickTimerRef = useRef(null);
   const railTributeTimerRef = useRef(null);
   const communityRailTapTimerRef = useRef(null);
@@ -564,6 +566,8 @@ function App() {
   const [communitySignPipelineStep, setCommunitySignPipelineStep] = useState(0);
   const [communitySignPipelineUnlocked, setCommunitySignPipelineUnlocked] = useState(0);
   const [communityCaptureOpen, setCommunityCaptureOpen] = useState(false);
+  activePanelRef.current = activePanel;
+  communityCaptureOpenRef.current = communityCaptureOpen;
   const [communityCaptureMode, setCommunityCaptureMode] = useState('video');
   const [communityCaptureRecording, setCommunityCaptureRecording] = useState(false);
   const [communityCaptureSeconds, setCommunityCaptureSeconds] = useState(0);
@@ -3496,6 +3500,13 @@ function App() {
       cameraFrameLoopRef.current?.stop();
       cameraFrameLoopRef.current = createCameraFrameLoop({
         isActive: () => Boolean(streamRef.current),
+        isPaused: () => {
+          if (typeof document !== 'undefined' && document.hidden) return true;
+          const inCall = Boolean(chatCallScreenRef?.current);
+          const inVisualPanel = ['translate', 'camera', 'learn'].includes(activePanelRef.current);
+          const inCapture = Boolean(communityCaptureOpenRef.current);
+          return !inCall && !inVisualPanel && !inCapture;
+        },
         getVideo: () => {
           if (offscreenVideoRef.current && offscreenVideoRef.current.readyState >= 2) return offscreenVideoRef.current;
           if (videoRef.current && videoRef.current.readyState >= 2) return videoRef.current;
@@ -4870,7 +4881,7 @@ function App() {
     const usernameCheck = validateUsername(contactForm.username);
     const phone = normalizePhoneNumber(contactForm.countryCode, contactForm.number);
     if (!name) {
-      setContactFormError('Contact name required hai.');
+      setContactFormError('Contact name is required.');
       return;
     }
     if (!usernameCheck.valid) {
@@ -4891,9 +4902,9 @@ function App() {
     if (duplicate) {
       const isUsernameDuplicate = normalizeUsername(duplicate.username) === normalizeUsername(usernameCheck.username);
       const reason = isUsernameDuplicate
-        ? `Ye username (${usernameCheck.username})`
-        : `Ye phone number (${phone.fullNumber || phone.nationalNumber})`;
-      setContactFormError(`${reason} already "${duplicate.name}" ke naam se saved hai.`);
+        ? `Username (${usernameCheck.username})`
+        : `Phone number (${phone.fullNumber || phone.nationalNumber})`;
+      setContactFormError(`${reason} is already saved as "${duplicate.name}".`);
       setSelectedChatId(duplicate.id);
       return;
     }
@@ -4936,7 +4947,7 @@ function App() {
     if (firebaseUid) {
       const uidDuplicate = contacts.find((contact) => contact.firebaseUid && contact.firebaseUid === firebaseUid);
       if (uidDuplicate) {
-        setContactFormError(`Ye Signova account already "${uidDuplicate.name}" ke naam se saved hai.`);
+        setContactFormError(`This Signova account is already saved as "${uidDuplicate.name}".`);
         setSelectedChatId(uidDuplicate.id);
         return;
       }

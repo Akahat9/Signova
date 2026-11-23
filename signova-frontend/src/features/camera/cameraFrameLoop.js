@@ -10,6 +10,7 @@ function frameRate(value) {
 
 export function createCameraFrameLoop({
   isActive,
+  isPaused = () => false,
   getVideo,
   getConfig,
   processFrame,
@@ -24,9 +25,18 @@ export function createCameraFrameLoop({
 
   let timer = null;
   let running = false;
+  let manualPaused = false;
   let processing = false;
   let frameCount = 0;
   let lastProcessedAt = -Infinity;
+  let visibilityHandler = null;
+
+  function isCurrentlyPaused() {
+    if (manualPaused) return true;
+    if (typeof isPaused === 'function' && isPaused()) return true;
+    if (typeof document !== 'undefined' && document.hidden) return true;
+    return false;
+  }
 
   function schedule(delay) {
     if (!running) return;
@@ -37,6 +47,12 @@ export function createCameraFrameLoop({
     timer = null;
     if (!running || !isActive()) {
       running = false;
+      return;
+    }
+
+    if (isCurrentlyPaused()) {
+      // Standby power-save cadence: throttle check when tab is hidden or paused
+      schedule(500);
       return;
     }
 
@@ -67,18 +83,46 @@ export function createCameraFrameLoop({
     schedule(Math.max(MIN_LOOP_DELAY_MS, minFrameGap - elapsed));
   }
 
-  function stop() {
-    running = false;
+  function pause() {
+    manualPaused = true;
     if (timer !== null) clearTimer(timer);
     timer = null;
+  }
+
+  function resume() {
+    if (!running) return;
+    manualPaused = false;
+    schedule(0);
+  }
+
+  function stop() {
+    running = false;
+    manualPaused = false;
+    if (timer !== null) clearTimer(timer);
+    timer = null;
+    if (visibilityHandler && typeof document !== 'undefined') {
+      document.removeEventListener('visibilitychange', visibilityHandler);
+      visibilityHandler = null;
+    }
   }
 
   function start() {
     stop();
     running = true;
+    manualPaused = false;
     processing = false;
     frameCount = 0;
     lastProcessedAt = -Infinity;
+
+    if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+      visibilityHandler = () => {
+        if (!document.hidden && running && !manualPaused) {
+          schedule(0);
+        }
+      };
+      document.addEventListener('visibilitychange', visibilityHandler);
+    }
+
     const config = getConfig() || {};
     schedule(1000 / frameRate(config.frameRate));
   }
@@ -86,7 +130,10 @@ export function createCameraFrameLoop({
   return {
     start,
     stop,
+    pause,
+    resume,
     isRunning: () => running,
+    isPaused: () => isCurrentlyPaused(),
   };
 }
 

@@ -40,7 +40,7 @@ export function useContactDirectoryLookup({ countryCode, number, username, conta
           loading: false,
           status: 'duplicate',
           tone: 'warning',
-          text: `⚠️ ${detail} already "${duplicate.name}" ke naam se saved hai.`,
+          text: `⚠️ ${detail} is already saved as "${duplicate.name}".`,
           verifiedUser: null,
           duplicateContact: duplicate,
         });
@@ -125,7 +125,7 @@ export function useContactDirectoryLookup({ countryCode, number, username, conta
           loading: false,
           status: 'unregistered',
           tone: 'note',
-          text: 'ℹ️ Signova account registered nahi hai · Call invite ke liye save kar sakte hain',
+          text: 'ℹ️ Unregistered Signova account · Direct call invitations available upon saving',
           verifiedUser: null,
           duplicateContact: null,
         });

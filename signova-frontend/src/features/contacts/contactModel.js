@@ -12,12 +12,12 @@ export const CONTACT_COUNTRIES = Object.freeze([
 
 export function validateContactUsername(username) {
   const clean = normalizeUsername(username);
-  if (!clean) return { valid: false, username: '', error: 'Username required hai.' };
+  if (!clean) return { valid: false, username: '', error: 'Username is required.' };
   if (!/^@[a-z0-9](?:[a-z0-9._]{2,28}[a-z0-9])$/.test(clean)) {
-    return { valid: false, username: clean, error: 'Username 4-30 characters ka hona chahiye, sirf letters, numbers, dot, underscore. Start/end letter ya number se ho.' };
+    return { valid: false, username: clean, error: 'Username must be 4–30 characters, alphanumeric with dot or underscore, starting and ending with a letter or number.' };
   }
   if (clean.includes('..') || clean.includes('__') || clean.includes('._') || clean.includes('_.')) {
-    return { valid: false, username: clean, error: 'Username me repeated dot/underscore pattern allowed nahi hai.' };
+    return { valid: false, username: clean, error: 'Consecutive separators are not allowed in username.' };
   }
   return { valid: true, username: clean, error: '' };
 }
@@ -66,7 +66,7 @@ export function formatUniversalPhone(countryCode = '+91', input = '') {
 
   const valid = digits.length >= 7 && digits.length <= 15;
   const error = (!valid && digits.length > 0)
-    ? (digits.length < 7 ? 'Phone number kam se kam 7 digits ka hona chahiye.' : 'Phone number maximum 15 digits ka ho sakta hai.')
+    ? (digits.length < 7 ? 'Phone number must be at least 7 digits.' : 'Phone number cannot exceed 15 digits.')
     : '';
 
   // Pretty spacing for readable display
