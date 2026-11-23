@@ -32210,5 +32210,948 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   color: #f1f5f9;
 }
 
+/* ==========================================================================
+   Modern Minimalist Profile Page Redesign (Image 2 Parity)
+   ========================================================================== */
+
+.modernProfilePage {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 20px 48px;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(237, 233, 254, 0.6), transparent 45%),
+    radial-gradient(circle at 90% 85%, rgba(224, 231, 255, 0.5), transparent 45%),
+    #f8fafc;
+}
+
+.modernProfileContainer {
+  display: grid;
+  grid-template-columns: 310px minmax(0, 1fr);
+  gap: 22px;
+  max-width: 1140px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .modernProfileContainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------------------------------------------------------------
+   LEFT COLUMN: HERO IDENTITY CARD
+   ------------------------------------------------------------- */
+.modernProfileHeroCard {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 20px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 20px 45px -8px rgba(99, 102, 241, 0.12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+/* 3D Avatar */
+.modernAvatarWrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 14px;
+}
+
+.modernProfileAvatarLabel {
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 16px 36px rgba(124, 58, 237, 0.22);
+  border: 3.5px solid #ffffff;
+  background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
+}
+
+.modernProfileAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modernProfileAvatar3D {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modernAvatarUploadOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.modernProfileAvatarLabel:hover .modernAvatarUploadOverlay {
+  opacity: 1;
+}
+
+.modernHeroOnlineDot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #10b981;
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Name & Info */
+.modernHeroIdentity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.modernHeroName {
+  font-size: 21px;
+  font-weight: 750;
+  color: #0f172a;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.01em;
+}
+
+.modernVerifiedBadge {
+  display: inline-flex;
+  align-items: center;
+}
+
+.modernHeroUsername {
+  font-size: 13.5px;
+  color: #64748b;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.modernHeroOnlinePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  background: #f0fdf4;
+  color: #16a34a;
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.modernPulseGreen {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+.modernHeroBio {
+  font-size: 13px;
+  line-height: 1.45;
+  color: #475569;
+  margin: 12px 0 0 0;
+  padding: 0 4px;
+  font-weight: 450;
+}
+
+/* Stats Counter Bar */
+.modernHeroStatsBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px 0;
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.modernHeroStatItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modernHeroStatItem strong {
+  font-size: 17px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+.modernHeroStatItem small {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.modernHeroStatDivider {
+  width: 1px;
+  height: 24px;
+  background: #e2e8f0;
+}
+
+/* Action Buttons */
+.modernHeroActionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  margin-top: 18px;
+}
+
+.modernHeroOutlineBtn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  color: #334155;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  justify-content: flex-start;
+}
+
+.modernHeroOutlineBtn svg {
+  color: #7c3aed;
+  flex-shrink: 0;
+}
+
+.modernHeroOutlineBtn:hover {
+  background: #fbfbfe;
+  border-color: #c7d2fe;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.modernCopyToast {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #16a34a;
+  background: #f0fdf4;
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid #bbf7d0;
+  animation: modernFadeIn 200ms ease;
+}
+
+/* Persona Switcher */
+.modernPersonaSwitcher {
+  display: flex;
+  width: 100%;
+  margin-top: 18px;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 3px;
+}
+
+.modernPersonaBtn {
+  flex: 1;
+  padding: 8px 6px;
+  border-radius: 9px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modernPersonaBtn.activePersona {
+  background: #ffffff;
+  color: #6d28d9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Joined Date */
+.modernHeroJoinedDate {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* -------------------------------------------------------------
+   RIGHT COLUMN: MAIN CONTENT PANE (Image 2 Parity)
+   ------------------------------------------------------------- */
+.modernProfileContentCard {
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 26px 28px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 20px 45px -8px rgba(99, 102, 241, 0.12);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top Navigation Pills */
+.modernProfileTopNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.modernProfilePillTabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.modernProfilePillTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.modernNavPill {
+  padding: 7px 18px;
+  border-radius: 20px;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.modernNavPill:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.modernNavPill.activePill {
+  background: #6366f1;
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.modernProfileCloseBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 20px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.modernProfileCloseBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Tab Body */
+.modernProfileTabBody {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+/* Section Cards */
+.modernSectionCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modernSectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modernSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modernSectionTitle svg {
+  color: #7c3aed;
+}
+
+.modernSectionTitle h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.modernEditActionBtn,
+.modernSeeAllLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #6366f1;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modernEditActionBtn:hover,
+.modernSeeAllLink:hover {
+  text-decoration: underline;
+}
+
+/* About Me Box */
+.modernBioBox {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 14px;
+  padding: 14px 16px;
+}
+
+.modernBioBox p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.modernBioEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modernBioTextarea {
+  width: 100%;
+  border: 1.5px solid #c7d2fe;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  outline: none;
+  font-family: inherit;
+}
+
+.modernBioSaveBtn {
+  align-self: flex-end;
+  padding: 6px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #6366f1;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+
+/* Contact Information Cards */
+.modernContactCardsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+@media (max-width: 600px) {
+  .modernContactCardsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.modernContactCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+
+.modernContactCardLeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modernContactIconWrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #ede9fe;
+  color: #7c3aed;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.modernContactCardLeading small {
+  font-size: 11.5px;
+  color: #64748b;
+  display: block;
+}
+
+.modernContactCardLeading strong {
+  font-size: 13.5px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.modernPrivacyBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 650;
+}
+
+.modernPrivacyBadge.private {
+  background: #f5f3ff;
+  color: #6d28d9;
+}
+
+.modernPrivacyBadge.public {
+  background: #f0fdf4;
+  color: #16a34a;
+}
+
+.modernPrivacyBadge .dotGreen {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #16a34a;
+}
+
+/* Activity Stats Grid (4 Cards) */
+.modernActivityStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .modernActivityStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.modernActivityTile {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+
+.modernActivityTileIcon {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.modernActivityTile strong {
+  font-size: 16px;
+  font-weight: 750;
+  color: #0f172a;
+}
+
+.modernActivityTile small {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Shared Media Section */
+.modernMediaFilterRow {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.modernMediaFilterBtn {
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modernMediaFilterBtn.activeFilter {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.modernSharedMediaGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 768px) {
+  .modernSharedMediaGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.modernMediaCard {
+  aspect-ratio: 1;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modernMediaCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modernVideoPlayOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.28);
+  display: grid;
+  place-items: center;
+}
+
+.modernVideoDurationBadge {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 6px;
+}
+
+.modernDocCardContent,
+.modernLinkCardContent,
+.modernAudioCardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px;
+}
+
+.modernDocPdfBadge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 1px 4px;
+  border-radius: 4px;
+}
+
+.modernDocCardContent small,
+.modernLinkCardContent small {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 60px;
+}
+
+.modernAudioWaveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 18px;
+}
+
+.modernAudioWaveform span {
+  width: 3px;
+  height: 14px;
+  background: #7c3aed;
+  border-radius: 2px;
+}
+
+.modernAudioWaveform span:nth-child(2) { height: 18px; }
+.modernAudioWaveform span:nth-child(4) { height: 10px; }
+
+.modernAudioDuration {
+  font-size: 10px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.modernMediaCard.moreBadge {
+  background: #f8fafc;
+  cursor: pointer;
+  flex-direction: column;
+  border: 1.5px dashed #cbd5e1;
+}
+
+.modernMediaCard.moreBadge strong {
+  font-size: 16px;
+  color: #0f172a;
+}
+
+.modernMediaCard.moreBadge small {
+  font-size: 10.5px;
+  color: #64748b;
+}
+
+/* Recent Activity */
+.modernActivityList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modernActivityItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+}
+
+.modernActivityAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ede9fe;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+
+.modernActivityAvatar.heart {
+  background: #fee2e2;
+}
+
+.modernActivityText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.modernActivityText strong {
+  font-size: 13px;
+  color: #0f172a;
+}
+
+.modernActivityText small {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* Creator Hub Styling */
+.modernCreatorHubCard {
+  background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%);
+  border: 1.5px solid #ddd6fe;
+  padding: 16px;
+  border-radius: 18px;
+}
+
+.modernCreatorNotice {
+  font-size: 13px;
+  color: #4c1d95;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.modernCreatorMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.creatorMetricTile {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #e9d5ff;
+}
+
+.creatorMetricTile strong {
+  font-size: 15px;
+  color: #6d28d9;
+}
+
+.creatorMetricTile small {
+  font-size: 11px;
+  color: #6b21a8;
+}
+
+.modernCreatorBadgesRow {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.modernHonorBadge {
+  background: #ede9fe;
+  color: #5b21b6;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* Settings Embedded */
+.modernSettingsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modernSettingRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modernSettingRow span {
+  font-size: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.modernSettingSelect {
+  border: 1.5px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13.5px;
+  background: #ffffff;
+  outline: none;
+}
+
+.modernEmptyNotice {
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+/* Dark Mode Overrides for Modern Profile */
+.premiumDarkMode .modernProfilePage {
+  background: #020617;
+}
+
+.premiumDarkMode .modernProfileHeroCard,
+.premiumDarkMode .modernProfileContentCard {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.5);
+}
+
+.premiumDarkMode .modernHeroName,
+.premiumDarkMode .modernHeroStatItem strong,
+.premiumDarkMode .modernSectionTitle h3,
+.premiumDarkMode .modernContactCardLeading strong,
+.premiumDarkMode .modernActivityTile strong,
+.premiumDarkMode .modernActivityText strong {
+  color: #f8fafc;
+}
+
+.premiumDarkMode .modernHeroUsername,
+.premiumDarkMode .modernHeroBio,
+.premiumDarkMode .modernHeroStatItem small,
+.premiumDarkMode .modernHeroJoinedDate,
+.premiumDarkMode .modernBioBox p,
+.premiumDarkMode .modernContactCardLeading small,
+.premiumDarkMode .modernActivityTile small,
+.premiumDarkMode .modernActivityText small {
+  color: #94a3b8;
+}
+
+.premiumDarkMode .modernHeroOutlineBtn {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+.premiumDarkMode .modernHeroOutlineBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.premiumDarkMode .modernPersonaSwitcher {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.premiumDarkMode .modernPersonaBtn.activePersona {
+  background: #1e293b;
+  color: #a78bfa;
+}
+
+.premiumDarkMode .modernNavPill,
+.premiumDarkMode .modernProfileCloseBtn {
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+}
+
+.premiumDarkMode .modernBioBox,
+.premiumDarkMode .modernContactCard,
+.premiumDarkMode .modernActivityTile,
+.premiumDarkMode .modernActivityItem {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+
 
 

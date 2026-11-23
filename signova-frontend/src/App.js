@@ -7175,6 +7175,9 @@ function App() {
             openScannedProfile={openScannedProfile}
             profileQrMessage={profileQrMessage}
             profileStats={profileStats}
+            contacts={contacts}
+            callHistory={callHistory}
+            communityGroups={communityGroups}
           />
 
           {activePanel === 'translate' && (
