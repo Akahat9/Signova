@@ -1,12 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { CONTACT_COUNTRIES, extractLookupPhoneKeys, generateUsernameSlug } from '../../features/contacts/contactModel';
-import { firestoreDb } from '../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { CONTACT_COUNTRIES, formatUniversalPhone, generateUsernameSlug } from '../../features/contacts/contactModel';
+import { useContactDirectoryLookup } from '../../features/contacts/useContactDirectoryLookup';
 
 /**
  * AddContactModal component
- * Dialog for adding a new Signova contact with name, phone number, username, and visibility options.
- * Features smart auto-fill from phone number and automatic username slugging from full name.
+ * Dialog for adding a new Signova contact with universal phone formatting,
+ * instant live debounce directory checks, and duplicate prevention.
  */
 export default function AddContactModal({
   contactModalOpen,
@@ -15,20 +14,33 @@ export default function AddContactModal({
   setContactForm,
   addContact,
   contactFormError,
+  contacts = [],
 }) {
   const [manualUsernameEdited, setManualUsernameEdited] = useState(false);
-  const [lookupStatus, setLookupStatus] = useState({ loading: false, found: false, verifiedUser: null, text: '' });
-  const lookupTimerRef = useRef(null);
+
+  const lookupStatus = useContactDirectoryLookup({
+    countryCode: contactForm.countryCode,
+    number: contactForm.number,
+    username: contactForm.username,
+    contacts,
+  });
 
   useEffect(() => {
     if (contactModalOpen) {
       setManualUsernameEdited(false);
-      setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
     }
-    return () => {
-      if (lookupTimerRef.current) clearTimeout(lookupTimerRef.current);
-    };
   }, [contactModalOpen]);
+
+  useEffect(() => {
+    if (lookupStatus.status === 'verified' && lookupStatus.verifiedUser) {
+      const u = lookupStatus.verifiedUser;
+      setContactForm((prev) => ({
+        ...prev,
+        username: u.username || prev.username,
+        name: prev.name.trim() ? prev.name : (u.name || prev.name),
+      }));
+    }
+  }, [lookupStatus.status, lookupStatus.verifiedUser, setContactForm]);
 
   if (!contactModalOpen) {
     return null;
@@ -36,7 +48,7 @@ export default function AddContactModal({
 
   function handleNameChange(event) {
     const nextName = event.target.value;
-    if (!manualUsernameEdited && !lookupStatus.found) {
+    if (!manualUsernameEdited && lookupStatus.status !== 'verified') {
       const autoSlug = generateUsernameSlug(nextName);
       setContactForm((prev) => ({ ...prev, name: nextName, username: autoSlug }));
     } else {
@@ -45,99 +57,19 @@ export default function AddContactModal({
   }
 
   function handlePhoneChange(event) {
-    const rawDigits = event.target.value.replace(/\D/g, '');
-    setContactForm((prev) => ({ ...prev, number: rawDigits }));
-
-    if (lookupTimerRef.current) clearTimeout(lookupTimerRef.current);
-
-    if (rawDigits.length < 7) {
-      if (lookupStatus.found) {
-        setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
-      }
-      return;
-    }
-
-    setLookupStatus((prev) => ({ ...prev, loading: true, text: 'Searching Signova directory...' }));
-
-    lookupTimerRef.current = setTimeout(async () => {
-      if (!firestoreDb) {
-        setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
-        return;
-      }
-      const phoneKeys = extractLookupPhoneKeys(contactForm.countryCode, rawDigits);
-      let matchedData = null;
-      for (const key of phoneKeys) {
-        try {
-          const snap = await getDoc(doc(firestoreDb, 'publicPhoneIdentities', key));
-          if (snap.exists() && snap.data()?.username) {
-            matchedData = snap.data();
-            break;
-          }
-        } catch {
-          // ignore individual lookup error
-        }
-      }
-
-      if (matchedData) {
-        setLookupStatus({
-          loading: false,
-          found: true,
-          verifiedUser: matchedData,
-          text: `✓ Verified Signova account found: ${matchedData.username}`,
-        });
-        setContactForm((prev) => ({
-          ...prev,
-          username: matchedData.username,
-          name: prev.name.trim() ? prev.name : (matchedData.name || prev.name),
-        }));
-      } else {
-        setLookupStatus({
-          loading: false,
-          found: false,
-          verifiedUser: null,
-          text: rawDigits.length >= 10 ? 'No Signova account registered with this number yet' : '',
-        });
-        if (!manualUsernameEdited && rawDigits.length >= 10) {
-          setContactForm((prev) => ({
-            ...prev,
-            username: prev.username || `@user_${rawDigits.slice(-4)}`,
-          }));
-        }
-      }
-    }, 350);
+    const rawInput = event.target.value;
+    const parsed = formatUniversalPhone(contactForm.countryCode, rawInput);
+    setContactForm((prev) => ({
+      ...prev,
+      countryCode: parsed.countryCode,
+      number: parsed.nationalNumber,
+    }));
   }
 
   function handleUsernameChange(event) {
     const nextUsername = event.target.value;
     setManualUsernameEdited(true);
     setContactForm((prev) => ({ ...prev, username: nextUsername }));
-
-    if (lookupTimerRef.current) clearTimeout(lookupTimerRef.current);
-    const cleanUsername = nextUsername.trim().toLowerCase();
-    if (cleanUsername.length < 3) {
-      setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
-      return;
-    }
-
-    lookupTimerRef.current = setTimeout(async () => {
-      if (!firestoreDb) return;
-      try {
-        const snap = await getDoc(doc(firestoreDb, 'publicUserIdentities', cleanUsername.startsWith('@') ? cleanUsername : `@${cleanUsername}`));
-        if (snap.exists() && snap.data()?.uid) {
-          const uData = snap.data();
-          setLookupStatus({
-            loading: false,
-            found: true,
-            verifiedUser: uData,
-            text: `✓ Verified Signova account found: ${uData.username}`,
-          });
-        } else {
-          setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
-        }
-      } catch {
-        setLookupStatus({ loading: false, found: false, verifiedUser: null, text: '' });
-      }
-    }, 350);
   }
 
   return (
@@ -201,11 +133,15 @@ export default function AddContactModal({
             onChange={handleUsernameChange}
             placeholder="@username"
           />
-          {lookupStatus.found ? (
+          {lookupStatus.tone === 'found' ? (
             <div className="contactLookupBadge contactLookupFound">
               {lookupStatus.text}
             </div>
-          ) : lookupStatus.loading ? (
+          ) : lookupStatus.tone === 'warning' ? (
+            <div className="contactLookupBadge contactLookupWarning">
+              {lookupStatus.text}
+            </div>
+          ) : lookupStatus.tone === 'searching' ? (
             <div className="contactLookupBadge contactLookupSearching">
               {lookupStatus.text}
             </div>

@@ -5482,6 +5482,12 @@ body.signovaLibraryPage .libraryDashboard {
   border: 1px solid rgba(100, 116, 139, 0.15);
 }
 
+.contactLookupWarning {
+  background: rgba(245, 158, 11, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
 .contactIdentityNote {
   margin-top: -4px;
   color: #64748b;

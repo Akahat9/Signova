@@ -1,5 +1,6 @@
-import React from 'react';
-import { CONTACT_COUNTRIES } from '../features/contacts/contactModel';
+import React, { useEffect, useState } from 'react';
+import { CONTACT_COUNTRIES, formatUniversalPhone, generateUsernameSlug } from '../features/contacts/contactModel';
+import { useContactDirectoryLookup } from '../features/contacts/useContactDirectoryLookup';
 
 export default function ContactsView({
   activePanel,
@@ -7,9 +8,62 @@ export default function ContactsView({
   setContactForm,
   addContact,
   contactFormError,
+  contacts = [],
 }) {
+  const [manualUsernameEdited, setManualUsernameEdited] = useState(false);
+
+  const lookupStatus = useContactDirectoryLookup({
+    countryCode: contactForm.countryCode,
+    number: contactForm.number,
+    username: contactForm.username,
+    contacts,
+  });
+
+  useEffect(() => {
+    if (activePanel === 'contacts') {
+      setManualUsernameEdited(false);
+    }
+  }, [activePanel]);
+
+  useEffect(() => {
+    if (lookupStatus.status === 'verified' && lookupStatus.verifiedUser) {
+      const u = lookupStatus.verifiedUser;
+      setContactForm((prev) => ({
+        ...prev,
+        username: u.username || prev.username,
+        name: prev.name.trim() ? prev.name : (u.name || prev.name),
+      }));
+    }
+  }, [lookupStatus.status, lookupStatus.verifiedUser, setContactForm]);
+
   if (activePanel !== 'contacts') {
     return null;
+  }
+
+  function handleNameChange(event) {
+    const nextName = event.target.value;
+    if (!manualUsernameEdited && lookupStatus.status !== 'verified') {
+      const autoSlug = generateUsernameSlug(nextName);
+      setContactForm((prev) => ({ ...prev, name: nextName, username: autoSlug }));
+    } else {
+      setContactForm((prev) => ({ ...prev, name: nextName }));
+    }
+  }
+
+  function handlePhoneChange(event) {
+    const rawInput = event.target.value;
+    const parsed = formatUniversalPhone(contactForm.countryCode, rawInput);
+    setContactForm((prev) => ({
+      ...prev,
+      countryCode: parsed.countryCode,
+      number: parsed.nationalNumber,
+    }));
+  }
+
+  function handleUsernameChange(event) {
+    const nextUsername = event.target.value;
+    setManualUsernameEdited(true);
+    setContactForm((prev) => ({ ...prev, username: nextUsername }));
   }
 
   return (
@@ -22,7 +76,7 @@ export default function ContactsView({
         <input
           className="signSearch"
           value={contactForm.name}
-          onChange={(event) => setContactForm({ ...contactForm, name: event.target.value })}
+          onChange={handleNameChange}
           placeholder="Full name"
         />
         <div className="contactPhoneRow">
@@ -41,7 +95,7 @@ export default function ContactsView({
           <input
             className="signSearch"
             value={contactForm.number}
-            onChange={(event) => setContactForm({ ...contactForm, number: event.target.value.replace(/\D/g, '') })}
+            onChange={handlePhoneChange}
             placeholder="Phone number (optional)"
             inputMode="numeric"
           />
@@ -49,9 +103,26 @@ export default function ContactsView({
         <input
           className="signSearch"
           value={contactForm.username}
-          onChange={(event) => setContactForm({ ...contactForm, username: event.target.value })}
+          onChange={handleUsernameChange}
           placeholder="@username"
         />
+        {lookupStatus.tone === 'found' ? (
+          <div className="contactLookupBadge contactLookupFound">
+            {lookupStatus.text}
+          </div>
+        ) : lookupStatus.tone === 'warning' ? (
+          <div className="contactLookupBadge contactLookupWarning">
+            {lookupStatus.text}
+          </div>
+        ) : lookupStatus.tone === 'searching' ? (
+          <div className="contactLookupBadge contactLookupSearching">
+            {lookupStatus.text}
+          </div>
+        ) : lookupStatus.text ? (
+          <div className="contactLookupBadge contactLookupNote">
+            {lookupStatus.text}
+          </div>
+        ) : null}
         {contactFormError ? <small className="contactFormError">{contactFormError}</small> : null}
         <small className="contactIdentityNote">Username is the default identity. Phone number is optional in profile view.</small>
         <div className="contactAvatarOptions" aria-label="Contact avatar view">

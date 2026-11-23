@@ -7589,6 +7589,7 @@ function App() {
             setContactForm={setContactForm}
             addContact={addContact}
             contactFormError={contactFormError}
+            contacts={contacts}
           />
 
           <CommunityCreateSignView
@@ -7766,6 +7767,7 @@ function App() {
         setContactForm={setContactForm}
         addContact={addContact}
         contactFormError={contactFormError}
+        contacts={contacts}
       />
 
       {groupModalOpen && (

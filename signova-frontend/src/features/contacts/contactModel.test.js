@@ -3,11 +3,37 @@ import {
   contactInitial,
   deduplicateContacts,
   extractLookupPhoneKeys,
+  formatUniversalPhone,
   generateUsernameSlug,
   normalizeContactPhone,
   normalizeContactRecord,
   validateContactUsername,
 } from './contactModel';
+
+test('universal phone formatter handles raw, international, and local zero formats', () => {
+  // Local leading zero
+  const localZero = formatUniversalPhone('+91', '09876543210');
+  expect(localZero.valid).toBe(true);
+  expect(localZero.nationalNumber).toBe('9876543210');
+  expect(localZero.countryCode).toBe('+91');
+  expect(localZero.formattedNumber).toBe('+91 98765 43210');
+  expect(localZero.lookupKeys).toContain('9876543210');
+  expect(localZero.lookupKeys).toContain('919876543210');
+
+  // Auto-detect pasted +1 international prefix
+  const pastedUS = formatUniversalPhone('+91', '+1 (555) 234-5678');
+  expect(pastedUS.valid).toBe(true);
+  expect(pastedUS.countryCode).toBe('+1');
+  expect(pastedUS.nationalNumber).toBe('5552345678');
+  expect(pastedUS.formattedNumber).toBe('+1 (555) 234-5678');
+
+  // UK with spaces and hyphens
+  const uk = formatUniversalPhone('+44', '07700 900-123');
+  expect(uk.valid).toBe(true);
+  expect(uk.countryCode).toBe('+44');
+  expect(uk.nationalNumber).toBe('7700900123');
+  expect(uk.formattedNumber).toBe('+44 7700 900123');
+});
 
 test('normalizes contact username and international phone data', () => {
   expect(validateContactUsername(' Sign.User ')).toMatchObject({ valid: true, username: '@sign.user' });
