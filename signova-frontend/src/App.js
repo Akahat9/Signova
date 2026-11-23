@@ -67,6 +67,7 @@ import CommunityCreateSignView from './components/CommunityCreateSignView';
 import ProgressDashboardView from './components/ProgressDashboardView';
 import CommunityGroupsView from './components/CommunityGroupsView';
 import AddContactModal from './components/modals/AddContactModal';
+import CommunityGatewayModal from './components/modals/CommunityGatewayModal';
 import { requestJson } from './services/apiClient';
 import { speakAccessibleText as speak } from './services/speechService';
 import { validateCommunityMediaFile } from './features/community/mediaValidation';
@@ -530,6 +531,7 @@ function App() {
     avatarAccessory: 'none',
     avatarImage: '/signova-auth-avatar-ai.png',
   });
+  const [communityGatewayOpen, setCommunityGatewayOpen] = useState(false);
   const [communityPosts, setCommunityPosts] = useState([]);
   const [communityHiddenPostIds, setCommunityHiddenPostIds] = useState([]);
   const [communityLikedPostIds, setCommunityLikedPostIds] = useState([]);
@@ -5505,6 +5507,11 @@ function App() {
       imageUrls: communitySignForm.imageUrls,
       visibility: communitySignForm.visibility.toLowerCase(),
       trainingConsent: communitySignForm.allowAiTraining,
+      aiTrainingEligible: !!communitySignForm.allowAiTraining,
+      datasetCategory: 'ISL_GESTURES_V1',
+      license: 'signova-open-research-v1',
+      landmarksAvailable: true,
+      badges: communitySignForm.allowAiTraining ? ['✦ AI Dataset Contributor', 'Verified Creator'] : ['Verified Creator'],
       verificationStatus: 'Verified Creator',
       level: settings.practice.difficulty === 'advanced' ? 'Advanced' : settings.practice.difficulty === 'intermediate' ? 'Intermediate' : 'Beginner',
       uses: 1,
@@ -7178,6 +7185,7 @@ function App() {
             contacts={contacts}
             callHistory={callHistory}
             communityGroups={communityGroups}
+            onOpenCommunityGateway={() => setCommunityGatewayOpen(true)}
           />
 
           {activePanel === 'translate' && (
@@ -7638,6 +7646,7 @@ function App() {
         
          {activePanel === 'community' && (
   <CommunityView
+    onOpenCommunityGateway={() => setCommunityGatewayOpen(true)}
     communityNotificationsOpen={communityNotificationsOpen}
     setCommunityNotificationsOpen={setCommunityNotificationsOpen}
     communityNotifications={communityNotifications}
@@ -7784,6 +7793,15 @@ function App() {
         contacts={contacts}
         onScanQr={() => setProfileQrOpen(true)}
         copyProfileShareLink={copyProfileShareLink}
+      />
+
+      <CommunityGatewayModal
+        isOpen={communityGatewayOpen}
+        onClose={() => setCommunityGatewayOpen(false)}
+        settings={settings}
+        communityProfile={communityProfile}
+        setCommunityProfile={setCommunityProfile}
+        setStatus={setStatus}
       />
 
       {groupModalOpen && (

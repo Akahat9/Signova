@@ -45,6 +45,7 @@ export default function ProfileView({
   contacts = [],
   callHistory = [],
   communityGroups = [],
+  onOpenCommunityGateway,
 }) {
   const [qrModalTab, setQrModalTab] = useState('view'); // 'view' or 'scan'
   const [profileTab, setProfileTab] = useState('about'); // 'about' | 'media' | 'files' | 'links' | 'activity' | 'settings'
@@ -422,6 +423,19 @@ export default function ProfileView({
                       <span className="modernHonorBadge">🏅 Model Pioneer</span>
                       <span className="modernHonorBadge">👥 Community Mentor</span>
                     </div>
+                    {typeof onOpenCommunityGateway === 'function' && (
+                      <div style={{ marginTop: '14px' }}>
+                        <button
+                          type="button"
+                          className="modernHeroOutlineBtn"
+                          onClick={onOpenCommunityGateway}
+                          style={{ fontSize: '13px', padding: '9px 18px', width: 'auto', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                        >
+                          <span style={{ color: '#7c3aed' }}>✦</span>
+                          <span>Configure Creator Alias & AI Dataset Terms</span>
+                        </button>
+                      </div>
+                    )}
                   </section>
                 ) : null}
 

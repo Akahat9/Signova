@@ -144,7 +144,19 @@ export default function CommunityCreateSignView({
               <header><span>04</span><div><strong>Publishing</strong><small>Choose visibility and confirm your rights.</small></div></header>
               <div className="minimalSignChoiceRow" aria-label="Visibility">{['Public', 'Community', 'Private'].map((visibility) => <button type="button" className={communitySignForm.visibility === visibility ? 'activeMinimalChoice' : ''} onClick={() => setCommunitySignForm({ ...communitySignForm, visibility })} key={visibility}>{visibility}</button>)}</div>
               <label className="minimalConsentRow"><input type="checkbox" checked={communitySignForm.showCreatorName} onChange={(event) => setCommunitySignForm({ ...communitySignForm, showCreatorName: event.target.checked })} /><span><strong>Show creator credit</strong><small>Display {communityProfile.username} with this sign.</small></span></label>
-              <label className="minimalConsentRow"><input type="checkbox" checked={communitySignForm.allowAiTraining} onChange={(event) => setCommunitySignForm({ ...communitySignForm, allowAiTraining: event.target.checked })} /><span><strong>Allow AI training use</strong><small>Optional consent; your profile identity is excluded.</small></span></label>
+              <label className="minimalConsentRow">
+                <input
+                  type="checkbox"
+                  checked={communitySignForm.allowAiTraining}
+                  onChange={(event) => setCommunitySignForm({ ...communitySignForm, allowAiTraining: event.target.checked })}
+                />
+                <span>
+                  <strong>Signova AI Dataset Training Contribution ✦</strong>
+                  <small>
+                    Allow this demonstration and 3D MediaPipe landmark vectors to contribute to Signova's open AI training dataset ({communitySignForm.allowAiTraining ? '✦ Contributing to ISL_GESTURES_V1 dataset' : 'Excluded from model training'}).
+                  </small>
+                </span>
+              </label>
               <label className="minimalConsentRow"><input type="checkbox" checked={communitySignForm.rulesAccepted} onChange={(event) => setCommunitySignForm({ ...communitySignForm, rulesAccepted: event.target.checked })} /><span><strong>Follow community guidelines *</strong></span></label>
               <label className="minimalConsentRow"><input type="checkbox" checked={communitySignForm.rightsConfirmed} onChange={(event) => setCommunitySignForm({ ...communitySignForm, rightsConfirmed: event.target.checked })} /><span><strong>I have permission to share this content *</strong></span></label>
             </fieldset>

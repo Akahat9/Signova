@@ -58,12 +58,23 @@ export default function CommunityView({
   topContributors,
   trendingSigns,
   setCommunityComposerMedia,
+  onOpenCommunityGateway,
 }) {
   return (
     <section className="communityPage" aria-label="Signova community dashboard">
       <header className="communityTopBar">
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <strong>Signova Community Content</strong>
+          <button
+            type="button"
+            className="communityCreatorGatewayBtn"
+            onClick={onOpenCommunityGateway}
+            title="Configure your Community Creator / Developer ID & AI Training contribution"
+          >
+            <span>✦</span>
+            <span>{communityProfile?.name || 'Creator Persona'}</span>
+            {communityProfile?.aiDatasetConsent && <span className="communityAiBadge">AI Contributor</span>}
+          </button>
         </div>
         <div className="communityNotificationWrap">
           <button
