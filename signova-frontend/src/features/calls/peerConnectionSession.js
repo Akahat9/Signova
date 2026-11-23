@@ -15,6 +15,7 @@ export function createPeerConnectionSession({
   onRemoteStream = () => undefined,
   onDataChannel = () => undefined,
   onConnectionStateChange = () => undefined,
+  onIceConnectionStateChange = () => undefined,
   subscribeRemoteCandidates,
   onRemoteCandidateError = () => undefined,
   onCandidateSubscriptionError = () => undefined,
@@ -37,6 +38,14 @@ export function createPeerConnectionSession({
     if (channel) onDataChannel(channel, 'remote');
   };
   peer.onconnectionstatechange = () => onConnectionStateChange(peer.connectionState, peer);
+  peer.oniceconnectionstatechange = () => {
+    onIceConnectionStateChange(peer.iceConnectionState, peer);
+    if (!peer.connectionState || peer.connectionState === 'connected') {
+      if (peer.iceConnectionState === 'disconnected' || peer.iceConnectionState === 'failed') {
+        onConnectionStateChange(peer.iceConnectionState, peer);
+      }
+    }
+  };
 
   localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
   if (caller) onDataChannel(peer.createDataChannel(dataChannelLabel, { ordered: true }), 'local');

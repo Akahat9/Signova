@@ -83,6 +83,10 @@ test('forwards remote streams, remote channels, and connection states', () => {
   expect(onRemoteStream).toHaveBeenCalledWith(remoteStream, { streams: [remoteStream] });
   expect(onDataChannel).toHaveBeenCalledWith(channel, 'remote');
   expect(onConnectionStateChange).toHaveBeenCalledWith('connected', peer);
+
+  peer.iceConnectionState = 'disconnected';
+  peer.oniceconnectionstatechange();
+  expect(onConnectionStateChange).toHaveBeenCalledWith('disconnected', peer);
 });
 
 test('reports async candidate failures without leaking unhandled rejections', async () => {

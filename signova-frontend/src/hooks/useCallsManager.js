@@ -105,6 +105,9 @@ export default function useCallsManager({
   const callStatsTimerRef = useRef(null);
   const callRingTimeoutRef = useRef(null);
   const callReconnectTimeoutRef = useRef(null);
+  const callHeartbeatTimerRef = useRef(null);
+  const lastHeartbeatReceivedRef = useRef(0);
+  const reconnectAttemptRef = useRef(0);
   const previousCallStatsRef = useRef({ at: 0, bytes: 0 });
   const chatCallDragRef = useRef(null);
   const callControlsTimerRef = useRef(null);
@@ -200,11 +203,20 @@ export default function useCallsManager({
     previousCallStatsRef.current = { at: 0, bytes: 0 };
   }
 
+  function stopCallHeartbeat() {
+    if (callHeartbeatTimerRef.current) {
+      window.clearInterval(callHeartbeatTimerRef.current);
+      callHeartbeatTimerRef.current = null;
+    }
+    lastHeartbeatReceivedRef.current = 0;
+  }
+
   function clearCallTimers() {
     window.clearTimeout(callRingTimeoutRef.current);
     window.clearTimeout(callReconnectTimeoutRef.current);
     callRingTimeoutRef.current = null;
     callReconnectTimeoutRef.current = null;
+    stopCallHeartbeat();
   }
 
   function retryServiceConnection(setApiConnection) {
@@ -319,11 +331,48 @@ export default function useCallsManager({
     callStatsTimerRef.current = window.setInterval(sample, 2500);
   }
 
+  function startCallHeartbeat(channel) {
+    stopCallHeartbeat();
+    if (!channel || channel.readyState !== 'open') return;
+    lastHeartbeatReceivedRef.current = Date.now();
+    callHeartbeatTimerRef.current = window.setInterval(() => {
+      const activeChannel = captionChannelRef.current;
+      if (!activeChannel || activeChannel.readyState !== 'open') {
+        stopCallHeartbeat();
+        return;
+      }
+      try {
+        activeChannel.send(JSON.stringify({ type: 'signova-heartbeat-ping', sentAt: Date.now() }));
+      } catch {
+        // Transport error caught cleanly
+      }
+      if (lastHeartbeatReceivedRef.current && Date.now() - lastHeartbeatReceivedRef.current > 8000) {
+        setCaptionChannelStatus('Sync degraded · Checking transport');
+      }
+    }, 3000);
+  }
+
   function configureCaptionChannel(channel) {
     captionChannelRef.current = channel;
     channel.onmessage = (event) => {
       try {
-        applyRemoteCaptionPayload(JSON.parse(event.data));
+        const payload = JSON.parse(event.data);
+        if (payload?.type === 'signova-heartbeat-ping') {
+          if (channel.readyState === 'open') {
+            try {
+              channel.send(JSON.stringify({ type: 'signova-heartbeat-pong', sentAt: payload.sentAt, receivedAt: Date.now() }));
+            } catch {}
+          }
+          lastHeartbeatReceivedRef.current = Date.now();
+          return;
+        }
+        if (payload?.type === 'signova-heartbeat-pong') {
+          lastHeartbeatReceivedRef.current = Date.now();
+          const rtt = Math.max(1, Date.now() - (Number(payload.sentAt) || Date.now()));
+          setCallSignTelemetry((current) => ({ ...current, rttMs: rtt }));
+          return;
+        }
+        applyRemoteCaptionPayload(payload);
       } catch {
         setRemoteCaption(String(event.data || 'Remote sign received'));
         setCaptionChannelStatus('Caption synced');
@@ -331,10 +380,17 @@ export default function useCallsManager({
     };
     channel.onopen = () => {
       setCaptionChannelStatus('Caption sync connected');
+      startCallHeartbeat(channel);
       sendCaptionSync({ caption, sentence });
     };
-    channel.onclose = () => setCaptionChannelStatus('Caption sync closed');
-    channel.onerror = () => setCaptionChannelStatus('Caption sync error');
+    channel.onclose = () => {
+      stopCallHeartbeat();
+      setCaptionChannelStatus('Caption sync closed');
+    };
+    channel.onerror = () => {
+      stopCallHeartbeat();
+      setCaptionChannelStatus('Caption sync error');
+    };
   }
 
   async function getCallIceConfiguration() {
@@ -379,35 +435,40 @@ export default function useCallsManager({
       },
       onConnectionStateChange: (state, activePeer) => {
         if (state === 'connected') {
+          reconnectAttemptRef.current = 0;
           clearCallTimers();
           stopCallAudio();
           callConnectedAtRef.current = Date.now();
-          setCallStatus('WebRTC connected');
+          setCallStatus('WebRTC connected · Secure');
           startCallStats(activePeer);
           setCallRoomStatus(firestoreDb, roomId, 'connected').catch(() => undefined);
-        } else if (state === 'disconnected') {
-          setCallStatus('Connection interrupted — reconnecting');
-          setCallRoomStatus(firestoreDb, roomId, 'reconnecting').catch(() => undefined);
-          if (caller) {
-            window.clearTimeout(callReconnectTimeoutRef.current);
-            callReconnectTimeoutRef.current = window.setTimeout(async () => {
-              if (activePeer.connectionState !== 'disconnected') return;
-              try {
-                const restartOffer = await activePeer.createOffer({ iceRestart: true });
-                await activePeer.setLocalDescription(restartOffer);
-                await publishCallOffer(firestoreDb, roomId, restartOffer);
-              } catch {
-                setCallStatus('Reconnect negotiation failed');
-              }
-            }, 3000);
+        } else if (state === 'disconnected' || state === 'failed') {
+          if (reconnectAttemptRef.current < 3) {
+            reconnectAttemptRef.current += 1;
+            const attempt = reconnectAttemptRef.current;
+            setCallStatus(`Connection interrupted — reconnecting (attempt ${attempt}/3)…`);
+            setCallRoomStatus(firestoreDb, roomId, 'reconnecting').catch(() => undefined);
+            if (caller) {
+              window.clearTimeout(callReconnectTimeoutRef.current);
+              callReconnectTimeoutRef.current = window.setTimeout(async () => {
+                if (activePeer.connectionState === 'connected') return;
+                try {
+                  const restartOffer = await activePeer.createOffer({ iceRestart: true });
+                  await activePeer.setLocalDescription(restartOffer);
+                  await publishCallOffer(firestoreDb, roomId, restartOffer);
+                } catch {
+                  setCallStatus('Reconnect negotiation failed');
+                }
+              }, 1200 * attempt);
+            }
+          } else {
+            clearCallTimers();
+            stopCallStats();
+            stopCallAudio();
+            callConnectedAtRef.current = 0;
+            setCallStatus('Call connection lost · Network unreachable');
+            setCallRoomStatus(firestoreDb, roomId, 'failed').catch(() => undefined);
           }
-        } else if (state === 'failed') {
-          clearCallTimers();
-          stopCallStats();
-          stopCallAudio();
-          callConnectedAtRef.current = 0;
-          setCallStatus('Call connection failed');
-          setCallRoomStatus(firestoreDb, roomId, 'failed').catch(() => undefined);
         } else if (state === 'closed') {
           clearCallTimers();
           stopCallStats();
