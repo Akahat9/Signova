@@ -7779,6 +7779,8 @@ function App() {
         addContact={addContact}
         contactFormError={contactFormError}
         contacts={contacts}
+        onScanQr={() => setProfileQrOpen(true)}
+        copyProfileShareLink={copyProfileShareLink}
       />
 
       {groupModalOpen && (

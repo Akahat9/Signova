@@ -31590,4 +31590,625 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   color: #f1f5f9 !important;
 }
 
+/* ==========================================================================
+   Modern Minimalist Add Contact Card Redesign (Image 1 Parity)
+   ========================================================================== */
+
+.modernContactModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: modernFadeIn 220ms ease-out both;
+}
+
+@keyframes modernFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modernAddContactCard {
+  position: relative;
+  width: min(480px, calc(100vw - 32px));
+  background: #ffffff;
+  border-radius: 28px;
+  padding: 28px 24px 22px 24px;
+  box-shadow: 0 25px 60px -12px rgba(99, 102, 241, 0.18), 0 0 1px 1px rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: modernSlideUp 260ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes modernSlideUp {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modernModalCloseBtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modernModalCloseBtn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+/* Header */
+.modernModalHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-right: 36px;
+}
+
+.modernModalLogoGlow {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.15);
+  flex-shrink: 0;
+}
+
+.modernModalLogoGlow img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.modernModalHeaderInfo h2 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.modernModalHeaderInfo p {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0 0;
+  font-weight: 500;
+}
+
+/* Form container */
+.modernAddContactForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Unified Search Bar */
+.modernSearchContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 14px;
+  transition: all 0.2s ease;
+}
+
+.modernSearchContainer:focus-within {
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.modernSearchIcon {
+  color: #94a3b8;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.modernSearchInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #0f172a;
+  font-weight: 500;
+  outline: none;
+}
+
+.modernSearchInput::placeholder {
+  color: #94a3b8;
+  font-weight: 450;
+}
+
+.modernSearchClearBtn {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.modernSearchClearBtn:hover {
+  color: #475569;
+}
+
+/* Matched Contact Result Card */
+.modernMatchResultCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fbfbfe;
+  border: 1.5px solid #ece9fe;
+  border-radius: 16px;
+  padding: 10px 14px;
+  animation: modernFadeIn 200ms ease;
+}
+
+.modernMatchAvatarWrap {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.modernMatchAvatarImg,
+.modernMatchAvatarFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 16px;
+  display: grid;
+  place-items: center;
+}
+
+.modernMatchOnlineDot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  background: #10b981;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+}
+
+.modernMatchDetails {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.modernMatchDetails strong {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0f172a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modernMatchDetails span {
+  font-size: 12.5px;
+  color: #6366f1;
+  font-weight: 500;
+}
+
+.modernMatchAddBtn {
+  padding: 7px 18px;
+  border-radius: 10px;
+  background: #f5f3ff;
+  border: 1.5px solid #ddd6fe;
+  color: #6d28d9;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modernMatchAddBtn:hover {
+  background: #6d28d9;
+  border-color: #6d28d9;
+  color: #ffffff;
+}
+
+/* Alerts */
+.modernLookupAlert {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.modernLookupAlert.alertWarning {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  color: #b45309;
+}
+
+.modernLookupAlert.alertSearching {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #15803d;
+}
+
+.modernSpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(21, 128, 61, 0.2);
+  border-top-color: #15803d;
+  border-radius: 50%;
+  animation: modernSpin 0.7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes modernSpin {
+  to { transform: rotate(360deg); }
+}
+
+.modernManualEntryCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modernManualNotice {
+  font-size: 12px;
+  color: #64748b;
+  margin: 0;
+}
+
+.modernManualInput {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  outline: none;
+}
+
+.modernManualInput:focus {
+  border-color: #6366f1;
+}
+
+.modernFormError {
+  font-size: 12.5px;
+  color: #ef4444;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+/* OR Divider */
+.modernOrDivider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 2px 0;
+}
+
+.modernOrDivider::before,
+.modernOrDivider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modernOrDivider span {
+  padding: 0 12px;
+}
+
+/* Quick Action Tiles */
+.modernQuickActionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.modernQuickActionTile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+}
+
+.modernQuickActionTile:hover {
+  border-color: #c7d2fe;
+  background: #fbfbfe;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.06);
+}
+
+.modernTileIconWrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #f5f3ff;
+  color: #7c3aed;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.modernTileText {
+  display: flex;
+  flex-direction: column;
+}
+
+.modernTileText strong {
+  font-size: 13.5px;
+  font-weight: 650;
+  color: #0f172a;
+}
+
+.modernTileText small {
+  font-size: 11.5px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+/* Contact Privacy Card */
+.modernPrivacyCard {
+  background: #f8fafc;
+  border: 1.5px solid #f1f5f9;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modernPrivacyHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modernPrivacyShield {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #ede9fe;
+  color: #6d28d9;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.modernPrivacyHeaderText strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #0f172a;
+  display: block;
+}
+
+.modernPrivacyHeaderText small {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+.modernToggleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 4px;
+}
+
+.modernToggleLeading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.modernToggleIcon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #7c3aed;
+  border: 1px solid #e2e8f0;
+  display: grid;
+  place-items: center;
+}
+
+.modernToggleLeading strong {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  display: block;
+}
+
+.modernToggleLeading small {
+  font-size: 11.5px;
+  color: #64748b;
+}
+
+/* iOS-style Modern Toggle Switch */
+.modernSwitch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.modernSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.modernSwitchSlider {
+  position: absolute;
+  inset: 0;
+  background: #cbd5e1;
+  border-radius: 24px;
+  transition: 0.25s ease;
+}
+
+.modernSwitchSlider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: 0.25s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.modernSwitch input:checked + .modernSwitchSlider {
+  background: #7c3aed;
+}
+
+.modernSwitch input:checked + .modernSwitchSlider:before {
+  transform: translateX(20px);
+}
+
+/* Modal Footer */
+.modernModalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+  padding-top: 6px;
+}
+
+.modernFooterSecurity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 11.5px;
+  font-weight: 500;
+}
+
+.modernFooterSecurity svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+
+.modernPrimaryAddBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #6366f1 0%, #7c3aed 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow: 0 8px 20px -4px rgba(124, 58, 237, 0.38);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.modernPrimaryAddBtn:hover {
+  box-shadow: 0 12px 26px -4px rgba(124, 58, 237, 0.48);
+  transform: translateY(-1px);
+}
+
+.modernPrimaryAddBtn:active {
+  transform: translateY(0);
+}
+
+/* Dark Mode support */
+.premiumDarkMode .modernAddContactCard {
+  background: #0f172a;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6);
+}
+
+.premiumDarkMode .modernModalCloseBtn {
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+}
+
+.premiumDarkMode .modernModalHeaderInfo h2 {
+  color: #f8fafc;
+}
+
+.premiumDarkMode .modernModalHeaderInfo p {
+  color: #94a3b8;
+}
+
+.premiumDarkMode .modernSearchContainer {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.premiumDarkMode .modernSearchInput {
+  color: #f8fafc;
+}
+
+.premiumDarkMode .modernQuickActionTile {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.premiumDarkMode .modernTileText strong {
+  color: #f1f5f9;
+}
+
+.premiumDarkMode .modernPrivacyCard {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.premiumDarkMode .modernPrivacyHeaderText strong,
+.premiumDarkMode .modernToggleLeading strong {
+  color: #f1f5f9;
+}
+
+
 
