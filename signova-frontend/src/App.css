@@ -36522,25 +36522,109 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   height: 0 !important;
 }
 
-/* Lock outer page scroll on desktop so only Right Column scrolls cleanly */
+/* Lock outer page scroll on desktop, bring HeroCol beside appRail, and make ContentCard full-page */
 @media (min-width: 961px) {
   .modernProfilePageRoot {
     height: 100vh !important;
     max-height: 100vh !important;
     overflow: hidden !important;
-    padding: 20px 24px !important;
+    padding: 12px 16px 12px 8px !important;
   }
 
   .modernProfileLayout {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
     height: 100% !important;
-    align-items: start !important;
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+    gap: 14px !important;
+    align-items: stretch !important;
   }
 
-  .modernProfileRightCol {
-    max-height: calc(100vh - 40px) !important;
+  .modernProfileHeroCol {
+    height: 100% !important;
+    max-height: calc(100vh - 24px) !important;
     overflow-y: auto !important;
-    padding-bottom: 32px !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    border-radius: 24px !important;
+    padding: 24px 20px !important;
   }
+
+  .modernProfileHeroCol::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+  }
+
+  .modernProfileContentCard,
+  .modernProfileRightCol {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: calc(100vh - 24px) !important;
+    overflow-y: auto !important;
+    padding: 22px 28px 32px !important;
+    border-radius: 24px !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .modernProfileContentCard::-webkit-scrollbar,
+  .modernProfileRightCol::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+  }
+}
+
+/* Polished Profile Inputs, Cards, and Sticky Tab Header */
+.modernProfileTopNav {
+  position: sticky !important;
+  top: -22px !important;
+  z-index: 12 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  padding-top: 6px !important;
+  padding-bottom: 16px !important;
+  margin-top: -6px !important;
+  margin-bottom: 20px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.premiumDarkMode .modernProfileTopNav {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.modernSettingInput,
+.modernSettingSelect {
+  width: 100% !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  padding: 10px 14px !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: #0f172a !important;
+  background: #f8fafc !important;
+  transition: all 0.16s ease !important;
+  outline: none !important;
+}
+
+.modernSettingInput:focus,
+.modernSettingSelect:focus {
+  border-color: #7c3aed !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12) !important;
+}
+
+.premiumDarkMode .modernSettingInput,
+.premiumDarkMode .modernSettingSelect {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .modernSettingInput:focus,
+.premiumDarkMode .modernSettingSelect:focus {
+  border-color: #a78bfa !important;
+  background: #1e293b !important;
 }
 
 /* Profile Hero Avatar Placeholder (Rounded-Square Squircle + Corner 'S' Badge) */
