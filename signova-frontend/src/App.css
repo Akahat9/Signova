@@ -36522,13 +36522,18 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   height: 0 !important;
 }
 
-/* Lock outer page scroll on desktop, bring HeroCol beside appRail, and make ContentCard full-page */
+/* Lock outer page scroll on desktop, bring HeroCol right beside appRail, and make ContentCard full-page wide */
 @media (min-width: 961px) {
+  .messengerShell.profileMode .profilePage.modernProfilePageRoot,
+  body.signovaProfilePage .profilePage.modernProfilePageRoot,
   .modernProfilePageRoot {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
     height: 100vh !important;
     max-height: 100vh !important;
     overflow: hidden !important;
-    padding: 12px 16px 12px 8px !important;
+    padding: 8px 10px 8px 4px !important;
   }
 
   .modernProfileLayout {
@@ -36536,19 +36541,19 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
     max-width: none !important;
     margin: 0 !important;
     height: 100% !important;
-    grid-template-columns: 300px minmax(0, 1fr) !important;
-    gap: 14px !important;
+    grid-template-columns: 290px minmax(0, 1fr) !important;
+    gap: 10px !important;
     align-items: stretch !important;
   }
 
   .modernProfileHeroCol {
     height: 100% !important;
-    max-height: calc(100vh - 24px) !important;
+    max-height: calc(100vh - 16px) !important;
     overflow-y: auto !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
     border-radius: 24px !important;
-    padding: 24px 20px !important;
+    padding: 22px 18px !important;
   }
 
   .modernProfileHeroCol::-webkit-scrollbar {
@@ -36560,7 +36565,7 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   .modernProfileRightCol {
     width: 100% !important;
     height: 100% !important;
-    max-height: calc(100vh - 24px) !important;
+    max-height: calc(100vh - 16px) !important;
     overflow-y: auto !important;
     padding: 22px 28px 32px !important;
     border-radius: 24px !important;
