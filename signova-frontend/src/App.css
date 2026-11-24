@@ -30179,8 +30179,9 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   align-items: center !important;
   justify-content: center !important;
   padding: 20px !important;
-  background: rgba(15, 23, 42, 0.6) !important;
-  backdrop-filter: blur(14px) !important;
+  background: rgba(15, 23, 42, 0.56) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   animation: profileQrFade 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -35640,8 +35641,9 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   align-items: center !important;
   justify-content: center !important;
   padding: 16px !important;
-  background: rgba(15, 23, 42, 0.72) !important;
-  backdrop-filter: blur(12px) !important;
+  background: rgba(15, 23, 42, 0.56) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
   animation: checkoutFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
@@ -36479,4 +36481,146 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   background: #1e293b !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: #f8fafc !important;
+}
+
+/* ==========================================================================
+   FINAL POLISH: NO SCROLLBAR ON PROFILE, HERO AVATAR PLACEHOLDER, RAIL ICON
+   ========================================================================== */
+.modernProfilePageRoot,
+.profilePage,
+.modernProfileLayout,
+.modernProfileRightCol,
+.modernProfileTabBody {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.modernProfilePageRoot::-webkit-scrollbar,
+.profilePage::-webkit-scrollbar,
+.modernProfileLayout::-webkit-scrollbar,
+.modernProfileRightCol::-webkit-scrollbar,
+.modernProfileTabBody::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Profile Hero Avatar Placeholder (Signova Icon + Initial 'S' underneath) */
+.modernHeroAvatarFallback {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%) !important;
+  border-radius: inherit !important;
+}
+
+.modernHeroLogoPlaceholder {
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 4px 10px rgba(124, 58, 237, 0.18)) !important;
+}
+
+.modernHeroInitialSubtext {
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  color: #7c3aed !important;
+  line-height: 1 !important;
+  letter-spacing: 0.5px !important;
+}
+
+.premiumDarkMode .modernHeroAvatarFallback {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(79, 70, 229, 0.25) 100%) !important;
+}
+
+.premiumDarkMode .modernHeroInitialSubtext {
+  color: #c4b5fd !important;
+}
+
+/* Remove glow effect on rail profile button */
+.proProfileButton::before,
+.railButton.profileButton::before {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+/* Matching Rail Profile Avatar + Verification Sign Badge */
+.railProfileAvatarWrapper {
+  position: relative !important;
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.railProfileCustomImg {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 12px !important;
+  object-fit: cover !important;
+  border: 1.5px solid rgba(124, 58, 237, 0.25) !important;
+}
+
+.railProfileSignovaAvatar {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 1px !important;
+  padding: 2px !important;
+  border: 1.5px solid rgba(124, 58, 237, 0.25) !important;
+}
+
+.railProfileSignovaIcon {
+  width: 19px !important;
+  height: 19px !important;
+  object-fit: contain !important;
+}
+
+.railProfileInitialText {
+  font-size: 9.5px !important;
+  font-weight: 800 !important;
+  color: #7c3aed !important;
+  line-height: 1 !important;
+}
+
+.railProfileVerifiedBadge {
+  position: absolute !important;
+  bottom: -3px !important;
+  right: -3px !important;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  display: grid !important;
+  place-items: center !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16) !important;
+  z-index: 2 !important;
+}
+
+.premiumDarkMode .railProfileSignovaAvatar {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.28) 0%, rgba(79, 70, 229, 0.28) 100%) !important;
+  border-color: rgba(167, 139, 250, 0.35) !important;
+}
+
+.premiumDarkMode .railProfileInitialText {
+  color: #c4b5fd !important;
+}
+
+.premiumDarkMode .railProfileVerifiedBadge {
+  background: #0f172a !important;
 }

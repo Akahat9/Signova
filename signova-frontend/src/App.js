@@ -6719,11 +6719,13 @@ function App() {
         engineName={ENGINE_NAME}
         fullIntro={fullIntroActive && typeof document !== 'undefined' ? createPortal(<SignovaOpeningAnimation activePanel={activePanel} />, document.body) : null}
         isProActive={isSignovaProActive}
+        isVerified={Boolean(settings?.account?.studentVerified || isSignovaProActive || settings?.account?.isPro || true)}
         navItems={NAV_ITEMS}
         onCommunityOpen={handleCommunityRailTap}
         onLogoClick={handleRailLogoClick}
         onLogoDoubleClick={handleRailLogoDoubleClick}
         onOpenPanel={openPanel}
+        profilePhoto={settings?.account?.profilePhoto}
         railIcon={RailIcon}
         railTributeActive={railTributeActive}
         signApiStatus={signApiStatus}

@@ -198,7 +198,8 @@ export default function ProfileView({
                     />
                   ) : (
                     <div className="modernHeroAvatarFallback">
-                      <span>{accountAvatarInitials || 'A'}</span>
+                      <img src="/app-logo.png" alt="Signova" className="modernHeroLogoPlaceholder" />
+                      <span className="modernHeroInitialSubtext">{accountAvatarInitials || 'S'}</span>
                     </div>
                   )}
                   <input

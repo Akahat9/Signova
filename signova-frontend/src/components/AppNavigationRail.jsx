@@ -7,11 +7,13 @@ export default function AppNavigationRail({
   engineName,
   fullIntro,
   isProActive,
+  isVerified = true,
   navItems,
   onCommunityOpen,
   onLogoClick,
   onLogoDoubleClick,
   onOpenPanel,
+  profilePhoto,
   railIcon: RailIcon,
   railTributeActive,
   signApiStatus,
@@ -61,16 +63,30 @@ export default function AppNavigationRail({
       </nav>
       <div className="railProfileSection">
         <button
-          className={`${['profile', 'signovaPro'].includes(activePanel) ? 'railButton profileButton activeRailButton' : 'railButton profileButton'} ${isProActive ? 'proProfileButton' : ''}`}
+          className={`${['profile', 'signovaPro'].includes(activePanel) ? 'railButton profileButton activeRailButton' : 'railButton profileButton'}`}
           type="button"
           title="Profile"
           aria-label="Profile"
           onClick={() => onOpenPanel('profile')}
         >
-          <span className={isProActive ? 'railProfileAvatar profileInitialPremiumRing' : 'railProfileAvatar'} aria-hidden="true">
-            <i />
-            <b>{accountAvatarInitials}</b>
-          </span>
+          <div className="railProfileAvatarWrapper" aria-hidden="true">
+            {profilePhoto ? (
+              <img src={profilePhoto} alt="Profile" className="railProfileCustomImg" />
+            ) : (
+              <div className="railProfileSignovaAvatar">
+                <img src="/app-logo.png" alt="Signova" className="railProfileSignovaIcon" />
+                <span className="railProfileInitialText">{accountAvatarInitials || 'S'}</span>
+              </div>
+            )}
+            {isVerified && (
+              <span className="railProfileVerifiedBadge" title="Verified Account">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none">
+                  <circle cx="12" cy="12" r="11" fill="#7c3aed" />
+                  <path d="M7 12.5l3 3 7-7" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </span>
+            )}
+          </div>
           <span className="railLabel">Profile</span>
         </button>
         <div className="securityCard railSecurityCard">
