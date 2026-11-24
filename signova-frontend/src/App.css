@@ -33055,11 +33055,22 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   border-radius: 20px;
 }
 
-/* Settings Embedded */
+/* Settings Embedded (Clean 2-Column Side-by-Side Grid) */
 .modernSettingsGrid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 16px 20px !important;
+  align-items: start !important;
+}
+
+.modernSettingRowFull {
+  grid-column: 1 / -1 !important;
+}
+
+@media (max-width: 680px) {
+  .modernSettingsGrid {
+    grid-template-columns: 1fr !important;
+  }
 }
 
 .modernSettingRow {
@@ -36509,6 +36520,27 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
+}
+
+/* Lock outer page scroll on desktop so only Right Column scrolls cleanly */
+@media (min-width: 961px) {
+  .modernProfilePageRoot {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    padding: 20px 24px !important;
+  }
+
+  .modernProfileLayout {
+    height: 100% !important;
+    align-items: start !important;
+  }
+
+  .modernProfileRightCol {
+    max-height: calc(100vh - 40px) !important;
+    overflow-y: auto !important;
+    padding-bottom: 32px !important;
+  }
 }
 
 /* Profile Hero Avatar Placeholder (Rounded-Square Squircle + Corner 'S' Badge) */

@@ -538,7 +538,7 @@ export default function ProfileView({
                   </div>
                 </section>
 
-                {/* Section 2: Identity Details */}
+                {/* Section 2: Identity Details (Side-by-Side 2-Column Grid) */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -586,26 +586,12 @@ export default function ProfileView({
                     </label>
 
                     <label className="modernSettingRow">
-                      <span>Preferred System Language</span>
-                      <select
-                        value={settings?.account?.preferredLanguage || 'English'}
-                        onChange={(e) => updateSetting('account', 'preferredLanguage', e.target.value)}
-                        className="modernSettingSelect"
-                      >
-                        <option>English</option>
-                        <option>Hindi</option>
-                        <option>Hinglish</option>
-                        <option>ISL Gloss</option>
-                      </select>
-                    </label>
-
-                    <label className="modernSettingRow">
                       <span>City</span>
                       <input
                         type="text"
                         value={settings?.account?.city || ''}
                         onChange={(e) => updateSetting('account', 'city', e.target.value)}
-                        placeholder="City"
+                        placeholder="e.g. New Delhi"
                         className="modernSettingInput"
                       />
                     </label>
@@ -616,14 +602,96 @@ export default function ProfileView({
                         type="text"
                         value={settings?.account?.country || ''}
                         onChange={(e) => updateSetting('account', 'country', e.target.value)}
-                        placeholder="Country"
+                        placeholder="e.g. India"
                         className="modernSettingInput"
                       />
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Profile Visibility</span>
+                      <select
+                        value={settings?.privacy?.communityPublicProfile === false ? 'Contacts Only' : 'Public Profile'}
+                        onChange={(e) => updateSetting('privacy', 'communityPublicProfile', e.target.value === 'Public Profile')}
+                        className="modernSettingSelect"
+                      >
+                        <option>Public Profile</option>
+                        <option>Contacts Only</option>
+                      </select>
                     </label>
                   </div>
                 </section>
 
-                {/* Section 3: Sign Language Profile */}
+                {/* Section 3: Preferred Language & Communication (Separate from Sign Language) */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                      </svg>
+                      <h3>Preferred Language & Communication</h3>
+                    </div>
+                  </div>
+
+                  <div className="modernSettingsGrid">
+                    <label className="modernSettingRow">
+                      <span>Preferred Language</span>
+                      <select
+                        value={settings?.account?.preferredLanguage || 'English'}
+                        onChange={(e) => updateSetting('account', 'preferredLanguage', e.target.value)}
+                        className="modernSettingSelect"
+                      >
+                        <option>English</option>
+                        <option>Hindi (हिन्दी)</option>
+                        <option>Hinglish</option>
+                        <option>Bengali (বাংলা)</option>
+                        <option>Tamil (தமிழ்)</option>
+                        <option>Telugu (తెలుగు)</option>
+                        <option>Marathi (मराठी)</option>
+                        <option>Gujarati (ગુજરાતી)</option>
+                        <option>Kannada (ಕನ್ನಡ)</option>
+                        <option>Malayalam (മലയാളം)</option>
+                        <option>Punjabi (ਪੰਜਾਬੀ)</option>
+                        <option>Spanish</option>
+                        <option>French</option>
+                      </select>
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Secondary Language</span>
+                      <select
+                        value={settings?.account?.secondaryLanguage || 'None'}
+                        onChange={(e) => updateSetting('account', 'secondaryLanguage', e.target.value)}
+                        className="modernSettingSelect"
+                      >
+                        <option>None</option>
+                        <option>English</option>
+                        <option>Hindi (हिन्दी)</option>
+                        <option>Hinglish</option>
+                        <option>Regional Language</option>
+                      </select>
+                    </label>
+
+                    <div className="modernSettingRow modernSettingRowFull">
+                      <span>Communication Preference</span>
+                      <div className="modernChipGroup">
+                        {['Sign + Text', 'Voice + Sign', 'Live Captions', 'Interpreter Support'].map((mode) => (
+                          <button
+                            key={mode}
+                            type="button"
+                            className={`modernChipBtn ${(settings?.account?.communicationMode || 'Sign + Text') === mode ? 'activeChip' : ''}`}
+                            onClick={() => updateSetting('account', 'communicationMode', mode)}
+                          >
+                            {mode}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Section 4: Sign Language Preferences (Separate Section with More Options) */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -645,21 +713,36 @@ export default function ProfileView({
                         onChange={(e) => updateSetting('account', 'userType', e.target.value)}
                         className="modernSettingSelect"
                       >
+                        <option>Sign Language Learner</option>
                         <option>Deaf</option>
                         <option>Hard of Hearing</option>
                         <option>Mute</option>
-                        <option>Sign Language Learner</option>
                         <option>Interpreter</option>
-                        <option>Teacher</option>
-                        <option>Parent</option>
-                        <option>General User</option>
+                        <option>Teacher / Educator</option>
+                        <option>Parent / Family Member</option>
+                        <option>Content Creator</option>
+                        <option>Accessibility Advocate</option>
+                      </select>
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Daily Practice Target</span>
+                      <select
+                        value={settings?.practice?.dailyGoal || 15}
+                        onChange={(e) => updateSetting('practice', 'dailyGoal', Number(e.target.value))}
+                        className="modernSettingSelect"
+                      >
+                        <option value={10}>10 mins / day (Casual)</option>
+                        <option value={15}>15 mins / day (Regular)</option>
+                        <option value={30}>30 mins / day (Focused)</option>
+                        <option value={60}>60 mins / day (Intensive)</option>
                       </select>
                     </label>
 
                     <div className="modernSettingRow">
                       <span>Preferred Sign Dialect</span>
                       <div className="modernChipGroup">
-                        {['ISL', 'ASL', 'BSL', 'Other'].map((lang) => (
+                        {['ISL', 'ASL', 'BSL', 'Auslan', 'JSL', 'Other'].map((lang) => (
                           <button
                             key={lang}
                             type="button"
@@ -675,7 +758,7 @@ export default function ProfileView({
                     <div className="modernSettingRow">
                       <span>Sign Proficiency Level</span>
                       <div className="modernChipGroup">
-                        {['Beginner', 'Intermediate', 'Advanced'].map((level) => (
+                        {['Beginner', 'Intermediate', 'Advanced', 'Fluent'].map((level) => (
                           <button
                             key={level}
                             type="button"
