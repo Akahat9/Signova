@@ -34324,3 +34324,317 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   background: #7c3aed;
   color: #ffffff;
 }
+
+/* =========================================================
+   POLISH: ENTERPRISE ADDITIONS FOR PROFILE & CONTACT MODALS
+   ========================================================= */
+
+/* Daily Goal Card & Track */
+.modernDailyGoalCard {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.05) 0%, rgba(59, 130, 246, 0.04) 100%);
+  border: 1px solid rgba(124, 58, 237, 0.16);
+}
+
+.goalPercentBadge {
+  font-size: 13px;
+  font-weight: 700;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.1);
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+.goalTrackWrapper {
+  margin-top: 14px;
+}
+
+.goalTrack {
+  width: 100%;
+  height: 9px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.goalFill {
+  height: 100%;
+  background: linear-gradient(90deg, #7c3aed 0%, #3b82f6 100%);
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.goalStatsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.goalStatsRow small {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.quickPracticeBtn {
+  background: #7c3aed;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.quickPracticeBtn:hover {
+  background: #6d28d9;
+  transform: translateY(-1px);
+}
+
+/* Interactive Badge */
+.interactiveBadge {
+  cursor: pointer;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  background: rgba(124, 58, 237, 0.04);
+  color: #7c3aed;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.interactiveBadge:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.14);
+}
+
+/* Toast feedback messages */
+.modernProToast,
+.modernSettingsToast {
+  background: #10b981;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  animation: signovaFadeIn 0.25s ease-out;
+}
+
+/* Tier Selection Buttons */
+.tierSelectBtn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(124, 58, 237, 0.25);
+  background: #ffffff;
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tierSelectBtn:hover {
+  background: #7c3aed;
+  color: #ffffff;
+}
+
+.tierSelectBtn.tierActive {
+  background: #7c3aed;
+  color: #ffffff;
+  border-color: #7c3aed;
+}
+
+/* Contact Action Dropdown Menu */
+.modernContactMenuWrap {
+  position: relative;
+}
+
+.modernContactActionDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 190px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  padding: 6px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: signovaScaleUp 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modernDropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s ease;
+}
+
+.modernDropdownItem:hover {
+  background: #f1f5f9;
+}
+
+.modernDropdownItem.dangerAction {
+  color: #ef4444;
+}
+
+.modernDropdownItem.dangerAction:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* Lightbox Modal */
+.modernLightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: signovaFadeIn 0.2s ease-out;
+}
+
+.modernLightboxCard {
+  position: relative;
+  max-width: 90vw;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: #0f172a;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modernLightboxClose {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 20px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  transition: background 0.15s ease;
+}
+
+.modernLightboxClose:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.modernLightboxMediaWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000;
+  max-height: 72vh;
+}
+
+.modernLightboxImg {
+  max-width: 100%;
+  max-height: 72vh;
+  object-fit: contain;
+}
+
+.modernLightboxVideo {
+  max-width: 100%;
+  max-height: 72vh;
+  outline: none;
+}
+
+.modernLightboxDoc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px;
+  color: #f8fafc;
+}
+
+.modernLightboxDocLink {
+  color: #38bdf8;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.modernLightboxFooter {
+  padding: 14px 20px;
+  background: #1e293b;
+  color: #cbd5e1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.modernLightboxFooter a {
+  color: #a78bfa;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.modernLightboxFooter a:hover {
+  text-decoration: underline;
+}
+
+/* Dark Mode Extensions */
+.premiumDarkMode .modernDailyGoalCard {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%) !important;
+  border-color: rgba(124, 58, 237, 0.3) !important;
+}
+
+.premiumDarkMode .goalTrack {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.premiumDarkMode .goalStatsRow small {
+  color: #94a3b8;
+}
+
+.premiumDarkMode .modernContactActionDropdown {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.premiumDarkMode .modernDropdownItem {
+  color: #e2e8f0;
+}
+
+.premiumDarkMode .modernDropdownItem:hover {
+  background: #334155;
+}
+
+.premiumDarkMode .tierSelectBtn {
+  background: #1e293b;
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+.premiumDarkMode .tierSelectBtn:hover,
+.premiumDarkMode .tierSelectBtn.tierActive {
+  background: #7c3aed;
+  color: #ffffff;
+}

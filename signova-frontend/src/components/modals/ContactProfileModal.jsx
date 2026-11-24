@@ -5,7 +5,7 @@ import { ContactAvatar } from '../AppPresentation';
  * Modern ContactProfileModal Component matching Image 2 specifications.
  * Displayed when clicking on a contact's profile in chat or contacts list.
  * Features real conversation media, real call metrics, contact privacy badges,
- * and quick Video/Voice Sign Chat launch actions.
+ * full-screen media lightbox, 3-dots actions menu, and 1-click Chat/Video/Voice launch.
  */
 export default function ContactProfileModal({
   isOpen,
@@ -19,10 +19,13 @@ export default function ContactProfileModal({
   selectedChatFlags = {},
   selectedChatPresence,
   encryptionStatus = 'End-to-end encrypted',
+  onOpenChat,
 }) {
   const [activeTab, setActiveTab] = useState('about'); // 'about' | 'media' | 'files' | 'links' | 'activity'
   const [mediaFilter, setMediaFilter] = useState('all'); // 'all' | 'photos' | 'videos' | 'documents' | 'links' | 'audio'
   const [copyFeedback, setCopyFeedback] = useState('');
+  const [actionsMenuOpen, setActionsMenuOpen] = useState(false);
+  const [activeLightboxMedia, setActiveLightboxMedia] = useState(null);
 
   // Extract real messages for this contact
   const contactMessages = useMemo(() => {
@@ -105,12 +108,22 @@ export default function ContactProfileModal({
     }
   }
 
+  function handleStartChat() {
+    onClose();
+    if (typeof onOpenChat === 'function') {
+      onOpenChat(contact);
+    }
+  }
+
   return (
     <div
       className="modernContactModalOverlay"
       role="presentation"
       onMouseDown={(e) => {
-        if (e.target === e.currentTarget) onClose();
+        if (e.target === e.currentTarget) {
+          onClose();
+          setActiveLightboxMedia(null);
+        }
       }}
     >
       <div className="modernContactProfileCard" role="dialog" aria-modal="true" aria-label={`${displayName} profile`}>
@@ -156,22 +169,34 @@ export default function ContactProfileModal({
             </div>
             <span className="modernStatDivider" />
             <div className="modernStatItem">
-              <strong>{contactMessages.length || 32}</strong>
+              <strong>{contactMessages.length || 0}</strong>
               <small>Messages</small>
             </div>
             <span className="modernStatDivider" />
             <div className="modernStatItem">
-              <strong>{callsCount || 12}</strong>
+              <strong>{callsCount || 0}</strong>
               <small>Calls</small>
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="modernHeroActionButtons">
+            {/* Direct Send Message Button */}
+            <button
+              type="button"
+              className="modernPrimaryAddBtn modernMessageActionBtn"
+              onClick={handleStartChat}
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              <span>Send Message</span>
+            </button>
+
             {typeof startVideoSignChat === 'function' && (
               <button
                 type="button"
-                className="modernPrimaryAddBtn modernCallActionBtn"
+                className="modernHeroOutlineBtn"
                 onClick={() => {
                   onClose();
                   startVideoSignChat();
@@ -230,7 +255,7 @@ export default function ContactProfileModal({
             RIGHT COLUMN: CONTENT PANE WITH PILL TABS (Image 2 Parity)
            ========================================================= */}
         <main className="modernProfileContentCard">
-          {/* Top Navigation Pill Tabs + Close Button */}
+          {/* Top Navigation Pill Tabs + 3-Dots Action Menu + Close Button */}
           <header className="modernProfileTopNav">
             <nav className="modernProfilePillTabs" aria-label="Contact details navigation">
               {['about', 'media', 'files', 'links', 'activity'].map((tab) => (
@@ -245,15 +270,64 @@ export default function ContactProfileModal({
               ))}
             </nav>
 
-            <button
-              type="button"
-              className="modernProfileCloseBtn"
-              onClick={onClose}
-              aria-label="Close contact profile"
-              title="Close"
-            >
-              ×
-            </button>
+            <div className="modernTopNavActions">
+              {/* 3-Dots Menu */}
+              <div className="modernContactMenuWrap">
+                <button
+                  type="button"
+                  className="modernIconBtn"
+                  onClick={() => setActionsMenuOpen((open) => !open)}
+                  aria-label="More contact actions"
+                  title="More actions"
+                >
+                  ⋮
+                </button>
+
+                {actionsMenuOpen && (
+                  <div className="modernContactActionDropdown" onMouseLeave={() => setActionsMenuOpen(false)}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleHeaderChatAction?.('favourite');
+                        setActionsMenuOpen(false);
+                      }}
+                    >
+                      <span>{selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleHeaderChatAction?.('muted');
+                        setActionsMenuOpen(false);
+                      }}
+                    >
+                      <span>{selectedChatFlags.muted ? '🔔 Unmute Notifications' : '🔕 Mute Notifications'}</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="dangerOption"
+                      onClick={() => {
+                        handleHeaderChatAction?.('blocked');
+                        setActionsMenuOpen(false);
+                      }}
+                    >
+                      <span>{selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Close Button */}
+              <button
+                type="button"
+                className="modernProfileCloseBtn"
+                onClick={onClose}
+                aria-label="Close contact profile"
+                title="Close"
+              >
+                ×
+              </button>
+            </div>
           </header>
 
           {/* TAB 1: ABOUT (Image 2 exact match) */}
@@ -359,7 +433,7 @@ export default function ContactProfileModal({
                 </div>
               </section>
 
-              {/* Section 4: Shared Media (REAL data only) */}
+              {/* Section 4: Shared Media (REAL data only + Clickable Lightbox) */}
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
                   <div className="modernSectionTitle">
@@ -388,7 +462,12 @@ export default function ContactProfileModal({
                 {visibleMediaList.length > 0 ? (
                   <div className="modernSharedMediaGrid">
                     {visibleMediaList.map((item, idx) => (
-                      <div key={item.id || idx} className="modernMediaItemPreview">
+                      <div
+                        key={item.id || idx}
+                        className="modernMediaItemPreview clickableMedia"
+                        onClick={() => setActiveLightboxMedia(item)}
+                        title="Click to preview"
+                      >
                         {item.mediaUrl || item.imageUrl ? (
                           <img src={item.mediaUrl || item.imageUrl} alt="" />
                         ) : item.videoUrl ? (
@@ -480,8 +559,12 @@ export default function ContactProfileModal({
                 {sharedMediaItems.length > 0 ? (
                   <div className="modernSharedMediaGrid">
                     {sharedMediaItems.map((m, idx) => (
-                      <div key={m.id || idx} className="modernMediaItemPreview">
-                        {m.videoUrl ? <video src={m.videoUrl} controls /> : <img src={m.mediaUrl || m.imageUrl} alt="" />}
+                      <div
+                        key={m.id || idx}
+                        className="modernMediaItemPreview clickableMedia"
+                        onClick={() => setActiveLightboxMedia(m)}
+                      >
+                        {m.videoUrl ? <video src={m.videoUrl} /> : <img src={m.mediaUrl || m.imageUrl} alt="" />}
                       </div>
                     ))}
                   </div>
@@ -511,7 +594,11 @@ export default function ContactProfileModal({
                           <strong>{doc.fileName || 'Shared Document'}</strong>
                           <small>{doc.fileSize || 'Encrypted PDF'}</small>
                         </div>
-                        {doc.documentUrl && <a href={doc.documentUrl} target="_blank" rel="noreferrer" className="modernSmallLink">Download</a>}
+                        {doc.documentUrl && (
+                          <a href={doc.documentUrl} target="_blank" rel="noreferrer" className="modernSmallLink">
+                            Download
+                          </a>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -583,6 +670,39 @@ export default function ContactProfileModal({
           )}
         </main>
       </div>
+
+      {/* Media Lightbox Modal */}
+      {activeLightboxMedia && (
+        <div
+          className="modernLightboxOverlay"
+          onClick={() => setActiveLightboxMedia(null)}
+          role="dialog"
+          aria-modal="true"
+        >
+          <div className="modernLightboxCard" onClick={(e) => e.stopPropagation()}>
+            <button
+              type="button"
+              className="modernLightboxClose"
+              onClick={() => setActiveLightboxMedia(null)}
+              aria-label="Close preview"
+            >
+              ×
+            </button>
+            <div className="modernLightboxMediaWrapper">
+              {activeLightboxMedia.videoUrl ? (
+                <video src={activeLightboxMedia.videoUrl} controls autoPlay />
+              ) : activeLightboxMedia.mediaUrl || activeLightboxMedia.imageUrl ? (
+                <img src={activeLightboxMedia.mediaUrl || activeLightboxMedia.imageUrl} alt="" />
+              ) : (
+                <div className="modernDocPreviewBox">
+                  <span>📄</span>
+                  <strong>{activeLightboxMedia.fileName || 'Shared Document'}</strong>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

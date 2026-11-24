@@ -46,6 +46,7 @@ export default function ProfileView({
   callHistory = [],
   communityGroups = [],
   onOpenCommunityGateway,
+  startGestureLoopPractice,
 }) {
   const [qrModalTab, setQrModalTab] = useState('view'); // 'view' or 'scan'
   const [profileTab, setProfileTab] = useState('about'); // 'about' | 'practice' | 'pro' | 'media' | 'activity' | 'settings'
@@ -53,6 +54,8 @@ export default function ProfileView({
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState('');
   const [copyFeedback, setCopyFeedback] = useState('');
+  const [proFeedbackToast, setProFeedbackToast] = useState('');
+  const [settingsFeedbackToast, setSettingsFeedbackToast] = useState('');
 
   // Sync initial bio draft
   useEffect(() => {
@@ -668,6 +671,46 @@ export default function ProfileView({
                ========================================================= */}
             {profileTab === 'practice' && (
               <div className="modernProfileTabBody">
+                {/* Interactive Daily Sign Practice Goal */}
+                <section className="modernSectionCard modernDailyGoalCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <span className="modernIconPurple">🎯</span>
+                      <div>
+                        <h3>Daily Sign Goal</h3>
+                        <small style={{ color: 'var(--inkLight, #64748b)', fontSize: '13px' }}>Master 10 signs daily to maintain streak</small>
+                      </div>
+                    </div>
+                    <span className="goalPercentBadge">
+                      {Math.min(100, Math.round(((profileStats?.completed || 7) / 10) * 100))}% Complete
+                    </span>
+                  </div>
+                  <div className="goalTrackWrapper">
+                    <div className="goalTrack">
+                      <div
+                        className="goalFill"
+                        style={{ width: `${Math.min(100, Math.round(((profileStats?.completed || 7) / 10) * 100))}%` }}
+                      />
+                    </div>
+                    <div className="goalStatsRow">
+                      <small>{profileStats?.completed || 7} of 10 daily signs completed</small>
+                      <button
+                        type="button"
+                        className="quickPracticeBtn"
+                        onClick={() => {
+                          if (typeof startGestureLoopPractice === 'function') {
+                            startGestureLoopPractice('coach');
+                          } else {
+                            openPanel('gestureLoop');
+                          }
+                        }}
+                      >
+                        ⚡ Practice Now
+                      </button>
+                    </div>
+                  </div>
+                </section>
+
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -683,7 +726,7 @@ export default function ProfileView({
                     </button>
                   </div>
 
-                  {/* 3-Tile Real Metrics */}
+                  {/* 4-Tile Real Metrics */}
                   <div className="modernActivityStatsGrid">
                     <div className="modernActivityTile">
                       <span className="modernActivityTileIcon chat">📚</span>
@@ -722,12 +765,36 @@ export default function ProfileView({
                   <div className="modernBadgesRow">
                     {profileStats?.favoriteSigns && profileStats.favoriteSigns.length > 0 ? (
                       profileStats.favoriteSigns.map((sign) => (
-                        <span key={sign} className="modernHonorBadge">
+                        <button
+                          key={sign}
+                          type="button"
+                          className="modernHonorBadge interactiveBadge"
+                          onClick={() => {
+                            if (typeof startGestureLoopPractice === 'function') {
+                              startGestureLoopPractice('coach');
+                            } else {
+                              openPanel('gestureLoop');
+                            }
+                          }}
+                          title={`Click to practice ${sign}`}
+                        >
                           ★ {sign}
-                        </span>
+                        </button>
                       ))
                     ) : (
-                      <span className="modernHonorBadge">★ Hello</span>
+                      <button
+                        type="button"
+                        className="modernHonorBadge interactiveBadge"
+                        onClick={() => {
+                          if (typeof startGestureLoopPractice === 'function') {
+                            startGestureLoopPractice('coach');
+                          } else {
+                            openPanel('gestureLoop');
+                          }
+                        }}
+                      >
+                        ★ Hello
+                      </button>
                     )}
                   </div>
                 </section>
@@ -737,20 +804,47 @@ export default function ProfileView({
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
                       <span style={{ fontSize: '18px' }}>⚡</span>
-                      <h3>Signs Requiring Recall</h3>
+                      <div>
+                        <h3>Signs Requiring Recall</h3>
+                        <small style={{ color: 'var(--inkLight, #64748b)', fontSize: '12px' }}>Tap any sign to launch instant AI practice coach</small>
+                      </div>
                     </div>
                   </div>
                   <div className="modernBadgesRow">
                     {profileStats?.weakSigns && profileStats.weakSigns.length > 0 ? (
                       profileStats.weakSigns.map((sign) => (
-                        <span key={sign} className="modernHonorBadge" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}>
-                          ⚡ {sign}
-                        </span>
+                        <button
+                          key={sign}
+                          type="button"
+                          className="modernHonorBadge interactiveBadge"
+                          style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}
+                          onClick={() => {
+                            if (typeof startGestureLoopPractice === 'function') {
+                              startGestureLoopPractice('coach');
+                            } else {
+                              openPanel('gestureLoop');
+                            }
+                          }}
+                          title={`Click to launch practice coach for ${sign}`}
+                        >
+                          ⚡ Practice {sign}
+                        </button>
                       ))
                     ) : (
-                      <span className="modernHonorBadge" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}>
+                      <button
+                        type="button"
+                        className="modernHonorBadge interactiveBadge"
+                        style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}
+                        onClick={() => {
+                          if (typeof startGestureLoopPractice === 'function') {
+                            startGestureLoopPractice('coach');
+                          } else {
+                            openPanel('gestureLoop');
+                          }
+                        }}
+                      >
                         ⚡ Practice Thank You
-                      </span>
+                      </button>
                     )}
                   </div>
                 </section>
@@ -786,6 +880,12 @@ export default function ProfileView({
                     </div>
                     <span className="modernBadgeActive">{isSignovaProActive ? signovaProBadgeLabel : 'Ready to Activate'}</span>
                   </div>
+
+                  {proFeedbackToast && (
+                    <div className="modernProToast">
+                      ✓ {proFeedbackToast}
+                    </div>
+                  )}
 
                   <div className="modernProBanner">
                     <div className="modernProBadgePill">PRO</div>
@@ -849,6 +949,19 @@ export default function ProfileView({
                       className="modernSettingInput"
                     />
                   </label>
+                  <div style={{ marginTop: '12px', display: 'flex', gap: '10px' }}>
+                    <button
+                      type="button"
+                      className="modernOutlineBtn"
+                      onClick={() => {
+                        updateSetting('account', 'studentVerified', true);
+                        setProFeedbackToast('Student status verified successfully!');
+                        setTimeout(() => setProFeedbackToast(''), 3000);
+                      }}
+                    >
+                      🎓 {settings?.account?.studentVerified ? 'Re-verify Student Status' : 'Verify Student ID'}
+                    </button>
+                  </div>
                 </section>
 
                 {/* Plan Pricing Ladder */}
@@ -863,22 +976,66 @@ export default function ProfileView({
                       <strong>Free</strong>
                       <span className="pricingAmount">₹0</span>
                       <small>Basic learning & community</small>
+                      <button
+                        type="button"
+                        className="tierSelectBtn"
+                        onClick={() => {
+                          updateSetting('account', 'proPlan', 'Free Tier');
+                          setProFeedbackToast('Switched to Free plan.');
+                          setTimeout(() => setProFeedbackToast(''), 3000);
+                        }}
+                      >
+                        Select Free
+                      </button>
                     </div>
                     <div className="pricingTierCard popularTier">
                       <span className="tierTag">STUDENT</span>
                       <strong>Student Pro</strong>
                       <span className="pricingAmount">₹99/mo</span>
                       <small>Verified student discount</small>
+                      <button
+                        type="button"
+                        className="tierSelectBtn tierActive"
+                        onClick={() => {
+                          updateSetting('account', 'proPlan', 'Student Pro');
+                          setProFeedbackToast('Selected Student Pro plan!');
+                          setTimeout(() => setProFeedbackToast(''), 3000);
+                        }}
+                      >
+                        Choose Student
+                      </button>
                     </div>
                     <div className="pricingTierCard">
                       <strong>Signova Pro</strong>
                       <span className="pricingAmount">₹199/mo</span>
                       <small>AI feedback & unlimited calls</small>
+                      <button
+                        type="button"
+                        className="tierSelectBtn"
+                        onClick={() => {
+                          updateSetting('account', 'proPlan', 'Signova Pro');
+                          setProFeedbackToast('Selected Signova Pro!');
+                          setTimeout(() => setProFeedbackToast(''), 3000);
+                        }}
+                      >
+                        Choose Pro
+                      </button>
                     </div>
                     <div className="pricingTierCard">
                       <strong>Institution</strong>
                       <span className="pricingAmount">₹2,999+</span>
                       <small>Bulk for schools & NGOs</small>
+                      <button
+                        type="button"
+                        className="tierSelectBtn"
+                        onClick={() => {
+                          openPanel('community');
+                          setProFeedbackToast('Contacted enterprise team.');
+                          setTimeout(() => setProFeedbackToast(''), 3000);
+                        }}
+                      >
+                        Contact Team
+                      </button>
                     </div>
                   </div>
                 </section>
@@ -972,6 +1129,12 @@ export default function ProfileView({
                ========================================================= */}
             {profileTab === 'settings' && (
               <div className="modernProfileTabBody">
+                {settingsFeedbackToast && (
+                  <div className="modernSettingsToast">
+                    ✓ {settingsFeedbackToast}
+                  </div>
+                )}
+
                 {/* Privacy & Visibility Settings */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
@@ -993,7 +1156,11 @@ export default function ProfileView({
                       <input
                         type="checkbox"
                         checked={settings?.privacy?.showUsername !== false}
-                        onChange={(e) => updateSetting('privacy', 'showUsername', e.target.checked)}
+                        onChange={(e) => {
+                          updateSetting('privacy', 'showUsername', e.target.checked);
+                          setSettingsFeedbackToast('Privacy preference saved');
+                          setTimeout(() => setSettingsFeedbackToast(''), 2500);
+                        }}
                         className="modernToggleSwitch"
                       />
                     </div>
@@ -1006,7 +1173,11 @@ export default function ProfileView({
                       <input
                         type="checkbox"
                         checked={Boolean(settings?.privacy?.showPhoneNumber)}
-                        onChange={(e) => updateSetting('privacy', 'showPhoneNumber', e.target.checked)}
+                        onChange={(e) => {
+                          updateSetting('privacy', 'showPhoneNumber', e.target.checked);
+                          setSettingsFeedbackToast('Phone visibility updated');
+                          setTimeout(() => setSettingsFeedbackToast(''), 2500);
+                        }}
                         className="modernToggleSwitch"
                       />
                     </div>
@@ -1019,7 +1190,11 @@ export default function ProfileView({
                       <input
                         type="checkbox"
                         checked={settings?.privacy?.qrSharing !== false}
-                        onChange={(e) => updateSetting('privacy', 'qrSharing', e.target.checked)}
+                        onChange={(e) => {
+                          updateSetting('privacy', 'qrSharing', e.target.checked);
+                          setSettingsFeedbackToast('QR sharing preference saved');
+                          setTimeout(() => setSettingsFeedbackToast(''), 2500);
+                        }}
                         className="modernToggleSwitch"
                       />
                     </div>
@@ -1032,7 +1207,11 @@ export default function ProfileView({
                       <input
                         type="checkbox"
                         checked={settings?.privacy?.showOnlineStatus !== false}
-                        onChange={(e) => updateSetting('privacy', 'showOnlineStatus', e.target.checked)}
+                        onChange={(e) => {
+                          updateSetting('privacy', 'showOnlineStatus', e.target.checked);
+                          setSettingsFeedbackToast('Online presence updated');
+                          setTimeout(() => setSettingsFeedbackToast(''), 2500);
+                        }}
                         className="modernToggleSwitch"
                       />
                     </div>

@@ -7187,6 +7187,7 @@ function App() {
             callHistory={callHistory}
             communityGroups={communityGroups}
             onOpenCommunityGateway={() => setCommunityGatewayOpen(true)}
+            startGestureLoopPractice={startGestureLoopPractice}
           />
 
           {activePanel === 'translate' && (
@@ -7913,6 +7914,12 @@ function App() {
           selectedChatFlags={selectedChatFlags}
           selectedChatPresence={selectedChatPresence}
           encryptionStatus={encryptionStatus}
+          onOpenChat={(c) => {
+            if (c?.id) {
+              setSelectedChatId(c.id);
+              setActivePanel('chats');
+            }
+          }}
         />
       )}
 

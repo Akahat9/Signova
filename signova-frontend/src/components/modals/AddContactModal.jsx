@@ -4,8 +4,9 @@ import { useContactDirectoryLookup } from '../../features/contacts/useContactDir
 
 /**
  * Modern AddContactModal component matching Signova's minimalist redesign (Image 1).
- * Features unified search, live verified match card with 1-click Add,
- * QR scanner trigger, invite link sharing, and iOS-style contact privacy toggles.
+ * Features unified smart search with auto country code (+91), live verified match card
+ * with 1-click Add, instant keyboard Enter support, QR scanner trigger, invite link sharing,
+ * and persistent iOS-style contact privacy toggles.
  */
 export default function AddContactModal({
   contactModalOpen,
@@ -17,6 +18,8 @@ export default function AddContactModal({
   contacts = [],
   onScanQr,
   copyProfileShareLink,
+  settings,
+  updateSetting,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [inviteCopied, setInviteCopied] = useState(false);
@@ -68,13 +71,17 @@ export default function AddContactModal({
       return;
     }
 
-    // Check if user is typing phone number (digits, +, or leading 0)
+    // Smart phone detection: digits only with auto country code fallback
     const digitsOnly = trimmed.replace(/\D/g, '');
-    if (trimmed.startsWith('+') || (digitsOnly.length >= 7 && !trimmed.startsWith('@'))) {
-      const parsed = formatUniversalPhone(contactForm.countryCode, trimmed);
+    const isPhoneQuery = trimmed.startsWith('+') || (digitsOnly.length >= 7 && !trimmed.startsWith('@'));
+
+    if (isPhoneQuery) {
+      const activeCode = contactForm.countryCode || '+91';
+      const formattedInput = trimmed.startsWith('+') ? trimmed : `${activeCode}${digitsOnly}`;
+      const parsed = formatUniversalPhone(activeCode, formattedInput);
       setContactForm((prev) => ({
         ...prev,
-        countryCode: parsed.countryCode,
+        countryCode: parsed.countryCode || activeCode,
         number: parsed.nationalNumber,
         username: prev.username || (manualName ? generateUsernameSlug(manualName) : ''),
       }));
@@ -86,6 +93,17 @@ export default function AddContactModal({
         username: formattedUser,
         name: manualName || prev.name || trimmed.replace(/^@/, ''),
       }));
+    }
+  }
+
+  function handleSearchKeyDown(e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (lookupStatus.status === 'verified' && lookupStatus.verifiedUser) {
+        handleQuickAdd(e);
+      } else {
+        addContact(e);
+      }
     }
   }
 
@@ -120,6 +138,20 @@ export default function AddContactModal({
   function handleQuickAdd(e) {
     e.preventDefault();
     addContact(e);
+  }
+
+  function handleToggleShowUsername(checked) {
+    setContactForm((prev) => ({ ...prev, showUsername: checked }));
+    if (typeof updateSetting === 'function') {
+      updateSetting('privacy', 'showUsername', checked);
+    }
+  }
+
+  function handleToggleShowNumber(checked) {
+    setContactForm((prev) => ({ ...prev, showNumber: checked }));
+    if (typeof updateSetting === 'function') {
+      updateSetting('privacy', 'showPhoneNumber', checked);
+    }
   }
 
   const verifiedUser = lookupStatus.verifiedUser;
@@ -172,6 +204,7 @@ export default function AddContactModal({
               placeholder="Search by username or phone number"
               value={searchQuery}
               onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
               autoFocus
             />
             {searchQuery ? (
@@ -186,7 +219,7 @@ export default function AddContactModal({
             ) : null}
           </div>
 
-          {/* Matched Contact Preview Card */}
+          {/* Matched Contact Preview Card (Matching Image 1 Parity) */}
           {lookupStatus.status === 'verified' && verifiedUser ? (
             <div className="modernMatchResultCard">
               <div className="modernMatchAvatarWrap">
@@ -316,7 +349,7 @@ export default function AddContactModal({
                 <input
                   type="checkbox"
                   checked={Boolean(contactForm.showUsername)}
-                  onChange={(e) => setContactForm({ ...contactForm, showUsername: e.target.checked })}
+                  onChange={(e) => handleToggleShowUsername(e.target.checked)}
                 />
                 <span className="modernSwitchSlider" />
               </label>
@@ -338,7 +371,7 @@ export default function AddContactModal({
                 <input
                   type="checkbox"
                   checked={Boolean(contactForm.showNumber)}
-                  onChange={(e) => setContactForm({ ...contactForm, showNumber: e.target.checked })}
+                  onChange={(e) => handleToggleShowNumber(e.target.checked)}
                 />
                 <span className="modernSwitchSlider" />
               </label>
