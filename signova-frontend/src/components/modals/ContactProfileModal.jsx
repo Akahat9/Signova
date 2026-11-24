@@ -142,6 +142,54 @@ export default function ContactProfileModal({
               />
               <span className={`modernHeroStatusDot ${isOnline ? 'statusOnline' : 'statusOffline'}`} />
             </div>
+
+            {/* 3-Dots Quick Actions Menu Placed Directly At Avatar Stage */}
+            <div className="modernAvatarActionsAnchor">
+              <button
+                type="button"
+                className="modernAvatarMenuBtn"
+                onClick={() => setActionsMenuOpen((open) => !open)}
+                aria-label="Contact options"
+                title="Contact options"
+              >
+                ⋮
+              </button>
+
+              {actionsMenuOpen && (
+                <div className="modernContactActionDropdown avatarDropdown" onMouseLeave={() => setActionsMenuOpen(false)}>
+                  <button
+                    type="button"
+                    className="modernDropdownItem"
+                    onClick={() => {
+                      handleHeaderChatAction?.('favourite');
+                      setActionsMenuOpen(false);
+                    }}
+                  >
+                    <span>{selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="modernDropdownItem"
+                    onClick={() => {
+                      handleHeaderChatAction?.('muted');
+                      setActionsMenuOpen(false);
+                    }}
+                  >
+                    <span>{selectedChatFlags.muted ? '🔔 Unmute Notifications' : '🔕 Mute Notifications'}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="modernDropdownItem dangerAction"
+                    onClick={() => {
+                      handleHeaderChatAction?.('blocked');
+                      setActionsMenuOpen(false);
+                    }}
+                  >
+                    <span>{selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}</span>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Name & Identity */}
@@ -271,53 +319,7 @@ export default function ContactProfileModal({
             </nav>
 
             <div className="modernTopNavActions">
-              {/* 3-Dots Menu */}
-              <div className="modernContactMenuWrap">
-                <button
-                  type="button"
-                  className="modernIconBtn"
-                  onClick={() => setActionsMenuOpen((open) => !open)}
-                  aria-label="More contact actions"
-                  title="More actions"
-                >
-                  ⋮
-                </button>
-
-                {actionsMenuOpen && (
-                  <div className="modernContactActionDropdown" onMouseLeave={() => setActionsMenuOpen(false)}>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleHeaderChatAction?.('favourite');
-                        setActionsMenuOpen(false);
-                      }}
-                    >
-                      <span>{selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleHeaderChatAction?.('muted');
-                        setActionsMenuOpen(false);
-                      }}
-                    >
-                      <span>{selectedChatFlags.muted ? '🔔 Unmute Notifications' : '🔕 Mute Notifications'}</span>
-                    </button>
-                    <button
-                      type="button"
-                      className="dangerOption"
-                      onClick={() => {
-                        handleHeaderChatAction?.('blocked');
-                        setActionsMenuOpen(false);
-                      }}
-                    >
-                      <span>{selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              {/* Close Button */}
+              {/* Close Button Only in Top Bar */}
               <button
                 type="button"
                 className="modernProfileCloseBtn"
@@ -543,6 +545,73 @@ export default function ContactProfileModal({
                       <p>No recent activity yet. Start a chat or video call to connect!</p>
                     </div>
                   )}
+                </div>
+              </section>
+
+              {/* Dedicated Privacy & Contact Actions Card (Scrolled to bottom) */}
+              <section className="modernSectionCard modernDangerZoneCard">
+                <div className="modernSectionHeader">
+                  <div className="modernSectionTitle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <h3>Privacy & Contact Actions</h3>
+                  </div>
+                </div>
+
+                <div className="modernContactActionList">
+                  <div className="modernContactActionRow">
+                    <div>
+                      <strong>Star / Favourite Contact</strong>
+                      <small>Pin this contact for rapid access across conversations</small>
+                    </div>
+                    <button
+                      type="button"
+                      className="modernSecondaryActionBtn"
+                      onClick={() => handleHeaderChatAction?.('favourite')}
+                    >
+                      {selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}
+                    </button>
+                  </div>
+
+                  <div className="modernContactActionRow">
+                    <div>
+                      <strong>Mute Notifications</strong>
+                      <small>Silence incoming message tones and call banners from this user</small>
+                    </div>
+                    <button
+                      type="button"
+                      className="modernSecondaryActionBtn"
+                      onClick={() => handleHeaderChatAction?.('muted')}
+                    >
+                      {selectedChatFlags.muted ? '🔔 Unmute' : '🔕 Mute Notifications'}
+                    </button>
+                  </div>
+
+                  <div className="modernContactActionRow dangerBorderTop">
+                    <div>
+                      <strong style={{ color: '#ef4444' }}>Block & Report Contact</strong>
+                      <small>Prevent this user from messaging, calling, or seeing online presence</small>
+                    </div>
+                    <div className="dangerActionsGroup">
+                      <button
+                        type="button"
+                        className="modernDangerActionBtn"
+                        onClick={() => handleHeaderChatAction?.('blocked')}
+                      >
+                        {selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}
+                      </button>
+                      <button
+                        type="button"
+                        className="modernReportActionBtn"
+                        onClick={() => {
+                          alert(`Contact ${displayName} reported for review.`);
+                        }}
+                      >
+                        ⚠ Report Spam
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </section>
             </div>

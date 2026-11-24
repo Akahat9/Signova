@@ -34638,3 +34638,403 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   background: #7c3aed;
   color: #ffffff;
 }
+
+/* =========================================================
+   POLISH: EDGE-TO-EDGE FULL WIDTH PROFILE & QR FIXES
+   ========================================================= */
+
+/* 1. Full-Width Edge-To-Edge Profile Page */
+.modernProfilePageRoot {
+  width: 100% !important;
+  height: 100% !important;
+  overflow-y: auto !important;
+  padding: 16px 20px 48px !important;
+}
+
+.modernProfileLayout {
+  display: grid !important;
+  grid-template-columns: 320px minmax(0, 1fr) !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: 100% !important; /* Full width edge-to-edge layout without blank space */
+  margin: 0 !important;
+  align-items: start !important;
+}
+
+@media (max-width: 1024px) {
+  .modernProfileLayout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 2. Structured Profile QR Modal Card (Prevents stretching & scaling bugs) */
+.profileQrModalCard {
+  width: min(92vw, 420px) !important;
+  max-width: 420px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(226, 232, 240, 0.8) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  margin: auto !important;
+  position: relative !important;
+}
+
+.profileQrModalHeader {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 18px 20px 14px !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.profileQrModalTitleBlock {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.profileQrModalIconWrap {
+  width: 38px !important;
+  height: 38px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 10px !important;
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: #7c3aed !important;
+}
+
+.profileQrModalTitleBlock h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.profileQrModalTitleBlock p {
+  margin: 2px 0 0 !important;
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+.profileQrModalCloseButton {
+  width: 32px !important;
+  height: 32px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  background: #f8fafc !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
+  transition: all 0.15s ease !important;
+}
+
+.profileQrModalCloseButton:hover {
+  background: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.profileQrModalTabs {
+  display: flex !important;
+  padding: 10px 20px 0 !important;
+  gap: 8px !important;
+  background: #f8fafc !important;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8) !important;
+}
+
+.profileQrTabButton {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px 16px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #64748b !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  border-bottom: 2.5px solid transparent !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.profileQrTabButton.active {
+  color: #7c3aed !important;
+  border-bottom-color: #7c3aed !important;
+  font-weight: 700 !important;
+}
+
+.profileQrViewContent {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  padding: 22px 20px !important;
+  gap: 14px !important;
+  text-align: center !important;
+}
+
+.profileQrUserBadge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  background: #f1f5f9 !important;
+  font-size: 13px !important;
+  color: #1e293b !important;
+}
+
+.profileQrBadgeDot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #10b981 !important;
+}
+
+.profileQrBoxContainer {
+  width: 240px !important;
+  height: 240px !important;
+  max-width: 240px !important;
+  max-height: 240px !important;
+  padding: 12px !important;
+  border-radius: 18px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08) !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+}
+
+.profileQrRenderedImg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.profileQrInstructionText {
+  margin: 0 !important;
+  font-size: 12.5px !important;
+  color: #64748b !important;
+  max-width: 280px !important;
+}
+
+.profileQrModalActionsRow {
+  display: flex !important;
+  gap: 10px !important;
+  width: 100% !important;
+  margin-top: 4px !important;
+}
+
+.profileQrModalSecondaryBtn,
+.profileQrModalPrimaryBtn {
+  flex: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.15s ease !important;
+}
+
+.profileQrModalSecondaryBtn {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+}
+
+.profileQrModalSecondaryBtn:hover {
+  background: #e2e8f0 !important;
+}
+
+.profileQrModalPrimaryBtn {
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  border: 1px solid #7c3aed !important;
+}
+
+.profileQrModalPrimaryBtn:hover {
+  background: #6d28d9 !important;
+}
+
+/* 3. Avatar Stage 3-Dots Placement */
+.modernAvatarActionsAnchor {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 5;
+}
+
+.modernAvatarMenuBtn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #ffffff;
+  color: #475569;
+  font-size: 16px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+}
+
+.modernAvatarMenuBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.modernContactActionDropdown.avatarDropdown {
+  top: calc(100% + 6px);
+  right: 0;
+  width: 195px;
+}
+
+/* 4. Danger Zone & Bottom Privacy Card in Contact Profile */
+.modernDangerZoneCard {
+  border-color: rgba(239, 68, 68, 0.25) !important;
+  background: linear-gradient(180deg, #ffffff 0%, rgba(254, 242, 242, 0.4) 100%) !important;
+}
+
+.modernContactActionList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.modernContactActionRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+}
+
+.modernContactActionRow.dangerBorderTop {
+  border-top: 1px solid rgba(239, 68, 68, 0.15);
+  padding-top: 14px;
+}
+
+.modernContactActionRow strong {
+  display: block;
+  font-size: 14px;
+  color: #1e293b;
+}
+
+.modernContactActionRow small {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.modernSecondaryActionBtn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #f8fafc;
+  color: #334155;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.modernSecondaryActionBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.dangerActionsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modernDangerActionBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.modernDangerActionBtn:hover {
+  background: #dc2626;
+}
+
+.modernReportActionBtn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: #fff;
+  color: #ef4444;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.modernReportActionBtn:hover {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+/* Dark Mode Support for New Additions */
+.premiumDarkMode .profileQrModalCard {
+  background: #0f172a !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.premiumDarkMode .profileQrModalHeader,
+.premiumDarkMode .profileQrModalTabs {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  background: #1e293b !important;
+}
+
+.premiumDarkMode .profileQrModalTitleBlock h3 {
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .profileQrBoxContainer {
+  background: #ffffff !important; /* QR stays crisp white background for scanning */
+}
+
+.premiumDarkMode .modernDangerZoneCard {
+  background: #1e293b !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.premiumDarkMode .modernContactActionRow strong {
+  color: #f8fafc;
+}
+
+.premiumDarkMode .modernSecondaryActionBtn {
+  background: #334155;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+}
+
+.premiumDarkMode .modernAvatarMenuBtn {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+}

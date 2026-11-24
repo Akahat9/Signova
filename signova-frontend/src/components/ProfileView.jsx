@@ -1288,7 +1288,7 @@ export default function ProfileView({
           </main>
         </div>
 
-        {/* Profile QR Modal (Preserved & Enhanced) */}
+        {/* Profile QR Modal (Polished & Fully Structured Card) */}
         {profileQrOpen && (
           <div
             className="profileQrModalOverlay"
@@ -1296,32 +1296,48 @@ export default function ProfileView({
             onClick={() => setProfileQrOpen(false)}
           >
             <div
-              className="profileQrModal"
+              className="profileQrModalCard"
               role="dialog"
               aria-modal="true"
               aria-label="Profile QR Sharing and Scanner"
               onClick={(event) => event.stopPropagation()}
             >
-              <button
-                type="button"
-                className="profileQrModalClose"
-                onClick={() => setProfileQrOpen(false)}
-                aria-label="Close QR Modal"
-              >
-                ×
-              </button>
+              <div className="profileQrModalHeader">
+                <div className="profileQrModalTitleBlock">
+                  <div className="profileQrModalIconWrap">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <rect x="3" y="3" width="7" height="7"/>
+                      <rect x="14" y="3" width="7" height="7"/>
+                      <rect x="3" y="14" width="7" height="7"/>
+                      <path d="M14 14h3v3h-3zM17 17h4v4h-4zM14 20h3v1h-3z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3>Signova Profile QR</h3>
+                    <p>Share or scan QR to connect instantly</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="profileQrModalCloseButton"
+                  onClick={() => setProfileQrOpen(false)}
+                  aria-label="Close QR Modal"
+                >
+                  ×
+                </button>
+              </div>
 
               <div className="profileQrModalTabs">
                 <button
                   type="button"
-                  className={qrModalTab === 'view' ? 'active' : ''}
+                  className={`profileQrTabButton ${qrModalTab === 'view' ? 'active' : ''}`}
                   onClick={() => setQrModalTab('view')}
                 >
                   My Profile QR
                 </button>
                 <button
                   type="button"
-                  className={qrModalTab === 'scan' ? 'active' : ''}
+                  className={`profileQrTabButton ${qrModalTab === 'scan' ? 'active' : ''}`}
                   onClick={() => setQrModalTab('scan')}
                 >
                   Scan QR
@@ -1331,21 +1347,57 @@ export default function ProfileView({
               <div className="profileQrModalBody">
                 {qrModalTab === 'view' ? (
                   <div className="profileQrViewContent">
-                    <div className="profileQrCodeLarge">
+                    <div className="profileQrUserBadge">
+                      <span className="profileQrBadgeDot" />
+                      <strong>{displayName}</strong>
+                      <small>{displayUsername}</small>
+                    </div>
+
+                    <div className="profileQrBoxContainer">
                       {profileQrDataUrl ? (
-                        <img src={profileQrDataUrl} alt={`${displayName} Signova QR`} />
+                        <img
+                          src={profileQrDataUrl}
+                          alt={`${displayName} Signova QR`}
+                          className="profileQrRenderedImg"
+                        />
                       ) : (
                         <div className="qrArt signovaProfileQrCode large">
                           <span /><span /><span /><i /><i /><i />
                         </div>
                       )}
                     </div>
-                    <strong>{displayName}</strong>
-                    <small>{displayUsername}</small>
-                    <p>Share this QR code with others to connect instantly on Signova</p>
-                    <div className="profileQrActions">
-                      <button type="button" onClick={shareProfileQr}>Share QR</button>
-                      <button type="button" onClick={downloadProfileQr}>Download Image</button>
+
+                    <p className="profileQrInstructionText">
+                      Share this QR code with others to connect instantly on Signova
+                    </p>
+
+                    <div className="profileQrModalActionsRow">
+                      <button
+                        type="button"
+                        className="profileQrModalSecondaryBtn"
+                        onClick={shareProfileQr}
+                      >
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <circle cx="18" cy="5" r="3"/>
+                          <circle cx="6" cy="12" r="3"/>
+                          <circle cx="18" cy="19" r="3"/>
+                          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                        <span>Share QR</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="profileQrModalPrimaryBtn"
+                        onClick={downloadProfileQr}
+                      >
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="7 10 12 15 17 10"/>
+                          <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        <span>Download Image</span>
+                      </button>
                     </div>
                   </div>
                 ) : (
