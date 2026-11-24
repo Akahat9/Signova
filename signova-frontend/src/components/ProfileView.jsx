@@ -1720,24 +1720,59 @@ export default function ProfileView({
                   </div>
                 ) : (
                   <div className="profileQrScanContent">
-                    <p>Select a Signova QR image from your device to connect:</p>
-                    <input
-                      ref={profileQrScanInputRef}
-                      type="file"
-                      accept="image/*"
-                      onChange={scanProfileQrImage}
-                      className="profileQrFileInput"
-                    />
-                    <div className="profileQrManualInput">
-                      <label>Or paste username / profile link:</label>
+                    <label className="qrScanUploadDropzone">
                       <input
-                        type="text"
-                        value={profileQrManualValue}
-                        onChange={(e) => setProfileQrManualValue(e.target.value)}
-                        placeholder="https://signova.web.app/invite/..."
+                        ref={profileQrScanInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={scanProfileQrImage}
+                        className="visuallyHidden"
                       />
-                      <button type="button" onClick={openScannedProfile}>Connect</button>
+                      <div className="qrScanDropIcon">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                      </div>
+                      <div className="qrScanDropText">
+                        <strong>Upload Signova QR Image</strong>
+                        <small>PNG, JPG, or WebP from your device</small>
+                      </div>
+                      <span className="qrScanBrowseBtn">Choose Image</span>
+                    </label>
+
+                    <div className="qrScanOrDivider">
+                      <span>OR</span>
                     </div>
+
+                    <div className="profileQrManualInput">
+                      <label htmlFor="qrManualInputField">Paste Username or Invite Link</label>
+                      <div className="qrManualInputRow">
+                        <input
+                          id="qrManualInputField"
+                          type="text"
+                          value={profileQrManualValue}
+                          onChange={(e) => setProfileQrManualValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              openScannedProfile();
+                            }
+                          }}
+                          placeholder="@username or https://signova.web.app/..."
+                          className="qrManualInputBox"
+                        />
+                        <button
+                          type="button"
+                          onClick={openScannedProfile}
+                          className="qrManualConnectBtn"
+                        >
+                          Connect
+                        </button>
+                      </div>
+                    </div>
+
                     {profileQrMessage && <p className="profileQrNotice">{profileQrMessage}</p>}
                   </div>
                 )}

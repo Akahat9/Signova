@@ -36704,3 +36704,193 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   border-color: #0f172a !important;
   background: #0f172a !important;
 }
+
+/* ==========================================================================
+   SCAN QR TAB REDESIGN (Modern Dropzone + Clean Manual Connect Row)
+   ========================================================================== */
+.profileQrScanContent {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  padding: 22px 20px !important;
+}
+
+.qrScanUploadDropzone {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  padding: 22px 16px !important;
+  border: 2px dashed rgba(124, 58, 237, 0.35) !important;
+  border-radius: 18px !important;
+  background: rgba(124, 58, 237, 0.04) !important;
+  cursor: pointer !important;
+  text-align: center !important;
+  transition: all 0.18s ease !important;
+}
+
+.qrScanUploadDropzone:hover {
+  border-color: #7c3aed !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.qrScanDropIcon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 14px !important;
+  background: #ffffff !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.14) !important;
+}
+
+.qrScanDropText {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.qrScanDropText strong {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.qrScanDropText small {
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+.qrScanBrowseBtn {
+  margin-top: 2px !important;
+  padding: 7px 16px !important;
+  border-radius: 999px !important;
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+}
+
+.qrScanOrDivider {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  color: #94a3b8 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.6px !important;
+}
+
+.qrScanOrDivider::before,
+.qrScanOrDivider::after {
+  content: "" !important;
+  flex: 1 !important;
+  height: 1px !important;
+  background: rgba(226, 232, 240, 0.9) !important;
+}
+
+.profileQrManualInput {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.profileQrManualInput label {
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #334155 !important;
+  margin: 0 !important;
+}
+
+.qrManualInputRow {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+}
+
+.qrManualInputBox {
+  flex: 1 !important;
+  min-width: 0 !important;
+  height: 40px !important;
+  padding: 0 12px !important;
+  border-radius: 10px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  font-size: 13px !important;
+  color: #0f172a !important;
+  outline: none !important;
+  transition: all 0.15s ease !important;
+}
+
+.qrManualInputBox:focus {
+  border-color: #7c3aed !important;
+  background: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.12) !important;
+}
+
+.qrManualConnectBtn {
+  height: 40px !important;
+  padding: 0 18px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.qrManualConnectBtn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35) !important;
+}
+
+.profileQrNotice {
+  margin: 0 !important;
+  padding: 10px 14px !important;
+  border-radius: 10px !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+  border: 1px solid rgba(124, 58, 237, 0.2) !important;
+  color: #6d28d9 !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+}
+
+.premiumDarkMode .qrScanUploadDropzone {
+  background: rgba(124, 58, 237, 0.08) !important;
+  border-color: rgba(167, 139, 250, 0.35) !important;
+}
+
+.premiumDarkMode .qrScanDropIcon {
+  background: #1e293b !important;
+  color: #c4b5fd !important;
+}
+
+.premiumDarkMode .qrScanDropText strong,
+.premiumDarkMode .profileQrManualInput label {
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .qrManualInputBox {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .qrScanOrDivider::before,
+.premiumDarkMode .qrScanOrDivider::after {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
