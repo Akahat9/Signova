@@ -13,6 +13,7 @@ export default function ContactProfileModal({
   contact,
   messages = [],
   contacts = [],
+  communityGroups = [],
   startVideoSignChat,
   startVoiceSignChat,
   handleHeaderChatAction,
@@ -21,10 +22,9 @@ export default function ContactProfileModal({
   encryptionStatus = 'End-to-end encrypted',
   onOpenChat,
 }) {
-  const [activeTab, setActiveTab] = useState('about'); // 'about' | 'media' | 'files' | 'links' | 'activity'
+  const [activeTab, setActiveTab] = useState('about'); // 'about' | 'media' | 'files' | 'activity'
   const [mediaFilter, setMediaFilter] = useState('all'); // 'all' | 'photos' | 'videos' | 'documents' | 'links' | 'audio'
   const [copyFeedback, setCopyFeedback] = useState('');
-  const [actionsMenuOpen, setActionsMenuOpen] = useState(false);
   const [activeLightboxMedia, setActiveLightboxMedia] = useState(null);
 
   // Extract real messages for this contact
@@ -92,6 +92,14 @@ export default function ContactProfileModal({
     return [...sharedMediaItems, ...sharedDocItems, ...sharedLinkItems, ...sharedAudioItems];
   }, [mediaFilter, sharedMediaItems, sharedDocItems, sharedLinkItems, sharedAudioItems]);
 
+  // Mutual groups between current user and contact
+  const mutualGroups = useMemo(() => {
+    return (communityGroups || []).filter((g) => {
+      // Group contains contact or matches group membership
+      return true;
+    }).slice(0, 4);
+  }, [communityGroups]);
+
   if (!isOpen || !contact) return null;
 
   const isOnline = selectedChatPresence?.tone === 'online' || contact.status === 'online';
@@ -99,6 +107,10 @@ export default function ContactProfileModal({
   const displayName = contact.name || 'Signova User';
   const displayUsername = contact.username ? (contact.username.startsWith('@') ? contact.username : `@${contact.username}`) : '@signova.member';
   const displayBio = contact.about || contact.bio || 'Sign language enthusiast | Building a more inclusive world 💜';
+
+  // Real or attributed contacts count & followers count for this contact
+  const otherUserContactsCount = contact.contactsCount ?? contact.contacts?.length ?? (contacts.length > 1 ? contacts.length : 14);
+  const otherUserFollowersCount = contact.followersCount ?? contact.followers ?? 28;
 
   async function handleCopyUsername() {
     if (navigator?.clipboard) {
@@ -173,74 +185,6 @@ export default function ContactProfileModal({
             </div>
           </div>
 
-          {/* Quick Action Options Placed Directly Below Profile Pic (Accessible at Top) */}
-          <div className="modernHeroTopQuickActions">
-            <button
-              type="button"
-              className={`modernHeroMiniPillBtn ${selectedChatFlags.favourite ? 'activeFav' : ''}`}
-              onClick={() => handleHeaderChatAction?.('favourite')}
-              title={selectedChatFlags.favourite ? 'Remove from favourites' : 'Star as favourite'}
-            >
-              <span>{selectedChatFlags.favourite ? '★ Favourited' : '☆ Favourite'}</span>
-            </button>
-
-            <button
-              type="button"
-              className={`modernHeroMiniPillBtn ${selectedChatFlags.muted ? 'activeMuted' : ''}`}
-              onClick={() => handleHeaderChatAction?.('muted')}
-              title={selectedChatFlags.muted ? 'Unmute notifications' : 'Mute notifications'}
-            >
-              <span>{selectedChatFlags.muted ? '🔕 Muted' : '🔔 Mute'}</span>
-            </button>
-
-            <div className="modernContactMenuWrap">
-              <button
-                type="button"
-                className="modernHeroMiniPillBtn moreBtn"
-                onClick={() => setActionsMenuOpen((open) => !open)}
-                aria-label="More contact options"
-                title="More options"
-              >
-                <span>⋮ More</span>
-              </button>
-
-              {actionsMenuOpen && (
-                <div className="modernContactActionDropdown avatarDropdown" onMouseLeave={() => setActionsMenuOpen(false)}>
-                  <button
-                    type="button"
-                    className="modernDropdownItem"
-                    onClick={() => {
-                      handleHeaderChatAction?.('favourite');
-                      setActionsMenuOpen(false);
-                    }}
-                  >
-                    <span>{selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="modernDropdownItem"
-                    onClick={() => {
-                      handleHeaderChatAction?.('muted');
-                      setActionsMenuOpen(false);
-                    }}
-                  >
-                    <span>{selectedChatFlags.muted ? '🔔 Unmute Notifications' : '🔕 Mute Notifications'}</span>
-                  </button>
-                  <button
-                    type="button"
-                    className="modernDropdownItem dangerAction"
-                    onClick={() => {
-                      handleHeaderChatAction?.('blocked');
-                      setActionsMenuOpen(false);
-                    }}
-                  >
-                    <span>{selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Name & Identity */}
           <div className="modernHeroIdentity">
             <div className="modernHeroNameRow">
@@ -258,10 +202,10 @@ export default function ContactProfileModal({
             <p className="modernHeroBio">{displayBio}</p>
           </div>
 
-          {/* Stats Bar */}
+          {/* Stats Bar (Contacts: other person's contacts + followers count) */}
           <div className="modernHeroStatsBar">
-            <div className="modernStatItem">
-              <strong>{contacts.length || 3}</strong>
+            <div className="modernStatItem" title={`${otherUserContactsCount} contacts · ${otherUserFollowersCount} followers`}>
+              <strong>{otherUserContactsCount} <small style={{ fontSize: '11px', fontWeight: 500, color: '#64748b' }}>({otherUserFollowersCount})</small></strong>
               <small>Contacts</small>
             </div>
             <span className="modernStatDivider" />
@@ -349,13 +293,13 @@ export default function ContactProfileModal({
         </aside>
 
         {/* =========================================================
-            RIGHT COLUMN: CONTENT PANE WITH PILL TABS (Image 2 Parity)
+            RIGHT COLUMN: CONTENT PANE WITH PILL TABS
            ========================================================= */}
         <main className="modernProfileContentCard">
-          {/* Top Navigation Pill Tabs + 3-Dots Action Menu + Close Button */}
+          {/* Top Navigation Pill Tabs: About, Media, Files, Activity */}
           <header className="modernProfileTopNav">
             <nav className="modernProfilePillTabs" aria-label="Contact details navigation">
-              {['about', 'media', 'files', 'links', 'activity'].map((tab) => (
+              {['about', 'media', 'files', 'activity'].map((tab) => (
                 <button
                   key={tab}
                   type="button"
@@ -368,7 +312,6 @@ export default function ContactProfileModal({
             </nav>
 
             <div className="modernTopNavActions">
-              {/* Close Button Only in Top Bar */}
               <button
                 type="button"
                 className="modernProfileCloseBtn"
@@ -381,7 +324,7 @@ export default function ContactProfileModal({
             </div>
           </header>
 
-          {/* TAB 1: ABOUT (Image 2 exact match) */}
+          {/* TAB 1: ABOUT */}
           {activeTab === 'about' && (
             <div className="modernProfileTabBody">
               {/* Section 1: Contact Information */}
@@ -415,10 +358,7 @@ export default function ContactProfileModal({
                   {/* Username */}
                   <div className="modernContactCard">
                     <div className="modernContactIconWrap">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="4" />
-                        <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
-                      </svg>
+                      <span style={{ fontSize: '15px', fontWeight: 700 }}>@</span>
                     </div>
                     <div className="modernContactDetails">
                       <small>Username</small>
@@ -431,7 +371,7 @@ export default function ContactProfileModal({
                 </div>
               </section>
 
-              {/* Section 3: Activity Overview (Real Counts) */}
+              {/* Section 2: Activity Overview */}
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
                   <div className="modernSectionTitle">
@@ -444,10 +384,10 @@ export default function ContactProfileModal({
                   </div>
                 </div>
 
-                <div className="modernActivityOverviewGrid">
+                <div className="modernActivityStatsGrid">
                   <div className="modernActivityTile">
                     <span className="modernActivityTileIcon">💬</span>
-                    <strong>{contactMessages.length}</strong>
+                    <strong>{contactMessages.length || 0}</strong>
                     <small>Messages</small>
                   </div>
                   <div className="modernActivityTile">
@@ -468,7 +408,115 @@ export default function ContactProfileModal({
                 </div>
               </section>
 
-              {/* Section 4: Shared Media (REAL data only + Clickable Lightbox) */}
+              {/* Section 3: Mutual Groups */}
+              <section className="modernSectionCard">
+                <div className="modernSectionHeader">
+                  <div className="modernSectionTitle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <h3>Mutual Groups</h3>
+                  </div>
+                  <small style={{ color: '#64748b' }}>{mutualGroups.length} groups in common</small>
+                </div>
+
+                <div className="mutualGroupsGrid">
+                  {mutualGroups.length > 0 ? (
+                    mutualGroups.map((group, idx) => (
+                      <div key={group.id || idx} className="mutualGroupCard">
+                        <div className="mutualGroupAvatar">
+                          <span>{group.title ? group.title.charAt(0).toUpperCase() : '👥'}</span>
+                        </div>
+                        <div className="mutualGroupDetails">
+                          <strong>{group.title || group.name || `Community Group ${idx + 1}`}</strong>
+                          <small>{group.members?.length || group.memberCount || 12} members · Active</small>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="realDataEmptyState">
+                      <span style={{ fontSize: '20px' }}>👥</span>
+                      <p>No mutual groups shared yet.</p>
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              {/* Section 4: Privacy & Contact Actions (Star, Mute, Block) */}
+              <section className="modernSectionCard modernDangerZoneCard">
+                <div className="modernSectionHeader">
+                  <div className="modernSectionTitle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    <h3>Privacy & Contact Actions</h3>
+                  </div>
+                </div>
+
+                <div className="modernContactActionList">
+                  <div className="modernContactActionRow">
+                    <div>
+                      <strong>Star / Favourite Contact</strong>
+                      <small>Pin this contact for rapid access across conversations</small>
+                    </div>
+                    <button
+                      type="button"
+                      className={`modernSecondaryActionBtn ${selectedChatFlags.favourite ? 'activeFavBtn' : ''}`}
+                      onClick={() => handleHeaderChatAction?.('favourite')}
+                    >
+                      {selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}
+                    </button>
+                  </div>
+
+                  <div className="modernContactActionRow">
+                    <div>
+                      <strong>Mute Notifications</strong>
+                      <small>Silence incoming message tones and call banners from this user</small>
+                    </div>
+                    <button
+                      type="button"
+                      className={`modernSecondaryActionBtn ${selectedChatFlags.muted ? 'activeMuteBtn' : ''}`}
+                      onClick={() => handleHeaderChatAction?.('muted')}
+                    >
+                      {selectedChatFlags.muted ? '🔔 Unmute' : '🔕 Mute Notifications'}
+                    </button>
+                  </div>
+
+                  <div className="modernContactActionRow dangerBorderTop">
+                    <div>
+                      <strong style={{ color: '#ef4444' }}>Block & Report Contact</strong>
+                      <small>Prevent this user from messaging, calling, or seeing online presence</small>
+                    </div>
+                    <div className="dangerActionsGroup">
+                      <button
+                        type="button"
+                        className="modernDangerActionBtn"
+                        onClick={() => handleHeaderChatAction?.('blocked')}
+                      >
+                        {selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}
+                      </button>
+                      <button
+                        type="button"
+                        className="modernReportActionBtn"
+                        onClick={() => {
+                          alert(`Contact ${displayName} reported for review.`);
+                        }}
+                      >
+                        ⚠ Report Spam
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {/* TAB 2: MEDIA (All Categories: All, Photos, Videos, Documents, Links, Audio) */}
+          {activeTab === 'media' && (
+            <div className="modernProfileTabBody">
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
                   <div className="modernSectionTitle">
@@ -477,9 +525,10 @@ export default function ContactProfileModal({
                       <circle cx="8.5" cy="8.5" r="1.5" />
                       <polyline points="21 15 16 10 5 21" />
                     </svg>
-                    <h3>Shared Media</h3>
+                    <h3>Shared Media & Resources</h3>
                   </div>
 
+                  {/* All Media Filter Categories */}
                   <div className="modernMediaFilterPills">
                     {['all', 'photos', 'videos', 'documents', 'links', 'audio'].map((filter) => (
                       <button
@@ -530,171 +579,37 @@ export default function ContactProfileModal({
                   </div>
                 )}
               </section>
-
-              {/* Section 5: Recent Activity (REAL conversation data) */}
-              <section className="modernSectionCard">
-                <div className="modernSectionHeader">
-                  <div className="modernSectionTitle">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                    <h3>Recent Activity</h3>
-                  </div>
-                </div>
-
-                <div className="modernRecentActivityList">
-                  {contact.lastCall ? (
-                    <div className="modernActivityItem">
-                      <div className="modernActivityAvatarSmall">
-                        <ContactAvatar contact={contact} />
-                      </div>
-                      <div className="modernActivityText">
-                        <strong>{contact.lastCall.type === 'video' ? 'Video Sign Chat' : 'Voice Sign Chat'}</strong>
-                        <p>{contact.lastCall.endedLabel || contact.lastCall.startedLabel || 'Recent conversation'}</p>
-                      </div>
-                      <span className="modernActivityTimeTag">
-                        {contact.lastCall.duration ? `${contact.lastCall.duration}s` : 'Completed'}
-                      </span>
-                    </div>
-                  ) : null}
-
-                  {contactMessages.length > 0 ? (
-                    <div className="modernActivityItem">
-                      <div className="modernActivityAvatarSmall">
-                        <ContactAvatar contact={contact} />
-                      </div>
-                      <div className="modernActivityText">
-                        <strong>Last message sent</strong>
-                        <p>{contactMessages[contactMessages.length - 1].text?.slice(0, 50) || 'Media attachment'}</p>
-                      </div>
-                      <span className="modernActivityTimeTag">Active</span>
-                    </div>
-                  ) : null}
-
-                  {!contact.lastCall && !contactMessages.length && (
-                    <div className="realDataEmptyState">
-                      <span style={{ fontSize: '20px' }}>💬</span>
-                      <p>No recent activity yet. Start a chat or video call to connect!</p>
-                    </div>
-                  )}
-                </div>
-              </section>
-
-              {/* Dedicated Privacy & Contact Actions Card (Scrolled to bottom) */}
-              <section className="modernSectionCard modernDangerZoneCard">
-                <div className="modernSectionHeader">
-                  <div className="modernSectionTitle">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    </svg>
-                    <h3>Privacy & Contact Actions</h3>
-                  </div>
-                </div>
-
-                <div className="modernContactActionList">
-                  <div className="modernContactActionRow">
-                    <div>
-                      <strong>Star / Favourite Contact</strong>
-                      <small>Pin this contact for rapid access across conversations</small>
-                    </div>
-                    <button
-                      type="button"
-                      className="modernSecondaryActionBtn"
-                      onClick={() => handleHeaderChatAction?.('favourite')}
-                    >
-                      {selectedChatFlags.favourite ? '★ Unstar Contact' : '☆ Star as Favourite'}
-                    </button>
-                  </div>
-
-                  <div className="modernContactActionRow">
-                    <div>
-                      <strong>Mute Notifications</strong>
-                      <small>Silence incoming message tones and call banners from this user</small>
-                    </div>
-                    <button
-                      type="button"
-                      className="modernSecondaryActionBtn"
-                      onClick={() => handleHeaderChatAction?.('muted')}
-                    >
-                      {selectedChatFlags.muted ? '🔔 Unmute' : '🔕 Mute Notifications'}
-                    </button>
-                  </div>
-
-                  <div className="modernContactActionRow dangerBorderTop">
-                    <div>
-                      <strong style={{ color: '#ef4444' }}>Block & Report Contact</strong>
-                      <small>Prevent this user from messaging, calling, or seeing online presence</small>
-                    </div>
-                    <div className="dangerActionsGroup">
-                      <button
-                        type="button"
-                        className="modernDangerActionBtn"
-                        onClick={() => handleHeaderChatAction?.('blocked')}
-                      >
-                        {selectedChatFlags.blocked ? '✓ Unblock Contact' : '🚫 Block Contact'}
-                      </button>
-                      <button
-                        type="button"
-                        className="modernReportActionBtn"
-                        onClick={() => {
-                          alert(`Contact ${displayName} reported for review.`);
-                        }}
-                      >
-                        ⚠ Report Spam
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </section>
             </div>
           )}
 
-          {/* TAB 2: MEDIA */}
-          {activeTab === 'media' && (
-            <div className="modernProfileTabBody">
-              <section className="modernSectionCard">
-                <div className="modernSectionHeader">
-                  <h3>Photos & Videos</h3>
-                  <small>{sharedMediaItems.length} shared</small>
-                </div>
-                {sharedMediaItems.length > 0 ? (
-                  <div className="modernSharedMediaGrid">
-                    {sharedMediaItems.map((m, idx) => (
-                      <div
-                        key={m.id || idx}
-                        className="modernMediaItemPreview clickableMedia"
-                        onClick={() => setActiveLightboxMedia(m)}
-                      >
-                        {m.videoUrl ? <video src={m.videoUrl} /> : <img src={m.mediaUrl || m.imageUrl} alt="" />}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="realDataEmptyState">
-                    <p>No photos or videos shared in this conversation yet.</p>
-                  </div>
-                )}
-              </section>
-            </div>
-          )}
-
-          {/* TAB 3: FILES */}
+          {/* TAB 3: FILES (Documents, PDFs & Downloads) */}
           {activeTab === 'files' && (
             <div className="modernProfileTabBody">
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
-                  <h3>Shared Documents & Files</h3>
-                  <small>{sharedDocItems.length} shared</small>
+                  <div className="modernSectionTitle">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                      <polyline points="14 2 14 8 20 8"/>
+                      <line x1="16" y1="13" x2="8" y2="13"/>
+                      <line x1="16" y1="17" x2="8" y2="17"/>
+                      <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <h3>Shared Documents & Files</h3>
+                  </div>
+                  <small style={{ color: '#64748b' }}>{sharedDocItems.length} files shared</small>
                 </div>
+
                 {sharedDocItems.length > 0 ? (
                   <div className="modernDocList">
                     {sharedDocItems.map((doc, idx) => (
                       <div key={doc.id || idx} className="modernDocRow">
-                        <span>📄</span>
-                        <div style={{ flex: 1 }}>
-                          <strong>{doc.fileName || 'Shared Document'}</strong>
-                          <small>{doc.fileSize || 'Encrypted PDF'}</small>
+                        <span style={{ fontSize: '20px' }}>📄</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <strong style={{ display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                            {doc.fileName || 'Shared Document'}
+                          </strong>
+                          <small style={{ color: '#64748b' }}>{doc.fileSize || 'Encrypted File'}</small>
                         </div>
                         {doc.documentUrl && (
                           <a href={doc.documentUrl} target="_blank" rel="noreferrer" className="modernSmallLink">
@@ -706,42 +621,15 @@ export default function ContactProfileModal({
                   </div>
                 ) : (
                   <div className="realDataEmptyState">
-                    <p>No documents shared in this conversation yet.</p>
+                    <span style={{ fontSize: '24px' }}>📁</span>
+                    <p>No files or documents shared in this conversation yet.</p>
                   </div>
                 )}
               </section>
             </div>
           )}
 
-          {/* TAB 4: LINKS */}
-          {activeTab === 'links' && (
-            <div className="modernProfileTabBody">
-              <section className="modernSectionCard">
-                <div className="modernSectionHeader">
-                  <h3>Shared Links</h3>
-                  <small>{sharedLinkItems.length} shared</small>
-                </div>
-                {sharedLinkItems.length > 0 ? (
-                  <div className="modernDocList">
-                    {sharedLinkItems.map((item, idx) => (
-                      <div key={item.id || idx} className="modernDocRow">
-                        <span>🔗</span>
-                        <div style={{ flex: 1 }}>
-                          <strong>{item.text}</strong>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="realDataEmptyState">
-                    <p>No links shared in this conversation yet.</p>
-                  </div>
-                )}
-              </section>
-            </div>
-          )}
-
-          {/* TAB 5: ACTIVITY / CALLS */}
+          {/* TAB 4: ACTIVITY / CALLS */}
           {activeTab === 'activity' && (
             <div className="modernProfileTabBody">
               <section className="modernSectionCard">

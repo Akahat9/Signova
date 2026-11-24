@@ -7908,6 +7908,7 @@ function App() {
           contact={selectedChatContact}
           messages={messages}
           contacts={contacts}
+          communityGroups={communityGroups}
           startVideoSignChat={startVideoSignChat}
           startVoiceSignChat={startVoiceSignChat}
           handleHeaderChatAction={handleHeaderChatAction}
