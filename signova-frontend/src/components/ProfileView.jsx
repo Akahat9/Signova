@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import SignovaCheckoutModal from './modals/SignovaCheckoutModal';
 
 /**
@@ -1523,7 +1524,7 @@ export default function ProfileView({
         </div>
 
         {/* Profile QR Modal (Polished & Fully Structured Card) */}
-        {profileQrOpen && (
+        {profileQrOpen && typeof document !== 'undefined' && createPortal(
           <div
             className="profileQrModalOverlay"
             role="presentation"
@@ -1659,22 +1660,26 @@ export default function ProfileView({
                 )}
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
         {/* Dedicated Signova Payment & Checkout Modal */}
-        <SignovaCheckoutModal
-          isOpen={Boolean(checkoutModalPlan)}
-          onClose={() => setCheckoutModalPlan(null)}
-          plan={checkoutModalPlan}
-          user={{
-            name: displayName,
-            username: displayUsername,
-            email: settings?.account?.email || '',
-            phone: settings?.account?.phone || '',
-          }}
-          onPaymentSuccess={handleCheckoutSuccess}
-        />
+        {typeof document !== 'undefined' && createPortal(
+          <SignovaCheckoutModal
+            isOpen={Boolean(checkoutModalPlan)}
+            onClose={() => setCheckoutModalPlan(null)}
+            plan={checkoutModalPlan}
+            user={{
+              name: displayName,
+              username: displayUsername,
+              email: settings?.account?.email || '',
+              phone: settings?.account?.phone || '',
+            }}
+            onPaymentSuccess={handleCheckoutSuccess}
+          />,
+          document.body
+        )}
       </section>
     );
   }

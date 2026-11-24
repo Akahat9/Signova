@@ -218,8 +218,13 @@ For billing support: support@signova.ai | https://signova.ai
   };
 
   return (
-    <div className="signovaCheckoutOverlay" role="dialog" aria-modal="true">
-      <div className="signovaCheckoutCard">
+    <div
+      className="signovaCheckoutOverlay"
+      role="dialog"
+      aria-modal="true"
+      onClick={() => { if (!isProcessing) onClose(); }}
+    >
+      <div className="signovaCheckoutCard" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
         <div className="signovaCheckoutHeader">
           <div className="checkoutTitleGroup">
