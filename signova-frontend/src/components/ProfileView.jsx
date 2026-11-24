@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SignovaCheckoutModal from './modals/SignovaCheckoutModal';
 
 /**
  * Modern ProfileView Component matching Signova's minimalist redesign.
@@ -56,6 +57,20 @@ export default function ProfileView({
   const [copyFeedback, setCopyFeedback] = useState('');
   const [proFeedbackToast, setProFeedbackToast] = useState('');
   const [settingsFeedbackToast, setSettingsFeedbackToast] = useState('');
+  const [institutionIdType, setInstitutionIdType] = useState('student_card');
+  const [studentDocFileName, setStudentDocFileName] = useState('');
+  const [studentIdNumber, setStudentIdNumber] = useState('');
+  const [studentGradYear, setStudentGradYear] = useState('2026');
+  const [isUploadingStudentId, setIsUploadingStudentId] = useState(false);
+  const [checkoutModalPlan, setCheckoutModalPlan] = useState(null);
+
+  const handleCheckoutSuccess = (completedPlan) => {
+    updateSetting('account', 'proPlan', completedPlan.name);
+    updateSetting('account', 'isPro', true);
+    updateSetting('account', 'proStatus', 'active');
+    setProFeedbackToast(`🎉 Payment successful (₹${completedPlan.price})! Subscribed to ${completedPlan.name}.`);
+    setTimeout(() => setProFeedbackToast(''), 5000);
+  };
 
   // Sync initial bio draft
   useEffect(() => {
@@ -868,17 +883,21 @@ export default function ProfileView({
             )}
 
             {/* =========================================================
-                TAB 3: SIGNOVA PRO (The requested "signova pro wala page")
+                TAB 3: SIGNOVA PRO (Comprehensive Membership & Verification Hub)
                ========================================================= */}
             {profileTab === 'pro' && (
               <div className="modernProfileTabBody">
+                {/* Active Membership Status Banner */}
                 <section className="modernSectionCard modernProFeatureCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
                       <span className="modernIconPurple">✦</span>
-                      <h3>Signova Pro Membership</h3>
+                      <div>
+                        <h3>Signova Pro Membership</h3>
+                        <small style={{ color: '#64748b' }}>Manage your plan, student privileges, and AI capabilities</small>
+                      </div>
                     </div>
-                    <span className="modernBadgeActive">{isSignovaProActive ? signovaProBadgeLabel : 'Ready to Activate'}</span>
+                    <span className="modernBadgeActive">{isSignovaProActive ? (settings?.account?.proPlan || 'Pro Active') : 'Ready to Activate'}</span>
                   </div>
 
                   {proFeedbackToast && (
@@ -890,152 +909,357 @@ export default function ProfileView({
                   <div className="modernProBanner">
                     <div className="modernProBadgePill">PRO</div>
                     <div className="modernProBannerText">
-                      <strong>2 Months Free Pro Trial Active</strong>
+                      <strong>Current Plan: {settings?.account?.proPlan || '2 Months Free Pro Trial'}</strong>
                       <p>Full access to AI sign feedback, continuous learning, and multi-dialect practice.</p>
                     </div>
                   </div>
 
                   <div className="modernCreatorMetricsGrid" style={{ margin: '16px 0' }}>
                     <div className="creatorMetricTile">
-                      <strong>{settings?.account?.proPlan || '2 months free Pro'}</strong>
-                      <small>Current Plan</small>
+                      <strong>{settings?.account?.proPlan || '2 Months Free Pro'}</strong>
+                      <small>Current Tier</small>
                     </div>
                     <div className="creatorMetricTile">
                       <strong>{isSignovaProActive ? `${signovaProDaysLeft} days` : 'Ready'}</strong>
-                      <small>Trial Remaining</small>
+                      <small>Billing Cycle / Days Left</small>
                     </div>
                     <div className="creatorMetricTile">
-                      <strong>{settings?.account?.studentVerified ? 'Verified' : 'Pending'}</strong>
+                      <strong style={{ color: settings?.account?.studentVerified ? '#10b981' : '#f59e0b' }}>
+                        {settings?.account?.studentVerified ? '✓ Verified' : 'Pending Verification'}
+                      </strong>
                       <small>Student ID Status</small>
                     </div>
                   </div>
-
-                  <div style={{ marginTop: '12px' }}>
-                    <button
-                      type="button"
-                      className="modernPrimaryAddBtn"
-                      onClick={() => openPanel('signovaPro')}
-                      style={{ width: 'auto', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-                    >
-                      <span>Open Full Signova Pro Dashboard</span>
-                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <polyline points="9 18 15 12 9 6"/>
-                      </svg>
-                    </button>
-                  </div>
                 </section>
 
-                {/* Student Verification Section */}
+                {/* Subscriptions Designed in Detailed Cards */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
-                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <rect x="2" y="5" width="20" height="14" rx="2"/>
+                        <line x1="2" y1="10" x2="22" y2="10"/>
                       </svg>
-                      <h3>Student Verification</h3>
+                      <div>
+                        <h3>Subscription Plans & Pricing</h3>
+                        <small style={{ color: '#64748b' }}>Choose the ideal plan for your learning, development, or organization</small>
+                      </div>
                     </div>
                   </div>
-                  <p className="modernCreatorNotice" style={{ marginBottom: '14px' }}>
-                    Verify your school or university enrollment to receive special Student Pro privileges.
-                  </p>
-                  <label className="modernSettingRow">
-                    <span>Institution Name</span>
-                    <input
-                      type="text"
-                      value={settings?.account?.studentInstitution || ''}
-                      onChange={(e) => updateSetting('account', 'studentInstitution', e.target.value)}
-                      placeholder="School / College / University"
-                      className="modernSettingInput"
-                    />
-                  </label>
-                  <div style={{ marginTop: '12px', display: 'flex', gap: '10px' }}>
-                    <button
-                      type="button"
-                      className="modernOutlineBtn"
-                      onClick={() => {
-                        updateSetting('account', 'studentVerified', true);
-                        setProFeedbackToast('Student status verified successfully!');
-                        setTimeout(() => setProFeedbackToast(''), 3000);
-                      }}
-                    >
-                      🎓 {settings?.account?.studentVerified ? 'Re-verify Student Status' : 'Verify Student ID'}
-                    </button>
-                  </div>
-                </section>
 
-                {/* Plan Pricing Ladder */}
-                <section className="modernSectionCard">
-                  <div className="modernSectionHeader">
-                    <div className="modernSectionTitle">
-                      <h3>Simple Plan Ladder</h3>
-                    </div>
-                  </div>
-                  <div className="modernPricingLadderGrid">
-                    <div className="pricingTierCard">
-                      <strong>Free</strong>
-                      <span className="pricingAmount">₹0</span>
-                      <small>Basic learning & community</small>
+                  <div className="modernSubscriptionCardsGrid">
+                    {/* Free Card */}
+                    <div className={`modernSubPlanCard ${settings?.account?.proPlan === 'Free Plan' ? 'activePlanCard' : ''}`}>
+                      <div className="planCardTop">
+                        <span className="planTierLabel">STARTER</span>
+                        <h4>Free Plan</h4>
+                        <div className="planPriceRow">
+                          <span className="planCurrency">₹</span>
+                          <span className="planPrice">0</span>
+                          <span className="planInterval">/forever</span>
+                        </div>
+                        <p className="planBriefDescription">For casual learners exploring sign language fundamentals.</p>
+                      </div>
+                      <div className="planDivider" />
+                      <div className="planFeaturesSection">
+                        <strong>What's Included:</strong>
+                        <ul className="planFeatureList">
+                          <li>✓ Basic Indian & American Sign dictionary access</li>
+                          <li>✓ Standard community posts and text chats</li>
+                          <li>✓ Up to 10 sign practice exercises per day</li>
+                          <li>✓ Community public profile card</li>
+                          <li>✕ No real-time AI gesture feedback</li>
+                          <li>✕ No HD multi-peer video calling</li>
+                        </ul>
+                      </div>
                       <button
                         type="button"
-                        className="tierSelectBtn"
+                        className="planCardActionBtn"
                         onClick={() => {
-                          updateSetting('account', 'proPlan', 'Free Tier');
+                          updateSetting('account', 'proPlan', 'Free Plan');
+                          updateSetting('account', 'isPro', false);
                           setProFeedbackToast('Switched to Free plan.');
                           setTimeout(() => setProFeedbackToast(''), 3000);
                         }}
                       >
-                        Select Free
+                        {settings?.account?.proPlan === 'Free Plan' ? 'Current Plan' : 'Select Free'}
                       </button>
                     </div>
-                    <div className="pricingTierCard popularTier">
-                      <span className="tierTag">STUDENT</span>
-                      <strong>Student Pro</strong>
-                      <span className="pricingAmount">₹99/mo</span>
-                      <small>Verified student discount</small>
+
+                    {/* Student Pro Card (₹149) */}
+                    <div className={`modernSubPlanCard popularPlanCard ${settings?.account?.proPlan === 'Student Pro' ? 'activePlanCard' : ''}`}>
+                      <div className="planPopularPill">STUDENT SPECIAL</div>
+                      <div className="planCardTop">
+                        <span className="planTierLabel">ACADEMIC</span>
+                        <h4>Student Pro</h4>
+                        <div className="planPriceRow">
+                          <span className="planCurrency">₹</span>
+                          <span className="planPrice">149</span>
+                          <span className="planInterval">/month</span>
+                        </div>
+                        <p className="planBriefDescription">Discounted full AI access for verified high school & college students.</p>
+                      </div>
+                      <div className="planDivider" />
+                      <div className="planFeaturesSection">
+                        <strong>What's Included:</strong>
+                        <ul className="planFeatureList">
+                          <li>✓ <b>Everything in Free</b> plus:</li>
+                          <li>✓ <b>Unlimited AI Sign Vision Feedback</b> with MediaPipe 3D</li>
+                          <li>✓ Instant AI Practice Coach for weak & recalled signs</li>
+                          <li>✓ Continuous streak protection & daily goal trackers</li>
+                          <li>✓ Verified Student Pro badge on public profile</li>
+                          <li>✓ 1-on-1 HD Video Sign Chat with real-time subtitles</li>
+                        </ul>
+                      </div>
                       <button
                         type="button"
-                        className="tierSelectBtn tierActive"
+                        className="planCardActionBtn primaryBtn"
                         onClick={() => {
-                          updateSetting('account', 'proPlan', 'Student Pro');
-                          setProFeedbackToast('Selected Student Pro plan!');
-                          setTimeout(() => setProFeedbackToast(''), 3000);
+                          if (!settings?.account?.studentVerified) {
+                            setProFeedbackToast('Please submit your Student ID verification below to unlock the ₹149 student rate.');
+                            setTimeout(() => setProFeedbackToast(''), 4000);
+                          } else {
+                            setCheckoutModalPlan({
+                              id: 'student',
+                              name: 'Student Pro',
+                              price: 149,
+                              defaultInterval: 'month',
+                            });
+                          }
                         }}
                       >
-                        Choose Student
+                        {settings?.account?.proPlan === 'Student Pro' ? 'Current Plan' : 'Choose Student (₹149)'}
                       </button>
                     </div>
-                    <div className="pricingTierCard">
-                      <strong>Signova Pro</strong>
-                      <span className="pricingAmount">₹199/mo</span>
-                      <small>AI feedback & unlimited calls</small>
+
+                    {/* Signova Pro (₹249) */}
+                    <div className={`modernSubPlanCard ${settings?.account?.proPlan === 'Signova Pro' ? 'activePlanCard' : ''}`}>
+                      <div className="planCardTop">
+                        <span className="planTierLabel">PROFESSIONAL</span>
+                        <h4>Signova Pro</h4>
+                        <div className="planPriceRow">
+                          <span className="planCurrency">₹</span>
+                          <span className="planPrice">249</span>
+                          <span className="planInterval">/month</span>
+                        </div>
+                        <p className="planBriefDescription">Complete suite for deaf educators, creators, and daily sign communicators.</p>
+                      </div>
+                      <div className="planDivider" />
+                      <div className="planFeaturesSection">
+                        <strong>What's Included:</strong>
+                        <ul className="planFeatureList">
+                          <li>✓ <b>Everything in Student Pro</b> plus:</li>
+                          <li>✓ Multi-dialect sign translation (ISL, ASL, BSL)</li>
+                          <li>✓ Full Creator Studio & Sign Creation upload toolkit</li>
+                          <li>✓ Unlimited video call recording & local offline vault</li>
+                          <li>✓ AI Gesture Loop with real-time accuracy scoring</li>
+                          <li>✓ Priority cloud rendering & 24/7 dedicated support</li>
+                        </ul>
+                      </div>
                       <button
                         type="button"
-                        className="tierSelectBtn"
+                        className="planCardActionBtn"
                         onClick={() => {
-                          updateSetting('account', 'proPlan', 'Signova Pro');
-                          setProFeedbackToast('Selected Signova Pro!');
-                          setTimeout(() => setProFeedbackToast(''), 3000);
+                          setCheckoutModalPlan({
+                            id: 'pro',
+                            name: 'Signova Pro',
+                            price: 249,
+                            defaultInterval: 'month',
+                          });
                         }}
                       >
-                        Choose Pro
+                        {settings?.account?.proPlan === 'Signova Pro' ? 'Current Plan' : 'Choose Pro (₹249)'}
                       </button>
                     </div>
-                    <div className="pricingTierCard">
-                      <strong>Institution</strong>
-                      <span className="pricingAmount">₹2,999+</span>
-                      <small>Bulk for schools & NGOs</small>
+
+                    {/* Business & Institution Card (₹349/mo or ₹2999/yr) */}
+                    <div className={`modernSubPlanCard businessPlanCard ${settings?.account?.proPlan === 'Institution & Business' || settings?.account?.proPlan === 'Institution Plan' ? 'activePlanCard' : ''}`}>
+                      <div className="planCardTop">
+                        <span className="planTierLabel">ENTERPRISE</span>
+                        <h4>Institution & Business</h4>
+                        <div className="planPriceRow">
+                          <span className="planCurrency">₹</span>
+                          <span className="planPrice">349</span>
+                          <span className="planInterval">/month</span>
+                        </div>
+                        <div className="planAnnualBadge">Or ₹2,999/year (Save ₹1,189)</div>
+                        <p className="planBriefDescription">For universities, NGOs, schools, and corporate accessibility teams.</p>
+                      </div>
+                      <div className="planDivider" />
+                      <div className="planFeaturesSection">
+                        <strong>What's Included:</strong>
+                        <ul className="planFeatureList">
+                          <li>✓ Bulk student/member licenses (up to 250 seats)</li>
+                          <li>✓ Centralized classroom progress & analytics dashboard</li>
+                          <li>✓ Custom sign vocabulary & institutional dataset training</li>
+                          <li>✓ Admin console with CSV member management</li>
+                          <li>✓ Dedicated Account Manager & SLA guarantee</li>
+                          <li>✓ Single Sign-On (SSO) & HIPAA/FERPA compliance</li>
+                        </ul>
+                      </div>
                       <button
                         type="button"
-                        className="tierSelectBtn"
+                        className="planCardActionBtn"
                         onClick={() => {
-                          openPanel('community');
-                          setProFeedbackToast('Contacted enterprise team.');
-                          setTimeout(() => setProFeedbackToast(''), 3000);
+                          setCheckoutModalPlan({
+                            id: 'institution',
+                            name: 'Institution & Business',
+                            price: 349,
+                            defaultInterval: 'month',
+                          });
                         }}
                       >
-                        Contact Team
+                        {settings?.account?.proPlan === 'Institution & Business' || settings?.account?.proPlan === 'Institution Plan' ? 'Current Plan' : 'Select Institution (₹349)'}
                       </button>
+                    </div>
+                  </div>
+                </section>
+
+                {/* Structured Student ID Verification Workflow */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                      </svg>
+                      <div>
+                        <h3>Student Identity Verification Portal</h3>
+                        <small style={{ color: '#64748b' }}>Upload official credentials to qualify for the ₹149/month Student Pro rate</small>
+                      </div>
+                    </div>
+                    <span className={`verificationStatusBadge ${settings?.account?.studentVerified ? 'verified' : 'pending'}`}>
+                      {settings?.account?.studentVerified ? '✓ Verified Student' : 'Action Required'}
+                    </span>
+                  </div>
+
+                  <div className="studentVerificationForm">
+                    <div className="formTwoColRow">
+                      <label className="modernFormField">
+                        <span>Institution / College / University Name</span>
+                        <input
+                          type="text"
+                          value={settings?.account?.studentInstitution || ''}
+                          onChange={(e) => updateSetting('account', 'studentInstitution', e.target.value)}
+                          placeholder="e.g. Indian Institute of Technology / Delhi University"
+                          className="modernSettingInput"
+                        />
+                      </label>
+
+                      <label className="modernFormField">
+                        <span>Student Roll / Registration Number</span>
+                        <input
+                          type="text"
+                          value={studentIdNumber}
+                          onChange={(e) => setStudentIdNumber(e.target.value)}
+                          placeholder="e.g. 2024-CS-0891"
+                          className="modernSettingInput"
+                        />
+                      </label>
+                    </div>
+
+                    <div className="formTwoColRow">
+                      <label className="modernFormField">
+                        <span>Document Proof Type</span>
+                        <select
+                          value={institutionIdType}
+                          onChange={(e) => setInstitutionIdType(e.target.value)}
+                          className="modernSettingInput"
+                        >
+                          <option value="student_card">College / University Student ID Card</option>
+                          <option value="tuition_receipt">Current Semester Tuition Receipt / Fee Challan</option>
+                          <option value="enrollment_letter">Official Bonafide Enrollment Certificate</option>
+                          <option value="school_portal">Student Portal Screenshot (.edu email)</option>
+                        </select>
+                      </label>
+
+                      <label className="modernFormField">
+                        <span>Expected Graduation Year</span>
+                        <select
+                          value={studentGradYear}
+                          onChange={(e) => setStudentGradYear(e.target.value)}
+                          className="modernSettingInput"
+                        >
+                          <option value="2025">2025</option>
+                          <option value="2026">2026</option>
+                          <option value="2027">2027</option>
+                          <option value="2028">2028</option>
+                          <option value="2029">2029+</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    {/* ID Document Upload Dropzone */}
+                    <div className="studentDocUploadZone">
+                      <label className="studentDocUploadLabel">
+                        <input
+                          type="file"
+                          accept="image/*,application/pdf"
+                          className="visuallyHidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setIsUploadingStudentId(true);
+                              setStudentDocFileName(file.name);
+                              setTimeout(() => {
+                                setIsUploadingStudentId(false);
+                                setProFeedbackToast(`Document "${file.name}" uploaded for verification.`);
+                                setTimeout(() => setProFeedbackToast(''), 3000);
+                              }, 900);
+                            }
+                          }}
+                        />
+                        <div className="uploadZoneInner">
+                          <span className="uploadZoneIcon">📄</span>
+                          {studentDocFileName ? (
+                            <div>
+                              <strong style={{ color: '#7c3aed' }}>✓ Selected: {studentDocFileName}</strong>
+                              <small style={{ display: 'block', color: '#64748b', marginTop: '2px' }}>Click to replace document</small>
+                            </div>
+                          ) : (
+                            <div>
+                              <strong>Upload Photo or PDF of Student ID Card</strong>
+                              <small style={{ display: 'block', color: '#64748b', marginTop: '2px' }}>PNG, JPG, or PDF (Max 15MB)</small>
+                            </div>
+                          )}
+                        </div>
+                      </label>
+                    </div>
+
+                    {/* Verification Submission Action */}
+                    <div className="verificationActionRow">
+                      <button
+                        type="button"
+                        className="modernPrimaryAddBtn"
+                        disabled={isUploadingStudentId}
+                        style={{ width: 'auto', padding: '10px 24px' }}
+                        onClick={() => {
+                          if (!settings?.account?.studentInstitution) {
+                            setProFeedbackToast('Please enter your Institution Name.');
+                            setTimeout(() => setProFeedbackToast(''), 3000);
+                            return;
+                          }
+                          updateSetting('account', 'studentVerified', true);
+                          setProFeedbackToast('Student ID submitted and verified! Student Pro rate ($149/mo) unlocked.');
+                          setTimeout(() => setProFeedbackToast(''), 3500);
+                        }}
+                      >
+                        {isUploadingStudentId ? 'Validating Document...' : (settings?.account?.studentVerified ? '✓ Re-Submit Verification' : 'Submit ID for Instant Verification')}
+                      </button>
+
+                      {settings?.account?.studentVerified && (
+                        <button
+                          type="button"
+                          className="modernOutlineBtn"
+                          onClick={() => {
+                            updateSetting('account', 'studentVerified', false);
+                            setProFeedbackToast('Student verification reset.');
+                            setTimeout(() => setProFeedbackToast(''), 2500);
+                          }}
+                        >
+                          Reset Verification
+                        </button>
+                      )}
                     </div>
                   </div>
                 </section>
@@ -1427,83 +1651,20 @@ export default function ProfileView({
             </div>
           </div>
         )}
-      </section>
-    );
-  }
 
-  /* ----------------------------------------------------
-   * 3. Signova Pro Membership Page (Dedicated Full Screen View)
-   * ---------------------------------------------------- */
-  if (activePanel === 'signovaPro') {
-    return (
-      <section className="profilePage signovaProPage" aria-label="Signova Pro Membership">
-        <header className="signovaProHero">
-          <button type="button" onClick={() => openPanel('profile')} aria-label="Back to profile">‹ Back</button>
-          <div className="signovaProHeroTitle">
-            <span className="proStarBadge">✦</span>
-            <h1>Signova Pro Membership</h1>
-            <p>Full access to AI feedback, continuous learning, and multi-dialect practice.</p>
-          </div>
-        </header>
-
-        <main className="signovaProLayout">
-          <section className="signovaProCard signovaProFeatureCard">
-            <div className="profileCardHeader">
-              <div>
-                <span>MEMBERSHIP PRIVILEGES</span>
-                <strong>What You Get With Pro</strong>
-              </div>
-            </div>
-            <ul className="proBenefitsList">
-              <li><b>✓ Real-time Sign Recognition:</b> AI analysis for live video calls and practice.</li>
-              <li><b>✓ 1,200+ Gesture Library:</b> Complete Indian & American Sign Language dictionary.</li>
-              <li><b>✓ Offline Media Vault:</b> Save signs, transcripts, and lessons locally.</li>
-            </ul>
-          </section>
-
-          <section className="signovaProCard">
-            <div className="profileCardHeader">
-              <div>
-                <span>STUDENT VERIFICATION</span>
-                <strong>Verify Student ID</strong>
-              </div>
-            </div>
-            <p>Upload a student ID card for institutional discount access.</p>
-            <label className="profileFieldWide">
-              <span>Institution name</span>
-              <input
-                value={settings?.account?.studentInstitution || ''}
-                onChange={(event) => updateSetting('account', 'studentInstitution', event.target.value)}
-                placeholder="School / college / university"
-              />
-            </label>
-            <div className="profileStatusList">
-              <div className="profileStatusItem">
-                <small>Student status</small>
-                <strong>{settings?.account?.studentVerified ? 'Verified' : 'Pending'}</strong>
-              </div>
-              <div className="profileStatusItem">
-                <small>Discount profile</small>
-                <strong>{settings?.account?.studentVerified ? 'Student Pro' : 'Upload required'}</strong>
-              </div>
-            </div>
-          </section>
-
-          <section className="signovaProCard">
-            <div className="profileCardHeader">
-              <div>
-                <span>PRICING AFTER TRIAL</span>
-                <strong>Simple Plan Ladder</strong>
-              </div>
-            </div>
-            <div className="signovaPricingRows">
-              <div className="pricingRowItem"><b>Free</b><strong>₹0</strong><small>Basic learning and limited practice</small></div>
-              <div className="pricingRowItem"><b>Student Pro</b><strong>₹99/mo</strong><small>Verified student identity + Pro badge</small></div>
-              <div className="pricingRowItem"><b>Signova Pro</b><strong>₹199/mo</strong><small>AI feedback, video sign chat, progress tools</small></div>
-              <div className="pricingRowItem"><b>Institution</b><strong>₹2,999+</strong><small>Bulk dashboards for schools and NGOs</small></div>
-            </div>
-          </section>
-        </main>
+        {/* Dedicated Signova Payment & Checkout Modal */}
+        <SignovaCheckoutModal
+          isOpen={Boolean(checkoutModalPlan)}
+          onClose={() => setCheckoutModalPlan(null)}
+          plan={checkoutModalPlan}
+          user={{
+            name: displayName,
+            username: displayUsername,
+            email: settings?.account?.email || '',
+            phone: settings?.account?.phone || '',
+          }}
+          onPaymentSuccess={handleCheckoutSuccess}
+        />
       </section>
     );
   }
