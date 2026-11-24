@@ -35038,3 +35038,129 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   border-color: rgba(255, 255, 255, 0.15);
   color: #cbd5e1;
 }
+
+/* =========================================================
+   CONTACT PROFILE MODAL: CENTERED AVATAR, ZOOM & TOP PILLS
+   ========================================================= */
+
+/* Center Avatar Frame and Inner Image */
+.modernHeroAvatarFrame.clickableHeroAvatar {
+  cursor: pointer;
+  position: relative;
+  margin: 0 auto;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.modernHeroAvatarFrame.clickableHeroAvatar:hover {
+  transform: scale(1.03);
+  box-shadow: 0 20px 42px rgba(124, 58, 237, 0.3);
+}
+
+.modernHeroAvatarImg.centeredHeroAvatar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 auto !important;
+}
+
+.centeredHeroAvatar img {
+  width: 72% !important;
+  height: 72% !important;
+  object-fit: contain !important;
+  margin: auto !important;
+  display: block !important;
+}
+
+/* Hover Zoom Icon Overlay */
+.avatarZoomOverlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  background: rgba(15, 23, 42, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  pointer-events: none;
+}
+
+.clickableHeroAvatar:hover .avatarZoomOverlay {
+  opacity: 1;
+}
+
+/* Top Quick Action Pills (Below Profile Pic) */
+.modernHeroTopQuickActions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  margin-bottom: 6px;
+}
+
+.modernHeroMiniPillBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  background: #f8fafc;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modernHeroMiniPillBtn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+.modernHeroMiniPillBtn.activeFav {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #d97706;
+}
+
+.modernHeroMiniPillBtn.activeMuted {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.modernHeroMiniPillBtn.moreBtn {
+  padding: 6px 10px;
+}
+
+/* Dark Mode Support for New Elements */
+.premiumDarkMode .modernHeroMiniPillBtn {
+  background: #1e293b;
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #cbd5e1;
+}
+
+.premiumDarkMode .modernHeroMiniPillBtn:hover {
+  background: #334155;
+  color: #f8fafc;
+}
+
+.premiumDarkMode .modernHeroMiniPillBtn.activeFav {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+}
+
+.premiumDarkMode .modernHeroMiniPillBtn.activeMuted {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}

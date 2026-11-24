@@ -131,28 +131,77 @@ export default function ContactProfileModal({
             LEFT COLUMN: 3D HERO AVATAR & QUICK ACTIONS (Image 2 Parity)
            ========================================================= */}
         <aside className="modernProfileHeroCol">
-          {/* Ambient Glow & 3D Avatar */}
+          {/* Ambient Glow & 3D Avatar (Centered, Clickable for Zoom) */}
           <div className="modernHeroAvatarStage">
             <div className="modernHeroRadialGlow" />
-            <div className="modernHeroAvatarFrame">
+            <div
+              className="modernHeroAvatarFrame clickableHeroAvatar"
+              onClick={() => {
+                const imgUrl = contact?.profileImage || '/app-logo.png';
+                setActiveLightboxMedia({
+                  mediaUrl: imgUrl,
+                  fileName: `${displayName}'s Profile Photo`,
+                });
+              }}
+              title="Click to view full photo"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  const imgUrl = contact?.profileImage || '/app-logo.png';
+                  setActiveLightboxMedia({
+                    mediaUrl: imgUrl,
+                    fileName: `${displayName}'s Profile Photo`,
+                  });
+                }
+              }}
+            >
               <ContactAvatar
                 contact={contact}
-                className="modernHeroAvatarImg"
+                className="modernHeroAvatarImg centeredHeroAvatar"
                 presenceTone={isOnline ? 'online' : 'offline'}
               />
               <span className={`modernHeroStatusDot ${isOnline ? 'statusOnline' : 'statusOffline'}`} />
+              <div className="avatarZoomOverlay" title="Zoom in">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/>
+                  <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+              </div>
             </div>
+          </div>
 
-            {/* 3-Dots Quick Actions Menu Placed Directly At Avatar Stage */}
-            <div className="modernAvatarActionsAnchor">
+          {/* Quick Action Options Placed Directly Below Profile Pic (Accessible at Top) */}
+          <div className="modernHeroTopQuickActions">
+            <button
+              type="button"
+              className={`modernHeroMiniPillBtn ${selectedChatFlags.favourite ? 'activeFav' : ''}`}
+              onClick={() => handleHeaderChatAction?.('favourite')}
+              title={selectedChatFlags.favourite ? 'Remove from favourites' : 'Star as favourite'}
+            >
+              <span>{selectedChatFlags.favourite ? '★ Favourited' : '☆ Favourite'}</span>
+            </button>
+
+            <button
+              type="button"
+              className={`modernHeroMiniPillBtn ${selectedChatFlags.muted ? 'activeMuted' : ''}`}
+              onClick={() => handleHeaderChatAction?.('muted')}
+              title={selectedChatFlags.muted ? 'Unmute notifications' : 'Mute notifications'}
+            >
+              <span>{selectedChatFlags.muted ? '🔕 Muted' : '🔔 Mute'}</span>
+            </button>
+
+            <div className="modernContactMenuWrap">
               <button
                 type="button"
-                className="modernAvatarMenuBtn"
+                className="modernHeroMiniPillBtn moreBtn"
                 onClick={() => setActionsMenuOpen((open) => !open)}
-                aria-label="Contact options"
-                title="Contact options"
+                aria-label="More contact options"
+                title="More options"
               >
-                ⋮
+                <span>⋮ More</span>
               </button>
 
               {actionsMenuOpen && (
@@ -206,7 +255,6 @@ export default function ContactProfileModal({
               <span className={`presenceDot ${isOnline ? 'dotOnline' : 'dotOffline'}`} />
               <small>{isOnline ? 'Online' : 'Offline'}</small>
             </div>
-            <p className="modernHeroBio">{displayBio}</p>
           </div>
 
           {/* Stats Bar */}
