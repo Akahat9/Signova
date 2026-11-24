@@ -197,9 +197,8 @@ export default function ProfileView({
                       className="modernHeroAvatarImg"
                     />
                   ) : (
-                    <div className="modernHeroAvatarFallback">
+                    <div className="modernHeroAvatarFallback defaultSignovaAvatar">
                       <img src="/app-logo.png" alt="Signova" className="modernHeroLogoPlaceholder" />
-                      <span className="modernHeroInitialSubtext">{accountAvatarInitials || 'S'}</span>
                     </div>
                   )}
                   <input
@@ -219,6 +218,11 @@ export default function ProfileView({
                     <span className="modernHeroProBadge" title={signovaProBadgeLabel}>PRO</span>
                   )}
                 </label>
+                {!settings?.account?.profilePhoto && (
+                  <span className="modernHeroInitialCornerBadge" aria-hidden="true">
+                    {accountAvatarInitials || 'S'}
+                  </span>
+                )}
                 <span className="modernHeroStatusDot statusOnline" title="Online" />
               </div>
             </div>

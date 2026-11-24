@@ -75,8 +75,12 @@ export default function AppNavigationRail({
             ) : (
               <div className="railProfileSignovaAvatar">
                 <img src="/app-logo.png" alt="Signova" className="railProfileSignovaIcon" />
-                <span className="railProfileInitialText">{accountAvatarInitials || 'S'}</span>
               </div>
+            )}
+            {!profilePhoto && (
+              <span className="railProfileInitialCornerBadge">
+                {accountAvatarInitials || 'S'}
+              </span>
             )}
             {isVerified && (
               <span className="railProfileVerifiedBadge" title="Verified Account">

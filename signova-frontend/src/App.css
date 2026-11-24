@@ -36505,40 +36505,61 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   height: 0 !important;
 }
 
-/* Profile Hero Avatar Placeholder (Signova Icon + Initial 'S' underneath) */
+/* Profile Hero Avatar Placeholder (Circular Signova Icon + Corner 'S' Badge) */
 .modernHeroAvatarFallback {
   width: 100% !important;
   height: 100% !important;
   display: flex !important;
-  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 5px !important;
-  background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%) !important;
-  border-radius: inherit !important;
+  background: radial-gradient(circle at 50% 45%, #ffffff 40%, #e0f2fe 100%) !important;
+  border-radius: 50% !important;
+  padding: 12px !important;
+}
+
+.modernHeroAvatarFrame:has(.defaultSignovaAvatar) {
+  border-radius: 50% !important;
+  border: 2.5px solid rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.12), 0 12px 28px rgba(14, 165, 233, 0.18) !important;
+  background: #ffffff !important;
 }
 
 .modernHeroLogoPlaceholder {
-  width: 52px !important;
-  height: 52px !important;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: contain !important;
-  filter: drop-shadow(0 4px 10px rgba(124, 58, 237, 0.18)) !important;
 }
 
-.modernHeroInitialSubtext {
-  font-size: 16px !important;
+.modernHeroInitialCornerBadge {
+  position: absolute !important;
+  bottom: -2px !important;
+  right: -2px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #1d4f9a 0%, #0ea5e9 100%) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
   font-weight: 800 !important;
-  color: #7c3aed !important;
-  line-height: 1 !important;
-  letter-spacing: 0.5px !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 3px solid #ffffff !important;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3) !important;
+  z-index: 4 !important;
+}
+
+.modernHeroAvatarFrame:has(.defaultSignovaAvatar) ~ .modernHeroStatusDot {
+  top: 2px !important;
+  bottom: auto !important;
+  right: 2px !important;
 }
 
 .premiumDarkMode .modernHeroAvatarFallback {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.25) 0%, rgba(79, 70, 229, 0.25) 100%) !important;
+  background: radial-gradient(circle at 50% 45%, #0f172a 40%, #1e293b 100%) !important;
 }
 
-.premiumDarkMode .modernHeroInitialSubtext {
-  color: #c4b5fd !important;
+.premiumDarkMode .modernHeroInitialCornerBadge {
+  border-color: #0f172a !important;
 }
 
 /* Remove glow effect on rail profile button */
@@ -36551,12 +36572,12 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   animation: none !important;
 }
 
-/* Matching Rail Profile Avatar + Verification Sign Badge */
+/* Matching Rail Profile Avatar + Corner 'S' Badge + Verification Sign */
 .railProfileAvatarWrapper {
   position: relative !important;
   width: 40px !important;
   height: 40px !important;
-  border-radius: 12px !important;
+  border-radius: 50% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -36566,41 +36587,51 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
 .railProfileCustomImg {
   width: 100% !important;
   height: 100% !important;
-  border-radius: 12px !important;
+  border-radius: 50% !important;
   object-fit: cover !important;
-  border: 1.5px solid rgba(124, 58, 237, 0.25) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
 }
 
 .railProfileSignovaAvatar {
   width: 100% !important;
   height: 100% !important;
-  border-radius: 12px !important;
-  background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%) !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 50% 45%, #ffffff 40%, #e0f2fe 100%) !important;
   display: flex !important;
-  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 1px !important;
-  padding: 2px !important;
-  border: 1.5px solid rgba(124, 58, 237, 0.25) !important;
+  padding: 5px !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12) !important;
 }
 
 .railProfileSignovaIcon {
-  width: 19px !important;
-  height: 19px !important;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: contain !important;
 }
 
-.railProfileInitialText {
-  font-size: 9.5px !important;
+.railProfileInitialCornerBadge {
+  position: absolute !important;
+  bottom: -2px !important;
+  right: -2px !important;
+  width: 16px !important;
+  height: 16px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #1d4f9a 0%, #0ea5e9 100%) !important;
+  color: #ffffff !important;
+  font-size: 9px !important;
   font-weight: 800 !important;
-  color: #7c3aed !important;
-  line-height: 1 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1.5px solid #ffffff !important;
+  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.3) !important;
+  z-index: 2 !important;
 }
 
 .railProfileVerifiedBadge {
   position: absolute !important;
-  bottom: -3px !important;
+  top: -3px !important;
   right: -3px !important;
   width: 15px !important;
   height: 15px !important;
@@ -36609,18 +36640,16 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   place-items: center !important;
   background: #ffffff !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16) !important;
-  z-index: 2 !important;
+  z-index: 3 !important;
 }
 
 .premiumDarkMode .railProfileSignovaAvatar {
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.28) 0%, rgba(79, 70, 229, 0.28) 100%) !important;
-  border-color: rgba(167, 139, 250, 0.35) !important;
+  background: radial-gradient(circle at 50% 45%, #0f172a 40%, #1e293b 100%) !important;
+  border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
-.premiumDarkMode .railProfileInitialText {
-  color: #c4b5fd !important;
-}
-
+.premiumDarkMode .railProfileInitialCornerBadge,
 .premiumDarkMode .railProfileVerifiedBadge {
+  border-color: #0f172a !important;
   background: #0f172a !important;
 }
