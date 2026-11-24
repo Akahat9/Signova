@@ -36505,57 +36505,67 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   height: 0 !important;
 }
 
-/* Profile Hero Avatar Placeholder (Circular Signova Icon + Corner 'S' Badge) */
+/* Profile Hero Avatar Placeholder (Rounded-Square Squircle + Corner 'S' Badge) */
 .modernHeroAvatarFallback {
   width: 100% !important;
   height: 100% !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: radial-gradient(circle at 50% 45%, #ffffff 40%, #e0f2fe 100%) !important;
-  border-radius: 50% !important;
-  padding: 12px !important;
+  background: #ffffff !important;
+  border-radius: 24px !important;
+  padding: 6px !important;
+  overflow: hidden !important;
 }
 
 .modernHeroAvatarFrame:has(.defaultSignovaAvatar) {
-  border-radius: 50% !important;
+  border-radius: 28px !important;
   border: 2.5px solid rgba(56, 189, 248, 0.45) !important;
-  box-shadow: 0 0 0 5px rgba(56, 189, 248, 0.12), 0 12px 28px rgba(14, 165, 233, 0.18) !important;
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12), 0 12px 28px rgba(14, 165, 233, 0.18) !important;
   background: #ffffff !important;
+  overflow: visible !important;
+}
+
+.modernHeroAvatarFrame:has(.defaultSignovaAvatar) .modernHeroPhotoLabel {
+  border-radius: 25px !important;
+  overflow: hidden !important;
 }
 
 .modernHeroLogoPlaceholder {
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
+  border-radius: 20px !important;
 }
 
 .modernHeroInitialCornerBadge {
   position: absolute !important;
-  bottom: -2px !important;
-  right: -2px !important;
-  width: 32px !important;
-  height: 32px !important;
+  bottom: -6px !important;
+  right: -6px !important;
+  width: 30px !important;
+  height: 30px !important;
   border-radius: 50% !important;
   background: linear-gradient(135deg, #1d4f9a 0%, #0ea5e9 100%) !important;
   color: #ffffff !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
   font-weight: 800 !important;
   display: grid !important;
   place-items: center !important;
-  border: 3px solid #ffffff !important;
-  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.3) !important;
-  z-index: 4 !important;
+  border: 2.5px solid #ffffff !important;
+  box-shadow: 0 4px 10px rgba(14, 165, 233, 0.35) !important;
+  z-index: 6 !important;
 }
 
 .modernHeroAvatarFrame:has(.defaultSignovaAvatar) ~ .modernHeroStatusDot {
-  top: 2px !important;
+  top: -3px !important;
   bottom: auto !important;
-  right: 2px !important;
+  right: -3px !important;
+  z-index: 6 !important;
 }
 
-.premiumDarkMode .modernHeroAvatarFallback {
-  background: radial-gradient(circle at 50% 45%, #0f172a 40%, #1e293b 100%) !important;
+.premiumDarkMode .modernHeroAvatarFallback,
+.premiumDarkMode .modernHeroAvatarFrame:has(.defaultSignovaAvatar) {
+  background: #0f172a !important;
 }
 
 .premiumDarkMode .modernHeroInitialCornerBadge {
@@ -36572,22 +36582,23 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   animation: none !important;
 }
 
-/* Matching Rail Profile Avatar + Corner 'S' Badge + Verification Sign */
+/* Matching Rail Profile Avatar (Rounded-Square Squircle + Corner 'S' + Verification Sign) */
 .railProfileAvatarWrapper {
   position: relative !important;
   width: 40px !important;
   height: 40px !important;
-  border-radius: 50% !important;
+  border-radius: 12px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   flex-shrink: 0 !important;
+  overflow: visible !important;
 }
 
 .railProfileCustomImg {
   width: 100% !important;
   height: 100% !important;
-  border-radius: 50% !important;
+  border-radius: 12px !important;
   object-fit: cover !important;
   border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
 }
@@ -36595,26 +36606,28 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
 .railProfileSignovaAvatar {
   width: 100% !important;
   height: 100% !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle at 50% 45%, #ffffff 40%, #e0f2fe 100%) !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  padding: 5px !important;
+  padding: 2px !important;
   border: 1.5px solid rgba(56, 189, 248, 0.45) !important;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12) !important;
+  box-shadow: 0 0 0 2.5px rgba(56, 189, 248, 0.12) !important;
+  overflow: hidden !important;
 }
 
 .railProfileSignovaIcon {
   width: 100% !important;
   height: 100% !important;
-  object-fit: contain !important;
+  object-fit: cover !important;
+  border-radius: 9px !important;
 }
 
 .railProfileInitialCornerBadge {
   position: absolute !important;
-  bottom: -2px !important;
-  right: -2px !important;
+  bottom: -4px !important;
+  right: -4px !important;
   width: 16px !important;
   height: 16px !important;
   border-radius: 50% !important;
@@ -36625,14 +36638,14 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   display: grid !important;
   place-items: center !important;
   border: 1.5px solid #ffffff !important;
-  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.3) !important;
-  z-index: 2 !important;
+  box-shadow: 0 2px 6px rgba(14, 165, 233, 0.35) !important;
+  z-index: 4 !important;
 }
 
 .railProfileVerifiedBadge {
   position: absolute !important;
-  top: -3px !important;
-  right: -3px !important;
+  top: -4px !important;
+  right: -4px !important;
   width: 15px !important;
   height: 15px !important;
   border-radius: 50% !important;
@@ -36640,11 +36653,11 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   place-items: center !important;
   background: #ffffff !important;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.16) !important;
-  z-index: 3 !important;
+  z-index: 5 !important;
 }
 
 .premiumDarkMode .railProfileSignovaAvatar {
-  background: radial-gradient(circle at 50% 45%, #0f172a 40%, #1e293b 100%) !important;
+  background: #0f172a !important;
   border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
