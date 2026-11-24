@@ -47,6 +47,7 @@ export default function ProfileView({
   callHistory = [],
   communityGroups = [],
   onOpenCommunityGateway,
+  onPlaySignovaIntro,
   startGestureLoopPractice,
 }) {
   const [qrModalTab, setQrModalTab] = useState('view'); // 'view' or 'scan'
@@ -70,6 +71,10 @@ export default function ProfileView({
     updateSetting('account', 'proStatus', 'active');
     setProFeedbackToast(`🎉 Payment successful (₹${completedPlan.price})! Subscribed to ${completedPlan.name}.`);
     setTimeout(() => setProFeedbackToast(''), 5000);
+    // 3. Play celebratory Signova intro animation on Pro activation
+    if (onPlaySignovaIntro) {
+      onPlaySignovaIntro();
+    }
   };
 
   // Sync initial bio draft

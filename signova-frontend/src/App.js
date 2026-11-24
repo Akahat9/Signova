@@ -3907,6 +3907,19 @@ function App() {
     fullIntroTimerRef.current = window.setTimeout(() => setFullIntroActive(false), 3150);
   }
 
+  // 1. First-time session splash on web app load (runs once per browser tab/session)
+  useEffect(() => {
+    if (typeof window === 'undefined' || process.env.NODE_ENV === 'test') return;
+    try {
+      if (!window.sessionStorage.getItem('signova_intro_seen')) {
+        window.sessionStorage.setItem('signova_intro_seen', '1');
+        playFullSignovaIntro();
+      }
+    } catch {
+      // Ignore storage access errors in restricted browsers
+    }
+  }, []);
+
   function applyAuthenticatedProfile(profile) {
     const nextName = profile.name || 'Signova User';
     const nameParts = splitAuthName(nextName);
@@ -4093,6 +4106,8 @@ function App() {
   async function finishFirebaseAuth(user, fallbackProfile = {}) {
     const profile = await loadAuthProfile(user, fallbackProfile);
     applyAuthenticatedProfile(profile);
+    // 2. Play welcome intro animation upon explicit Sign-In / Sign-Up completion
+    playFullSignovaIntro();
     const cleanUsername = normalizeAuthUsername(profile.username || user.email?.split('@')[0] || '');
     if (cleanUsername && firestoreDb && user?.uid) {
       setDoc(doc(firestoreDb, 'publicUserIdentities', cleanUsername), {
@@ -4381,13 +4396,7 @@ function App() {
 
   function handleRailLogoClick() {
     window.clearTimeout(railLogoClickTimerRef.current);
-    railLogoClickTimerRef.current = window.setTimeout(() => playRailTribute(), 220);
-  }
-
-  function handleRailLogoDoubleClick(event) {
-    event.preventDefault();
-    window.clearTimeout(railLogoClickTimerRef.current);
-    playFullSignovaIntro();
+    playRailTribute();
   }
 
   function handleCommunityRailTap() {
@@ -6723,7 +6732,6 @@ function App() {
         navItems={NAV_ITEMS}
         onCommunityOpen={handleCommunityRailTap}
         onLogoClick={handleRailLogoClick}
-        onLogoDoubleClick={handleRailLogoDoubleClick}
         onOpenPanel={openPanel}
         profilePhoto={settings?.account?.profilePhoto}
         railIcon={RailIcon}
@@ -7189,6 +7197,7 @@ function App() {
             callHistory={callHistory}
             communityGroups={communityGroups}
             onOpenCommunityGateway={() => setCommunityGatewayOpen(true)}
+            onPlaySignovaIntro={playFullSignovaIntro}
             startGestureLoopPractice={startGestureLoopPractice}
           />
 
