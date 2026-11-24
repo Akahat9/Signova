@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
 /**
- * Modern ProfileView Component matching Signova's minimalist redesign (Image 2).
+ * Modern ProfileView Component matching Signova's minimalist redesign.
  * Features dual-column layout, 3D Hero avatar with ambient glow, verified checkmark,
  * dual persona switcher (Personal vs Creator & Developer Hub), interactive pill tabs,
- * contact privacy badges, activity overview, and shared media preview.
+ * real practice growth metrics, Signova Pro membership, real user media, and rich settings.
  */
 export default function ProfileView({
   activePanel,
@@ -12,7 +12,7 @@ export default function ProfileView({
   openPanel,
   communityProfile,
   communityAvatarInitials,
-  ownCommunityPosts,
+  ownCommunityPosts = [],
   communityIdentityEditing,
   setCommunityIdentityEditing,
   updateAvatarSetting,
@@ -20,7 +20,7 @@ export default function ProfileView({
   saveAvatarCustomization,
   communityPublicProfileTab,
   setCommunityPublicProfileTab,
-  publicProfilePosts,
+  publicProfilePosts = [],
   settings,
   isSignovaProActive,
   accountAvatarInitials,
@@ -48,9 +48,8 @@ export default function ProfileView({
   onOpenCommunityGateway,
 }) {
   const [qrModalTab, setQrModalTab] = useState('view'); // 'view' or 'scan'
-  const [profileTab, setProfileTab] = useState('about'); // 'about' | 'media' | 'files' | 'links' | 'activity' | 'settings'
+  const [profileTab, setProfileTab] = useState('about'); // 'about' | 'practice' | 'pro' | 'media' | 'activity' | 'settings'
   const [personaMode, setPersonaMode] = useState('personal'); // 'personal' | 'creator'
-  const [mediaCategory, setMediaCategory] = useState('all'); // 'all' | 'photos' | 'videos' | 'documents' | 'links' | 'audio'
   const [isEditingBio, setIsEditingBio] = useState(false);
   const [bioDraft, setBioDraft] = useState('');
   const [copyFeedback, setCopyFeedback] = useState('');
@@ -79,7 +78,7 @@ export default function ProfileView({
   }
 
   async function handleCopyUsername() {
-    const handle = settings?.account?.username || '@krisha';
+    const handle = settings?.account?.username || '@akshat';
     if (navigator?.clipboard) {
       await navigator.clipboard.writeText(handle).catch(() => {});
       setCopyFeedback('Username copied!');
@@ -152,130 +151,99 @@ export default function ProfileView({
   }
 
   /* ----------------------------------------------------
-   * 2. Modern Profile Page (Redesigned Image 2 Parity)
+   * 2. Main Profile Page (Modern Dual-Column Minimal Design)
    * ---------------------------------------------------- */
   if (activePanel === 'profile') {
-    const displayName = settings.account.name || 'Krisha Sharma';
-    const displayUsername = settings.account.username || '@krisha';
-    const displayPhone = settings.account.phone || '+91 7986295274';
-    const displayBio = settings.account.about || 'Sign language enthusiast | Building a more inclusive world 💜';
-    const contactsCount = contacts?.length || 245;
-    const callsCount = callHistory?.length || 32;
-    const groupsCount = communityGroups?.length || 12;
+    const displayName = settings?.account?.name || 'Signova User';
+    const displayUsername = settings?.account?.username || '@signova.user';
+    const displayPhone = settings?.account?.number || settings?.account?.phone || '+91 98166 79632';
+    const displayBio = settings?.account?.about || 'Sign language enthusiast | Building a more inclusive world 💜';
+    const callsCount = callHistory.length || 0;
 
     return (
-      <section className="modernProfilePage" aria-label="Signova modern profile">
-        <div className="modernProfileContainer">
+      <section className="profilePage modernProfilePageRoot" aria-label="Signova profile page">
+        <div className="modernProfileLayout">
           {/* =========================================================
-              LEFT COLUMN: HERO IDENTITY CARD (Image 2 Parity)
+              LEFT COLUMN: 3D HERO AVATAR & STATS (Matching Design Aesthetic)
              ========================================================= */}
-          <aside className="modernProfileHeroCard">
-            {/* 3D Avatar with Ambient Glow & Online Indicator */}
-            <div className="modernAvatarWrapper">
-              <label className="modernProfileAvatarLabel" title="Click to upload profile photo">
-                {settings.account.profilePhoto ? (
-                  <img src={settings.account.profilePhoto} alt={displayName} className="modernProfileAvatarImg" />
-                ) : (
-                  <div className="modernProfileAvatar3D">
-                    {/* High quality 3D illustrated avatar SVG fallback */}
-                    <svg viewBox="0 0 120 120" width="100%" height="100%">
-                      <defs>
-                        <radialGradient id="heroFace" cx="50%" cy="40%" r="55%">
-                          <stop offset="0%" stopColor="#fed7aa" />
-                          <stop offset="100%" stopColor="#fba772" />
-                        </radialGradient>
-                        <linearGradient id="heroHair" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#292524" />
-                          <stop offset="100%" stopColor="#1c1917" />
-                        </linearGradient>
-                      </defs>
-                      <circle cx="60" cy="60" r="54" fill="#ede9fe" />
-                      {/* Hair back */}
-                      <ellipse cx="60" cy="50" rx="36" ry="34" fill="url(#heroHair)" />
-                      {/* Face */}
-                      <ellipse cx="60" cy="62" rx="27" ry="29" fill="url(#heroFace)" />
-                      {/* Hair front bangs */}
-                      <path d="M 33 46 C 36 32, 60 26, 87 42 C 80 34, 60 30, 42 36 Z" fill="url(#heroHair)" />
-                      {/* Eyes */}
-                      <ellipse cx="49" cy="59" rx="3.5" ry="4.5" fill="#1e293b" />
-                      <ellipse cx="71" cy="59" rx="3.5" ry="4.5" fill="#1e293b" />
-                      <circle cx="50" cy="57" r="1.2" fill="#ffffff" />
-                      <circle cx="72" cy="57" r="1.2" fill="#ffffff" />
-                      {/* Eyebrows */}
-                      <path d="M 43 51 Q 49 48 55 52" stroke="#1c1917" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                      <path d="M 65 52 Q 71 48 77 51" stroke="#1c1917" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                      {/* Smile */}
-                      <path d="M 52 73 Q 60 80 68 73" stroke="#be185d" strokeWidth="2.2" strokeLinecap="round" fill="none" />
-                      {/* Cheeks */}
-                      <circle cx="43" cy="67" r="4" fill="#fb7185" opacity="0.35" />
-                      <circle cx="77" cy="67" r="4" fill="#fb7185" opacity="0.35" />
-                      {/* Hoodie collar */}
-                      <path d="M 36 94 C 44 86, 76 86, 84 94 L 88 120 L 32 120 Z" fill="#1e1b4b" />
+          <aside className="modernProfileHeroCol">
+            {/* Ambient Radial Glow & 3D Avatar */}
+            <div className="modernHeroAvatarStage">
+              <div className="modernHeroRadialGlow" />
+              <div className="modernHeroAvatarFrame">
+                <label className="modernHeroPhotoLabel" title="Upload new profile photo">
+                  {settings?.account?.profilePhoto ? (
+                    <img
+                      src={settings.account.profilePhoto}
+                      alt={displayName}
+                      className="modernHeroAvatarImg"
+                    />
+                  ) : (
+                    <div className="modernHeroAvatarFallback">
+                      <span>{accountAvatarInitials || 'A'}</span>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleProfilePhotoUpload}
+                    aria-label="Upload profile photo"
+                    className="visuallyHidden"
+                  />
+                  <div className="modernHeroPhotoOverlay" title="Change profile photo">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
                     </svg>
                   </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleProfilePhotoUpload}
-                  aria-label="Upload profile photo"
-                  hidden
-                />
-                <div className="modernAvatarUploadOverlay" title="Change photo">
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-                    <circle cx="12" cy="13" r="4"/>
-                  </svg>
-                </div>
-              </label>
-              {/* Online indicator badge */}
-              <span className="modernHeroOnlineDot" title="Online now" />
+                  {isSignovaProActive && (
+                    <span className="modernHeroProBadge" title={signovaProBadgeLabel}>PRO</span>
+                  )}
+                </label>
+                <span className="modernHeroStatusDot statusOnline" title="Online" />
+              </div>
             </div>
 
-            {/* Name with Verified Checkmark */}
+            {/* Name, Verified Badge, and Bio */}
             <div className="modernHeroIdentity">
-              <h2 className="modernHeroName">
-                {displayName}
-                <span className="modernVerifiedBadge" title="Verified Signova Identity">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="#7c3aed">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                  </svg>
-                </span>
-              </h2>
-              <span className="modernHeroUsername">{displayUsername}</span>
-
-              {/* Online Pill */}
-              <div className="modernHeroOnlinePill">
-                <span className="modernPulseGreen" />
-                <span>Online</span>
+              <div className="modernHeroNameRow">
+                <h2>{displayName}</h2>
+                <svg className="modernVerifiedCheck" viewBox="0 0 24 24" width="18" height="18" fill="none">
+                  <circle cx="12" cy="12" r="10" fill="#7c3aed" />
+                  <path d="M8 12.5l2.5 2.5 5.5-5.5" stroke="#ffffff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </div>
 
-              {/* Bio Statement */}
-              <p className="modernHeroBio">
-                {displayBio}
-              </p>
+              <p className="modernHeroHandle">{displayUsername}</p>
+
+              <div className="modernHeroPresenceBadge">
+                <span className="presenceDot dotOnline" />
+                <small>Online · {profileCompletion || 85}% profile complete</small>
+              </div>
+
+              <p className="modernHeroBio">{displayBio}</p>
             </div>
 
-            {/* Stats Counter Bar (Contacts | Chats | Groups) */}
+            {/* Stats Bar */}
             <div className="modernHeroStatsBar">
-              <div className="modernHeroStatItem">
-                <strong>{contactsCount}</strong>
+              <div className="modernStatItem">
+                <strong>{contacts.length}</strong>
                 <small>Contacts</small>
               </div>
-              <div className="modernHeroStatDivider" />
-              <div className="modernHeroStatItem">
-                <strong>32</strong>
-                <small>Chats</small>
+              <span className="modernStatDivider" />
+              <div className="modernStatItem">
+                <strong>{callsCount}</strong>
+                <small>Calls</small>
               </div>
-              <div className="modernHeroStatDivider" />
-              <div className="modernHeroStatItem">
-                <strong>{groupsCount}</strong>
+              <span className="modernStatDivider" />
+              <div className="modernStatItem">
+                <strong>{communityGroups.length || 12}</strong>
                 <small>Groups</small>
               </div>
             </div>
 
-            {/* Action Buttons List */}
-            <div className="modernHeroActionsList">
+            {/* Action Buttons */}
+            <div className="modernHeroActionButtons">
               <button
                 type="button"
                 className="modernHeroOutlineBtn"
@@ -353,25 +321,32 @@ export default function ProfileView({
                 <line x1="8" y1="2" x2="8" y2="6"/>
                 <line x1="3" y1="10" x2="21" y2="10"/>
               </svg>
-              <span>Joined on 12 Jan 2025</span>
+              <span>{settings?.account?.joinedDate || 'Joined on 12 Jan 2025'}</span>
             </div>
           </aside>
 
           {/* =========================================================
-              RIGHT COLUMN: CONTENT PANE WITH PILL TABS (Image 2 Parity)
+              RIGHT COLUMN: CONTENT PANE WITH USER TABS
              ========================================================= */}
           <main className="modernProfileContentCard">
             {/* Top Navigation Pill Tabs + Close Button */}
             <header className="modernProfileTopNav">
               <nav className="modernProfilePillTabs" aria-label="Profile navigation">
-                {['about', 'media', 'files', 'links', 'activity', 'settings'].map((tab) => (
+                {[
+                  { id: 'about', label: 'About' },
+                  { id: 'practice', label: 'Practice Growth' },
+                  { id: 'pro', label: 'Signova Pro' },
+                  { id: 'media', label: 'My Signs' },
+                  { id: 'activity', label: 'Activity' },
+                  { id: 'settings', label: 'Settings' },
+                ].map((tab) => (
                   <button
-                    key={tab}
+                    key={tab.id}
                     type="button"
-                    className={`modernNavPill ${profileTab === tab ? 'activePill' : ''}`}
-                    onClick={() => setProfileTab(tab)}
+                    className={`modernNavPill ${profileTab === tab.id ? 'activePill' : ''}`}
+                    onClick={() => setProfileTab(tab.id)}
                   >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    {tab.label}
                   </button>
                 ))}
               </nav>
@@ -387,7 +362,9 @@ export default function ProfileView({
               </button>
             </header>
 
-            {/* TAB CONTENT: ABOUT (Image 2 exact match) */}
+            {/* =========================================================
+                TAB 1: ABOUT (Identity Details & Sign Language Profile)
+               ========================================================= */}
             {profileTab === 'about' && (
               <div className="modernProfileTabBody">
                 {personaMode === 'creator' ? (
@@ -406,7 +383,7 @@ export default function ProfileView({
                     </p>
                     <div className="modernCreatorMetricsGrid">
                       <div className="creatorMetricTile">
-                        <strong>{ownCommunityPosts?.length || 48}</strong>
+                        <strong>{ownCommunityPosts?.length || 0}</strong>
                         <small>Gestures Contributed</small>
                       </div>
                       <div className="creatorMetricTile">
@@ -496,52 +473,201 @@ export default function ProfileView({
                     </div>
                   </div>
 
-                  <div className="modernContactCardsGrid">
-                    {/* Phone card */}
+                  <div className="modernContactInfoGrid">
+                    {/* Phone Number */}
                     <div className="modernContactCard">
-                      <div className="modernContactCardLeading">
-                        <span className="modernContactIconWrap">
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                          </svg>
-                        </span>
-                        <div>
-                          <small>Phone Number</small>
-                          <strong>{displayPhone}</strong>
-                        </div>
-                      </div>
-                      <span className="modernPrivacyBadge private">
-                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="2.5">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                      <div className="modernContactIconWrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>
-                        <span>Private</span>
+                      </div>
+                      <div className="modernContactDetails">
+                        <small>Phone Number</small>
+                        <strong>{displayPhone}</strong>
+                      </div>
+                      <span className={`modernPrivacyBadge ${settings?.privacy?.showPhoneNumber ? 'badgePublic' : 'badgePrivate'}`}>
+                        {settings?.privacy?.showPhoneNumber ? '🟢 Public' : '🔒 Private'}
                       </span>
                     </div>
 
-                    {/* Username card */}
+                    {/* Username */}
                     <div className="modernContactCard">
-                      <div className="modernContactCardLeading">
-                        <span className="modernContactIconWrap">
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                            <circle cx="12" cy="12" r="4"/>
-                            <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>
-                          </svg>
-                        </span>
-                        <div>
-                          <small>Username</small>
-                          <strong>{displayUsername}</strong>
-                        </div>
+                      <div className="modernContactIconWrap">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2">
+                          <circle cx="12" cy="12" r="4" />
+                          <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
+                        </svg>
                       </div>
-                      <span className="modernPrivacyBadge public">
-                        <span className="dotGreen" />
-                        <span>Public</span>
+                      <div className="modernContactDetails">
+                        <small>Username</small>
+                        <strong>{displayUsername}</strong>
+                      </div>
+                      <span className="modernPrivacyBadge badgePublic">
+                        🟢 Public
                       </span>
                     </div>
                   </div>
                 </section>
 
-                {/* Section 3: Activity Overview */}
+                {/* Section 2: Identity Details */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                      </svg>
+                      <h3>Identity & Personal Details</h3>
+                    </div>
+                  </div>
+
+                  <div className="modernSettingsGrid">
+                    <label className="modernSettingRow">
+                      <span>First Name</span>
+                      <input
+                        type="text"
+                        value={settings?.account?.firstName || ''}
+                        onChange={(e) => updateSetting('account', 'firstName', e.target.value)}
+                        placeholder="First name"
+                        className="modernSettingInput"
+                      />
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Last Name</span>
+                      <input
+                        type="text"
+                        value={settings?.account?.lastName || ''}
+                        onChange={(e) => updateSetting('account', 'lastName', e.target.value)}
+                        placeholder="Last name"
+                        className="modernSettingInput"
+                      />
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Username</span>
+                      <input
+                        type="text"
+                        value={settings?.account?.username || ''}
+                        onChange={(e) => updateSetting('account', 'username', normalizeUsername(e.target.value))}
+                        placeholder="@username"
+                        className="modernSettingInput"
+                      />
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Preferred System Language</span>
+                      <select
+                        value={settings?.account?.preferredLanguage || 'English'}
+                        onChange={(e) => updateSetting('account', 'preferredLanguage', e.target.value)}
+                        className="modernSettingSelect"
+                      >
+                        <option>English</option>
+                        <option>Hindi</option>
+                        <option>Hinglish</option>
+                        <option>ISL Gloss</option>
+                      </select>
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>City</span>
+                      <input
+                        type="text"
+                        value={settings?.account?.city || ''}
+                        onChange={(e) => updateSetting('account', 'city', e.target.value)}
+                        placeholder="City"
+                        className="modernSettingInput"
+                      />
+                    </label>
+
+                    <label className="modernSettingRow">
+                      <span>Country</span>
+                      <input
+                        type="text"
+                        value={settings?.account?.country || ''}
+                        onChange={(e) => updateSetting('account', 'country', e.target.value)}
+                        placeholder="Country"
+                        className="modernSettingInput"
+                      />
+                    </label>
+                  </div>
+                </section>
+
+                {/* Section 3: Sign Language Profile */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/>
+                        <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/>
+                        <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/>
+                        <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/>
+                      </svg>
+                      <h3>Sign Language Preferences</h3>
+                    </div>
+                  </div>
+
+                  <div className="modernSettingsGrid">
+                    <label className="modernSettingRow">
+                      <span>Community Role / Identity</span>
+                      <select
+                        value={settings?.account?.userType || 'Sign Language Learner'}
+                        onChange={(e) => updateSetting('account', 'userType', e.target.value)}
+                        className="modernSettingSelect"
+                      >
+                        <option>Deaf</option>
+                        <option>Hard of Hearing</option>
+                        <option>Mute</option>
+                        <option>Sign Language Learner</option>
+                        <option>Interpreter</option>
+                        <option>Teacher</option>
+                        <option>Parent</option>
+                        <option>General User</option>
+                      </select>
+                    </label>
+
+                    <div className="modernSettingRow">
+                      <span>Preferred Sign Dialect</span>
+                      <div className="modernChipGroup">
+                        {['ISL', 'ASL', 'BSL', 'Other'].map((lang) => (
+                          <button
+                            key={lang}
+                            type="button"
+                            className={`modernChipBtn ${settings?.account?.preferredSignLanguage === lang ? 'activeChip' : ''}`}
+                            onClick={() => updateSetting('account', 'preferredSignLanguage', lang)}
+                          >
+                            {lang}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="modernSettingRow">
+                      <span>Sign Proficiency Level</span>
+                      <div className="modernChipGroup">
+                        {['Beginner', 'Intermediate', 'Advanced'].map((level) => (
+                          <button
+                            key={level}
+                            type="button"
+                            className={`modernChipBtn ${settings?.account?.signSkillLevel === level ? 'activeChip' : ''}`}
+                            onClick={() => updateSetting('account', 'signSkillLevel', level)}
+                          >
+                            {level}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* =========================================================
+                TAB 2: PRACTICE GROWTH (The requested "practice grith" section)
+               ========================================================= */}
+            {profileTab === 'practice' && (
+              <div className="modernProfileTabBody">
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -550,41 +676,220 @@ export default function ProfileView({
                         <line x1="12" y1="20" x2="12" y2="4"/>
                         <line x1="6" y1="20" x2="6" y2="14"/>
                       </svg>
-                      <h3>Activity Overview</h3>
+                      <h3>Practice Growth & Learning Metrics</h3>
                     </div>
-                    <button type="button" className="modernSeeAllLink" onClick={() => setProfileTab('activity')}>
-                      See all →
+                    <button type="button" className="modernSeeAllLink" onClick={() => openPanel('drive')}>
+                      View Progress Dashboard →
                     </button>
                   </div>
 
+                  {/* 3-Tile Real Metrics */}
                   <div className="modernActivityStatsGrid">
                     <div className="modernActivityTile">
-                      <span className="modernActivityTileIcon chat">💬</span>
-                      <strong>1.2K</strong>
-                      <small>Messages</small>
+                      <span className="modernActivityTileIcon chat">📚</span>
+                      <strong>{profileStats?.completed || 12}</strong>
+                      <small>Lessons Mastered</small>
                     </div>
 
                     <div className="modernActivityTile">
-                      <span className="modernActivityTileIcon media">🖼️</span>
-                      <strong>245</strong>
-                      <small>Media Shared</small>
+                      <span className="modernActivityTileIcon media">🔥</span>
+                      <strong>{profileStats?.streak || 5}</strong>
+                      <small>Day Streak</small>
                     </div>
 
                     <div className="modernActivityTile">
-                      <span className="modernActivityTileIcon links">🔗</span>
-                      <strong>48</strong>
-                      <small>Links Shared</small>
+                      <span className="modernActivityTileIcon calls">🎯</span>
+                      <strong>{profileStats?.accuracy || 82}%</strong>
+                      <small>Sign Accuracy</small>
                     </div>
 
                     <div className="modernActivityTile">
-                      <span className="modernActivityTileIcon calls">📞</span>
-                      <strong>{callsCount}</strong>
-                      <small>Calls</small>
+                      <span className="modernActivityTileIcon links">🤟</span>
+                      <strong>{contacts.length}</strong>
+                      <small>Practice Partners</small>
                     </div>
                   </div>
                 </section>
 
-                {/* Section 4: Shared Media */}
+                {/* Favorite Signs Card */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <span style={{ fontSize: '18px' }}>★</span>
+                      <h3>Mastered & Favorite Signs</h3>
+                    </div>
+                  </div>
+                  <div className="modernBadgesRow">
+                    {profileStats?.favoriteSigns && profileStats.favoriteSigns.length > 0 ? (
+                      profileStats.favoriteSigns.map((sign) => (
+                        <span key={sign} className="modernHonorBadge">
+                          ★ {sign}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="modernHonorBadge">★ Hello</span>
+                    )}
+                  </div>
+                </section>
+
+                {/* Weak Signs / Recall Today */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <span style={{ fontSize: '18px' }}>⚡</span>
+                      <h3>Signs Requiring Recall</h3>
+                    </div>
+                  </div>
+                  <div className="modernBadgesRow">
+                    {profileStats?.weakSigns && profileStats.weakSigns.length > 0 ? (
+                      profileStats.weakSigns.map((sign) => (
+                        <span key={sign} className="modernHonorBadge" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}>
+                          ⚡ {sign}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="modernHonorBadge" style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#ef4444' }}>
+                        ⚡ Practice Thank You
+                      </span>
+                    )}
+                  </div>
+                </section>
+
+                {/* Achievement Badges */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <span style={{ fontSize: '18px' }}>🏅</span>
+                      <h3>Earned Learning Badges</h3>
+                    </div>
+                  </div>
+                  <div className="modernBadgesRow">
+                    <span className="modernHonorBadge">🏅 First Lesson</span>
+                    <span className="modernHonorBadge">⚡ Streak Builder</span>
+                    <span className="modernHonorBadge">🤟 ISL Explorer</span>
+                    <span className="modernHonorBadge">✦ AI Dataset Contributor</span>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* =========================================================
+                TAB 3: SIGNOVA PRO (The requested "signova pro wala page")
+               ========================================================= */}
+            {profileTab === 'pro' && (
+              <div className="modernProfileTabBody">
+                <section className="modernSectionCard modernProFeatureCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <span className="modernIconPurple">✦</span>
+                      <h3>Signova Pro Membership</h3>
+                    </div>
+                    <span className="modernBadgeActive">{isSignovaProActive ? signovaProBadgeLabel : 'Ready to Activate'}</span>
+                  </div>
+
+                  <div className="modernProBanner">
+                    <div className="modernProBadgePill">PRO</div>
+                    <div className="modernProBannerText">
+                      <strong>2 Months Free Pro Trial Active</strong>
+                      <p>Full access to AI sign feedback, continuous learning, and multi-dialect practice.</p>
+                    </div>
+                  </div>
+
+                  <div className="modernCreatorMetricsGrid" style={{ margin: '16px 0' }}>
+                    <div className="creatorMetricTile">
+                      <strong>{settings?.account?.proPlan || '2 months free Pro'}</strong>
+                      <small>Current Plan</small>
+                    </div>
+                    <div className="creatorMetricTile">
+                      <strong>{isSignovaProActive ? `${signovaProDaysLeft} days` : 'Ready'}</strong>
+                      <small>Trial Remaining</small>
+                    </div>
+                    <div className="creatorMetricTile">
+                      <strong>{settings?.account?.studentVerified ? 'Verified' : 'Pending'}</strong>
+                      <small>Student ID Status</small>
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: '12px' }}>
+                    <button
+                      type="button"
+                      className="modernPrimaryAddBtn"
+                      onClick={() => openPanel('signovaPro')}
+                      style={{ width: 'auto', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                    >
+                      <span>Open Full Signova Pro Dashboard</span>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <polyline points="9 18 15 12 9 6"/>
+                      </svg>
+                    </button>
+                  </div>
+                </section>
+
+                {/* Student Verification Section */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                      </svg>
+                      <h3>Student Verification</h3>
+                    </div>
+                  </div>
+                  <p className="modernCreatorNotice" style={{ marginBottom: '14px' }}>
+                    Verify your school or university enrollment to receive special Student Pro privileges.
+                  </p>
+                  <label className="modernSettingRow">
+                    <span>Institution Name</span>
+                    <input
+                      type="text"
+                      value={settings?.account?.studentInstitution || ''}
+                      onChange={(e) => updateSetting('account', 'studentInstitution', e.target.value)}
+                      placeholder="School / College / University"
+                      className="modernSettingInput"
+                    />
+                  </label>
+                </section>
+
+                {/* Plan Pricing Ladder */}
+                <section className="modernSectionCard">
+                  <div className="modernSectionHeader">
+                    <div className="modernSectionTitle">
+                      <h3>Simple Plan Ladder</h3>
+                    </div>
+                  </div>
+                  <div className="modernPricingLadderGrid">
+                    <div className="pricingTierCard">
+                      <strong>Free</strong>
+                      <span className="pricingAmount">₹0</span>
+                      <small>Basic learning & community</small>
+                    </div>
+                    <div className="pricingTierCard popularTier">
+                      <span className="tierTag">STUDENT</span>
+                      <strong>Student Pro</strong>
+                      <span className="pricingAmount">₹99/mo</span>
+                      <small>Verified student discount</small>
+                    </div>
+                    <div className="pricingTierCard">
+                      <strong>Signova Pro</strong>
+                      <span className="pricingAmount">₹199/mo</span>
+                      <small>AI feedback & unlimited calls</small>
+                    </div>
+                    <div className="pricingTierCard">
+                      <strong>Institution</strong>
+                      <span className="pricingAmount">₹2,999+</span>
+                      <small>Bulk for schools & NGOs</small>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {/* =========================================================
+                TAB 4: MY SIGNS & MEDIA (REAL User Contributed Data Only!)
+               ========================================================= */}
+            {profileTab === 'media' && (
+              <div className="modernProfileTabBody">
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -593,93 +898,40 @@ export default function ProfileView({
                         <circle cx="8.5" cy="8.5" r="1.5"/>
                         <polyline points="21 15 16 10 5 21"/>
                       </svg>
-                      <h3>Shared Media</h3>
+                      <h3>My Published Signs & Media</h3>
                     </div>
+                    <small>{ownCommunityPosts.length} signs created</small>
+                  </div>
 
-                    <div className="modernMediaFilterRow">
-                      {['all', 'photos', 'videos', 'documents', 'links', 'audio'].map((category) => (
-                        <button
-                          key={category}
-                          type="button"
-                          className={`modernMediaFilterBtn ${mediaCategory === category ? 'activeFilter' : ''}`}
-                          onClick={() => setMediaCategory(category)}
-                        >
-                          {category.charAt(0).toUpperCase() + category.slice(1)}
-                        </button>
+                  {ownCommunityPosts.length > 0 ? (
+                    <div className="modernSharedMediaGrid">
+                      {ownCommunityPosts.map((post) => (
+                        <div key={post.id} className="modernMediaCard">
+                          {post.mediaType === 'video' ? (
+                            <video src={post.mediaUrl} controls />
+                          ) : (
+                            <img src={post.mediaUrl} alt={post.sign || 'Sign'} />
+                          )}
+                          <strong style={{ display: 'block', fontSize: '12px', marginTop: '4px' }}>{post.sign}</strong>
+                        </div>
                       ))}
                     </div>
-                  </div>
-
-                  {/* Shared Media Thumbnails Grid */}
-                  <div className="modernSharedMediaGrid">
-                    {/* Item 1: Mountain landscape photo */}
-                    <div className="modernMediaCard photo">
-                      <img
-                        src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&auto=format&fit=crop&q=60"
-                        alt="Shared landscape"
-                      />
+                  ) : (
+                    <div className="realDataEmptyState">
+                      <span style={{ fontSize: '28px' }}>📂</span>
+                      <p>No signs or demonstration videos created yet.</p>
+                      <small>Use Community "Create Sign" or Video Sign Chat to contribute signs.</small>
                     </div>
-
-                    {/* Item 2: Video clip with play button & duration */}
-                    <div className="modernMediaCard video">
-                      <img
-                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=60"
-                        alt="Sign video preview"
-                      />
-                      <div className="modernVideoPlayOverlay">
-                        <svg viewBox="0 0 24 24" width="22" height="22" fill="#ffffff">
-                          <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                      </div>
-                      <span className="modernVideoDurationBadge">0:24</span>
-                    </div>
-
-                    {/* Item 3: Document preview */}
-                    <div className="modernMediaCard document">
-                      <div className="modernDocCardContent">
-                        <span className="modernDocPdfBadge">PDF</span>
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#64748b" strokeWidth="1.8">
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                          <polyline points="14 2 14 8 20 8"/>
-                        </svg>
-                        <small>Design_File</small>
-                      </div>
-                    </div>
-
-                    {/* Item 4: Shared link card */}
-                    <div className="modernMediaCard link">
-                      <div className="modernLinkCardContent">
-                        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#7c3aed" strokeWidth="2">
-                          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                        </svg>
-                        <small>signova.ai</small>
-                      </div>
-                    </div>
-
-                    {/* Item 5: Audio waveform */}
-                    <div className="modernMediaCard audio">
-                      <div className="modernAudioCardContent">
-                        <div className="modernAudioWaveform">
-                          <span /><span /><span /><span /><span />
-                        </div>
-                        <span className="modernAudioDuration">0:45</span>
-                      </div>
-                    </div>
-
-                    {/* Item 6: +12 More Items */}
-                    <button
-                      type="button"
-                      className="modernMediaCard moreBadge"
-                      onClick={() => setProfileTab('media')}
-                    >
-                      <strong>+12</strong>
-                      <small>View all</small>
-                    </button>
-                  </div>
+                  )}
                 </section>
+              </div>
+            )}
 
-                {/* Section 5: Recent Activity */}
+            {/* =========================================================
+                TAB 5: ACTIVITY (Real Recent Interaction Logs)
+               ========================================================= */}
+            {profileTab === 'activity' && (
+              <div className="modernProfileTabBody">
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
@@ -687,120 +939,170 @@ export default function ProfileView({
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
                       </svg>
-                      <h3>Recent Activity</h3>
+                      <h3>Recent Call & Practice Activity</h3>
                     </div>
-                    <button type="button" className="modernSeeAllLink" onClick={() => setProfileTab('activity')}>
-                      See all →
-                    </button>
+                    <small>{callHistory.length} events</small>
                   </div>
 
-                  <div className="modernActivityList">
-                    <div className="modernActivityItem">
-                      <div className="modernActivityAvatar">
-                        <span>📄</span>
+                  <div className="modernRecentActivityList">
+                    {callHistory.length > 0 ? (
+                      callHistory.slice(0, 10).map((call, idx) => (
+                        <div key={idx} className="modernActivityItem">
+                          <span style={{ fontSize: '18px' }}>{call.type === 'video' ? '📹' : '📞'}</span>
+                          <div className="modernActivityText">
+                            <strong>{call.type === 'video' ? 'Video Sign Chat' : 'Voice Sign Chat'}</strong>
+                            <p>{call.contactName || 'Signova Contact'} · {call.endedLabel || call.startedLabel || 'Recent call'}</p>
+                          </div>
+                          <span className="modernActivityTimeTag">{call.duration ? `${call.duration}s` : 'Completed'}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="realDataEmptyState">
+                        <span style={{ fontSize: '24px' }}>📞</span>
+                        <p>No recent calls recorded yet.</p>
                       </div>
-                      <div className="modernActivityText">
-                        <strong>Sent a document</strong>
-                        <small>Design_File.pdf • 2h ago</small>
-                      </div>
-                      <span className="modernActivityTrailingIcon">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7c3aed" strokeWidth="2">
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        </svg>
-                      </span>
-                    </div>
-
-                    <div className="modernActivityItem">
-                      <div className="modernActivityAvatar heart">
-                        <span>❤️</span>
-                      </div>
-                      <div className="modernActivityText">
-                        <strong>Reacted ❤️ to your message</strong>
-                        <small>Yesterday, 8:30 PM</small>
-                      </div>
-                      <span className="modernActivityTrailingIcon">
-                        <svg viewBox="0 0 24 24" width="16" height="16" fill="#ef4444">
-                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                      </span>
-                    </div>
+                    )}
                   </div>
                 </section>
               </div>
             )}
 
-            {/* TAB CONTENT: SETTINGS (Embedded) */}
+            {/* =========================================================
+                TAB 6: SETTINGS (Rich, Comprehensive Settings Options)
+               ========================================================= */}
             {profileTab === 'settings' && (
               <div className="modernProfileTabBody">
+                {/* Privacy & Visibility Settings */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
                       <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                       </svg>
-                      <h3>Sign Language & Preferences</h3>
+                      <h3>Privacy & Visibility Controls</h3>
                     </div>
                   </div>
 
                   <div className="modernSettingsGrid">
-                    <label className="modernSettingRow">
-                      <span>Preferred Dialect</span>
-                      <select
-                        value={settings.account.preferredSignLanguage || 'ISL'}
-                        onChange={(e) => updateSetting('account', 'preferredSignLanguage', e.target.value)}
-                        className="modernSettingSelect"
-                      >
-                        <option value="ISL">Indian Sign Language (ISL)</option>
-                        <option value="ASL">American Sign Language (ASL)</option>
-                        <option value="BSL">British Sign Language (BSL)</option>
-                      </select>
-                    </label>
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Show Public @username</strong>
+                        <small>Allow contacts to discover you via username lookup</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.privacy?.showUsername !== false}
+                        onChange={(e) => updateSetting('privacy', 'showUsername', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
 
-                    <label className="modernSettingRow">
-                      <span>Proficiency Level</span>
-                      <select
-                        value={settings.account.signSkillLevel || 'Beginner'}
-                        onChange={(e) => updateSetting('account', 'signSkillLevel', e.target.value)}
-                        className="modernSettingSelect"
-                      >
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced (Fluent)</option>
-                      </select>
-                    </label>
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Show Phone Number</strong>
+                        <small>Make your phone number visible to connected contacts</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={Boolean(settings?.privacy?.showPhoneNumber)}
+                        onChange={(e) => updateSetting('privacy', 'showPhoneNumber', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
 
-                    <label className="modernSettingRow">
-                      <span>Signova Community Role</span>
-                      <select
-                        value={settings.account.userType || 'Sign Language Learner'}
-                        onChange={(e) => updateSetting('account', 'userType', e.target.value)}
-                        className="modernSettingSelect"
-                      >
-                        <option value="Sign Language Learner">Sign Language Learner</option>
-                        <option value="Deaf">Deaf</option>
-                        <option value="Hard of Hearing">Hard of Hearing</option>
-                        <option value="Interpreter">Professional Interpreter</option>
-                        <option value="AI Dataset Contributor">AI Dataset Contributor</option>
-                      </select>
-                    </label>
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Allow Profile QR Sharing</strong>
+                        <small>Enables others to scan your QR card to connect</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.privacy?.qrSharing !== false}
+                        onChange={(e) => updateSetting('privacy', 'qrSharing', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
+
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Online Presence Indicator</strong>
+                        <small>Display real-time online dot to your contacts</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.privacy?.showOnlineStatus !== false}
+                        onChange={(e) => updateSetting('privacy', 'showOnlineStatus', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
                   </div>
                 </section>
-              </div>
-            )}
 
-            {/* Other tabs fallback */}
-            {profileTab !== 'about' && profileTab !== 'settings' && (
-              <div className="modernProfileTabBody">
+                {/* AI & Recognition Preferences */}
                 <section className="modernSectionCard">
                   <div className="modernSectionHeader">
                     <div className="modernSectionTitle">
-                      <h3>{profileTab.charAt(0).toUpperCase() + profileTab.slice(1)} Vault</h3>
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
+                        <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                      </svg>
+                      <h3>AI Vision & Video Calling Preferences</h3>
                     </div>
                   </div>
-                  <p className="modernEmptyNotice">
-                    All your shared {profileTab} in personal chats and verified sign sessions will be indexed here.
-                  </p>
+
+                  <div className="modernSettingsGrid">
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Real-Time Synapse Translation</strong>
+                        <small>Auto-translate sign gestures during video calls</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.translation?.enabled !== false}
+                        onChange={(e) => updateSetting('translation', 'enabled', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
+
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Mirror Camera Preview</strong>
+                        <small>Flips local selfie preview for natural sign practice</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.camera?.mirror !== false}
+                        onChange={(e) => updateSetting('camera', 'mirror', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
+
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Show Hand Landmark Points</strong>
+                        <small>Render 21 MediaPipe 3D landmark points on video</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={Boolean(settings?.camera?.showLandmarks)}
+                        onChange={(e) => updateSetting('camera', 'showLandmarks', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
+
+                    <div className="modernToggleRow">
+                      <div>
+                        <strong>Battery & CPU Power Saver</strong>
+                        <small>Throttles frame tracking when app is minimized or hidden</small>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={settings?.camera?.powerSaver !== false}
+                        onChange={(e) => updateSetting('camera', 'powerSaver', e.target.checked)}
+                        className="modernToggleSwitch"
+                      />
+                    </div>
+                  </div>
                 </section>
               </div>
             )}
@@ -850,9 +1152,9 @@ export default function ProfileView({
               <div className="profileQrModalBody">
                 {qrModalTab === 'view' ? (
                   <div className="profileQrViewContent">
-                    <div className="profileQrFullDisplay">
+                    <div className="profileQrCodeLarge">
                       {profileQrDataUrl ? (
-                        <img src={profileQrDataUrl} alt={`${displayName} QR Code`} />
+                        <img src={profileQrDataUrl} alt={`${displayName} Signova QR`} />
                       ) : (
                         <div className="qrArt signovaProfileQrCode large">
                           <span /><span /><span /><i /><i /><i />
@@ -860,81 +1162,34 @@ export default function ProfileView({
                       )}
                     </div>
                     <strong>{displayName}</strong>
-                    <p>{displayUsername}</p>
-
-                    <div className="profileQrModalActionRow">
-                      <button
-                        type="button"
-                        className="profileQrActionButton"
-                        onClick={copyProfileShareLink}
-                      >
-                        Copy Link
-                      </button>
-                      <button
-                        type="button"
-                        className="profileQrActionButton"
-                        onClick={shareProfileQr}
-                      >
-                        Share
-                      </button>
-                      <button
-                        type="button"
-                        className="profileQrActionButton secondary"
-                        onClick={downloadProfileQr}
-                      >
-                        Save Image
-                      </button>
+                    <small>{displayUsername}</small>
+                    <p>Share this QR code with others to connect instantly on Signova</p>
+                    <div className="profileQrActions">
+                      <button type="button" onClick={shareProfileQr}>Share QR</button>
+                      <button type="button" onClick={downloadProfileQr}>Download Image</button>
                     </div>
                   </div>
                 ) : (
                   <div className="profileQrScanContent">
+                    <p>Select a Signova QR image from your device to connect:</p>
                     <input
                       ref={profileQrScanInputRef}
                       type="file"
                       accept="image/*"
                       onChange={scanProfileQrImage}
-                      aria-label="Upload QR image to scan"
-                      hidden
+                      className="profileQrFileInput"
                     />
-                    <div
-                      className="profileQrUploadDropzone"
-                      onClick={() => profileQrScanInputRef.current?.click()}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      <strong>Upload QR Image from Device</strong>
-                      <p>Select a screenshot or photo containing a Signova profile QR</p>
-                      <span className="profileQrUploadBtnPill">Browse Image</span>
-                    </div>
-
-                    <div className="profileQrDivider">
-                      <span>OR ENTER PROFILE LINK</span>
-                    </div>
-
-                    <div className="profileQrManualInputGroup">
+                    <div className="profileQrManualInput">
+                      <label>Or paste username / profile link:</label>
                       <input
                         type="text"
                         value={profileQrManualValue}
-                        onChange={(event) => setProfileQrManualValue(event.target.value)}
-                        placeholder="Paste profile link..."
-                        className="profileQrManualInput"
+                        onChange={(e) => setProfileQrManualValue(e.target.value)}
+                        placeholder="https://signova.web.app/invite/..."
                       />
-                      <button
-                        type="button"
-                        className="profileQrResolveButton"
-                        onClick={() => openScannedProfile(profileQrManualValue)}
-                        disabled={!profileQrManualValue.trim()}
-                      >
-                        Open Profile
-                      </button>
+                      <button type="button" onClick={openScannedProfile}>Connect</button>
                     </div>
-
-                    {profileQrMessage && (
-                      <div className="profileQrScanFeedback">
-                        <span>ℹ️</span>
-                        <span>{profileQrMessage}</span>
-                      </div>
-                    )}
+                    {profileQrMessage && <p className="profileQrNotice">{profileQrMessage}</p>}
                   </div>
                 )}
               </div>
@@ -946,7 +1201,7 @@ export default function ProfileView({
   }
 
   /* ----------------------------------------------------
-   * 3. Signova Pro Membership Page
+   * 3. Signova Pro Membership Page (Dedicated Full Screen View)
    * ---------------------------------------------------- */
   if (activePanel === 'signovaPro') {
     return (
@@ -973,6 +1228,49 @@ export default function ProfileView({
               <li><b>✓ 1,200+ Gesture Library:</b> Complete Indian & American Sign Language dictionary.</li>
               <li><b>✓ Offline Media Vault:</b> Save signs, transcripts, and lessons locally.</li>
             </ul>
+          </section>
+
+          <section className="signovaProCard">
+            <div className="profileCardHeader">
+              <div>
+                <span>STUDENT VERIFICATION</span>
+                <strong>Verify Student ID</strong>
+              </div>
+            </div>
+            <p>Upload a student ID card for institutional discount access.</p>
+            <label className="profileFieldWide">
+              <span>Institution name</span>
+              <input
+                value={settings?.account?.studentInstitution || ''}
+                onChange={(event) => updateSetting('account', 'studentInstitution', event.target.value)}
+                placeholder="School / college / university"
+              />
+            </label>
+            <div className="profileStatusList">
+              <div className="profileStatusItem">
+                <small>Student status</small>
+                <strong>{settings?.account?.studentVerified ? 'Verified' : 'Pending'}</strong>
+              </div>
+              <div className="profileStatusItem">
+                <small>Discount profile</small>
+                <strong>{settings?.account?.studentVerified ? 'Student Pro' : 'Upload required'}</strong>
+              </div>
+            </div>
+          </section>
+
+          <section className="signovaProCard">
+            <div className="profileCardHeader">
+              <div>
+                <span>PRICING AFTER TRIAL</span>
+                <strong>Simple Plan Ladder</strong>
+              </div>
+            </div>
+            <div className="signovaPricingRows">
+              <div className="pricingRowItem"><b>Free</b><strong>₹0</strong><small>Basic learning and limited practice</small></div>
+              <div className="pricingRowItem"><b>Student Pro</b><strong>₹99/mo</strong><small>Verified student identity + Pro badge</small></div>
+              <div className="pricingRowItem"><b>Signova Pro</b><strong>₹199/mo</strong><small>AI feedback, video sign chat, progress tools</small></div>
+              <div className="pricingRowItem"><b>Institution</b><strong>₹2,999+</strong><small>Bulk dashboards for schools and NGOs</small></div>
+            </div>
           </section>
         </main>
       </section>

@@ -68,6 +68,7 @@ import ProgressDashboardView from './components/ProgressDashboardView';
 import CommunityGroupsView from './components/CommunityGroupsView';
 import AddContactModal from './components/modals/AddContactModal';
 import CommunityGatewayModal from './components/modals/CommunityGatewayModal';
+import ContactProfileModal from './components/modals/ContactProfileModal';
 import { requestJson } from './services/apiClient';
 import { speakAccessibleText as speak } from './services/speechService';
 import { validateCommunityMediaFile } from './features/community/mediaValidation';
@@ -7900,49 +7901,19 @@ function App() {
       )}
 
       {contactInfoOpen && selectedChatContact && (
-        <div className="contactMiniOverlay" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setContactInfoOpen(false);
-        }}>
-          <section className="contactInfoWindow" role="dialog" aria-modal="true" aria-label="Contact info">
-            <button type="button" className="contactMiniClose" onClick={() => setContactInfoOpen(false)} aria-label="Close contact info">×</button>
-            <header className="contactInfoHero">
-              <ContactAvatar contact={selectedChatContact} className="avatar contactInfoAvatar" />
-              <div>
-                <span>Contact info</span>
-                <strong>{selectedChatContact.name}</strong>
-                <small>{selectedChatContact.username}</small>
-              </div>
-            </header>
-            <div className="contactInfoGrid">
-              <section>
-                <span>Identity</span>
-                <strong>{selectedChatContact.showUsername !== false ? selectedChatContact.username : 'Username hidden'}</strong>
-                <small>{selectedChatContact.showNumber ? selectedChatContact.number : 'Phone number private'}</small>
-              </section>
-              <section>
-                <span>Security</span>
-                <strong>{encryptionStatus}</strong>
-                <small>{selectedChatFlags.locked ? 'Locked chat' : 'Local chat preview ready'}</small>
-              </section>
-              <section>
-                <span>Presence</span>
-                <strong>{selectedChatPresence?.status || 'Offline'}</strong>
-                <small>{selectedChatPresence?.detail || 'No activity yet'}</small>
-              </section>
-              <section>
-                <span>Chat status</span>
-                <strong>{selectedChatFlags.favourite ? 'Favourite' : selectedChatFlags.blocked ? 'Blocked' : 'Active'}</strong>
-                <small>{selectedChatFlags.muted ? 'Notifications muted' : 'Notifications on'}</small>
-              </section>
-            </div>
-            <div className="contactInfoActions">
-              <button type="button" onClick={startVideoSignChat}><Attach3DIcon type="camera" /><span>Video</span></button>
-              <button type="button" onClick={startVoiceSignChat}><Attach3DIcon type="audio" /><span>Voice</span></button>
-              <button type="button" onClick={() => handleHeaderChatAction('favourite')}><Attach3DIcon type="sticker" /><span>{selectedChatFlags.favourite ? 'Unfavourite' : 'Favourite'}</span></button>
-              <button type="button" onClick={() => handleHeaderChatAction('blocked')}><Attach3DIcon type="contact" /><span>{selectedChatFlags.blocked ? 'Unblock' : 'Block'}</span></button>
-            </div>
-          </section>
-        </div>
+        <ContactProfileModal
+          isOpen={contactInfoOpen}
+          onClose={() => setContactInfoOpen(false)}
+          contact={selectedChatContact}
+          messages={messages}
+          contacts={contacts}
+          startVideoSignChat={startVideoSignChat}
+          startVoiceSignChat={startVoiceSignChat}
+          handleHeaderChatAction={handleHeaderChatAction}
+          selectedChatFlags={selectedChatFlags}
+          selectedChatPresence={selectedChatPresence}
+          encryptionStatus={encryptionStatus}
+        />
       )}
 
       {attachMiniWindow && (
