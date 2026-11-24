@@ -35164,3 +35164,32 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
   background: rgba(239, 68, 68, 0.2);
   color: #f87171;
 }
+
+/* =========================================================
+   CONTACT PROFILE MODAL: INVISIBLE SCROLLBAR WITH SMOOTH SCROLL
+   ========================================================= */
+
+/* Hide scrollbar completely while maintaining full scrollability */
+.modernProfileContentCard {
+  overflow-y: auto !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+.modernProfileContentCard::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+.modernContactProfileCard {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.modernContactProfileCard::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}

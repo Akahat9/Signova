@@ -255,6 +255,7 @@ export default function ContactProfileModal({
               <span className={`presenceDot ${isOnline ? 'dotOnline' : 'dotOffline'}`} />
               <small>{isOnline ? 'Online' : 'Offline'}</small>
             </div>
+            <p className="modernHeroBio">{displayBio}</p>
           </div>
 
           {/* Stats Bar */}
@@ -383,23 +384,7 @@ export default function ContactProfileModal({
           {/* TAB 1: ABOUT (Image 2 exact match) */}
           {activeTab === 'about' && (
             <div className="modernProfileTabBody">
-              {/* Section 1: About Me */}
-              <section className="modernSectionCard">
-                <div className="modernSectionHeader">
-                  <div className="modernSectionTitle">
-                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                      <circle cx="12" cy="7" r="4" />
-                    </svg>
-                    <h3>About Contact</h3>
-                  </div>
-                </div>
-                <div className="modernBioBox">
-                  <p>{displayBio}</p>
-                </div>
-              </section>
-
-              {/* Section 2: Contact Information */}
+              {/* Section 1: Contact Information */}
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
                   <div className="modernSectionTitle">
