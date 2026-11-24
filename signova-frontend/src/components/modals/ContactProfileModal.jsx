@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ContactAvatar } from '../AppPresentation';
 
 /**
@@ -26,6 +27,21 @@ export default function ContactProfileModal({
   const [mediaFilter, setMediaFilter] = useState('all'); // 'all' | 'photos' | 'videos' | 'documents' | 'links' | 'audio'
   const [copyFeedback, setCopyFeedback] = useState('');
   const [activeLightboxMedia, setActiveLightboxMedia] = useState(null);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        if (activeLightboxMedia) {
+          setActiveLightboxMedia(null);
+        } else if (typeof onClose === 'function') {
+          onClose();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, activeLightboxMedia, onClose]);
 
   // Extract real messages for this contact
   const contactMessages = useMemo(() => {
@@ -127,7 +143,9 @@ export default function ContactProfileModal({
     }
   }
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <div
       className="modernContactModalOverlay"
       role="presentation"
@@ -693,6 +711,7 @@ export default function ContactProfileModal({
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }

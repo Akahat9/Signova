@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { formatUniversalPhone, generateUsernameSlug } from '../../features/contacts/contactModel';
 import { useContactDirectoryLookup } from '../../features/contacts/useContactDirectoryLookup';
 
@@ -51,6 +52,17 @@ export default function AddContactModal({
       if (u.name) setManualName(u.name);
     }
   }, [lookupStatus.status, lookupStatus.verifiedUser, setContactForm]);
+
+  useEffect(() => {
+    if (!contactModalOpen) return undefined;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setContactModalOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [contactModalOpen, setContactModalOpen]);
 
   if (!contactModalOpen) {
     return null;
@@ -158,7 +170,9 @@ export default function AddContactModal({
   const displayName = verifiedUser?.name || manualName || contactForm.name || (searchQuery.replace(/^@/, '') || 'Contact');
   const displayUser = verifiedUser?.username || contactForm.username || (searchQuery.startsWith('@') ? searchQuery : `@${searchQuery}`);
 
-  return (
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
     <div
       className="modernContactModalOverlay"
       role="presentation"
@@ -400,6 +414,7 @@ export default function AddContactModal({
           </footer>
         </form>
       </section>
-    </div>
+    </div>,
+    document.body
   );
 }
