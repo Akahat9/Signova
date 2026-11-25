@@ -36,7 +36,7 @@ export async function ensureDirectChat({
   transact = runTransaction,
   timestamp = serverTimestamp,
 } = {}) {
-  if (!firestore || !currentUser?.uid || !currentUser.emailVerified) throw new Error('Verified Firebase login is required for realtime chat');
+  if (!firestore || !currentUser?.uid) throw new Error('Firebase login is required for realtime chat');
   const { chatId, memberIds } = await buildDirectChatId(currentUser.uid, contactUid, { digest });
   const chatRef = makeDoc(firestore, 'chats', chatId);
   await transact(firestore, async (transaction) => {

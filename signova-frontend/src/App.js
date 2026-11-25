@@ -2002,11 +2002,57 @@ function App() {
     });
   }, [activeRealtimeChat.chatId, activeRealtimeChat.contactId, authenticatedFirebaseUser?.uid, selectedChatContact?.firebaseUid, selectedChatContact?.id]);
 
+  // Auto-resolve missing firebaseUid for selectedChatContact via publicUserIdentities / publicPhoneIdentities
+  useEffect(() => {
+    const contact = selectedChatContact;
+    if (!firestoreDb || !authenticatedFirebaseUser?.uid || !contact?.id || contact?.firebaseUid) return undefined;
+    let cancelled = false;
+    async function resolveContactUid() {
+      const rawUsername = String(contact.username || '').trim().toLowerCase();
+      const candidates = rawUsername
+        ? [rawUsername.startsWith('@') ? rawUsername : `@${rawUsername}`, rawUsername.replace(/^@+/, '')]
+        : [];
+      for (const candidate of candidates) {
+        if (!candidate) continue;
+        try {
+          const snap = await getDoc(doc(firestoreDb, 'publicUserIdentities', candidate));
+          if (snap.exists() && snap.data()?.uid && snap.data().uid !== authenticatedFirebaseUser.uid) {
+            if (!cancelled) {
+              setContacts((prev) => prev.map((c) => (c.id === contact.id ? { ...c, firebaseUid: String(snap.data().uid) } : c)));
+            }
+            return;
+          }
+        } catch {
+          // ignore lookup errors
+        }
+      }
+      const phoneDigits = String(contact.number || '').replace(/\D/g, '');
+      if (phoneDigits.length >= 7) {
+        const phoneKeys = [phoneDigits, phoneDigits.slice(-10)];
+        for (const pKey of phoneKeys) {
+          try {
+            const snap = await getDoc(doc(firestoreDb, 'publicPhoneIdentities', pKey));
+            if (snap.exists() && snap.data()?.uid && snap.data().uid !== authenticatedFirebaseUser.uid) {
+              if (!cancelled) {
+                setContacts((prev) => prev.map((c) => (c.id === contact.id ? { ...c, firebaseUid: String(snap.data().uid) } : c)));
+              }
+              return;
+            }
+          } catch {
+            // ignore lookup errors
+          }
+        }
+      }
+    }
+    resolveContactUid();
+    return () => { cancelled = true; };
+  }, [authenticatedFirebaseUser?.uid, selectedChatContact, setContacts]);
+
   useEffect(() => {
     const contactId = selectedChatContact?.id || '';
     const contactUid = selectedChatContact?.firebaseUid || '';
     const currentUser = authenticatedFirebaseUser;
-    if (authStage !== 'app' || !contactId || !contactUid || !currentUser?.uid || !currentUser.emailVerified || !firestoreDb) {
+    if (authStage !== 'app' || !contactId || !contactUid || !currentUser?.uid || !firestoreDb) {
       setActiveRealtimeChat({ contactId, chatId: '', status: contactUid ? 'unavailable' : 'local', error: '' });
       return undefined;
     }
@@ -2669,72 +2715,87 @@ function App() {
     if (!outgoingText) return false;
     const replyContactId = selectedChatId;
     setComposerSending(true);
-    if (selectedChatContact?.firebaseUid) {
-      if (activeRealtimeChat.status !== 'ready' || activeRealtimeChat.contactId !== replyContactId || !activeRealtimeChat.chatId || !authenticatedFirebaseUser?.uid) {
-        setComposerSending(false);
-        setStatus(activeRealtimeChat.status === 'error' ? `Realtime chat unavailable: ${activeRealtimeChat.error}` : 'Connecting verified realtime chat · try again in a moment');
-        return false;
-      }
-      const createdAt = Date.now();
-      const messageId = `message-${window.crypto?.randomUUID?.() || `${createdAt}-${Math.random().toString(16).slice(2)}`}`;
-      const time = new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      setMessages((items) => [...items, {
-        id: messageId,
-        contactId: replyContactId,
-        direction: 'outgoing',
-        text: outgoingText,
-        time,
-        sentAt: time,
-        deliveredAt: '',
-        readAt: '',
-        status: 'sending',
-        encrypted: false,
-        reactions: [],
-        createdAt,
-        liveActivity: 'Sending through Firebase chat',
-        seenGlow: false,
-        senderUid: authenticatedFirebaseUser.uid,
-        transport: 'firestore-pending',
-        realtimeChatId: activeRealtimeChat.chatId,
-      }]);
-      setChatDraft('');
-      try {
-        await sendDirectTextMessage({
-          firestore: firestoreDb,
-          chatId: activeRealtimeChat.chatId,
-          senderUid: authenticatedFirebaseUser.uid,
-          text: outgoingText,
-          messageId,
-        });
-        setMessages((items) => items.map((message) => (
-          message.id === messageId ? { ...message, status: 'sent', liveActivity: 'Sent through Firebase chat' } : message
-        )));
-        setStatus('Message sent through Firebase chat');
-      } catch (error) {
-        let queued = null;
+    if (selectedChatContact?.firebaseUid && authenticatedFirebaseUser?.uid && firestoreDb) {
+      let targetChatId = (activeRealtimeChat.status === 'ready' && activeRealtimeChat.contactId === replyContactId)
+        ? activeRealtimeChat.chatId
+        : '';
+      if (!targetChatId) {
         try {
-          queued = enqueueDirectMessage(typeof window === 'undefined' ? null : window.localStorage, authenticatedFirebaseUser.uid, {
-            senderUid: authenticatedFirebaseUser.uid,
-            contactId: replyContactId,
-            chatId: activeRealtimeChat.chatId,
-            messageId,
-            text: outgoingText,
+          const ensured = await ensureDirectChat({
+            firestore: firestoreDb,
+            currentUser: authenticatedFirebaseUser,
+            contactUid: selectedChatContact.firebaseUid,
           });
-        } catch {
-          queued = null;
+          targetChatId = ensured?.chatId || '';
+          if (targetChatId) {
+            setActiveRealtimeChat({ contactId: replyContactId, chatId: targetChatId, status: 'ready', error: '' });
+          }
+        } catch (ensureErr) {
+          setStatus(`Realtime chat connecting: ${ensureErr?.message || 'queued locally'}`);
         }
-        setMessages((items) => items.map((message) => (
-          message.id === messageId
-            ? { ...message, status: queued ? 'queued' : 'failed', liveActivity: queued ? 'Queued for Firebase retry' : (error?.code === 'chat/write-timeout' ? 'Waiting for network confirmation' : 'Firebase send failed'), transport: queued ? 'firestore-queued' : 'firestore-failed' }
-            : message
-        )));
-        setStatus(queued
-          ? 'Message queued and will retry when Firebase reconnects'
-          : (error?.code === 'chat/write-timeout' ? 'Message is waiting for Firebase network confirmation' : `Message failed: ${error?.message || 'try again'}`));
-      } finally {
-        setComposerSending(false);
       }
-      return true;
+      if (targetChatId) {
+        const createdAt = Date.now();
+        const messageId = `message-${window.crypto?.randomUUID?.() || `${createdAt}-${Math.random().toString(16).slice(2)}`}`;
+        const time = new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        setMessages((items) => [...items, {
+          id: messageId,
+          contactId: replyContactId,
+          direction: 'outgoing',
+          text: outgoingText,
+          time,
+          sentAt: time,
+          deliveredAt: '',
+          readAt: '',
+          status: 'sending',
+          encrypted: false,
+          reactions: [],
+          createdAt,
+          liveActivity: 'Sending through Firebase chat',
+          seenGlow: false,
+          senderUid: authenticatedFirebaseUser.uid,
+          transport: 'firestore-pending',
+          realtimeChatId: targetChatId,
+        }]);
+        setChatDraft('');
+        try {
+          await sendDirectTextMessage({
+            firestore: firestoreDb,
+            chatId: targetChatId,
+            senderUid: authenticatedFirebaseUser.uid,
+            text: outgoingText,
+            messageId,
+          });
+          setMessages((items) => items.map((message) => (
+            message.id === messageId ? { ...message, status: 'sent', liveActivity: 'Sent through Firebase chat' } : message
+          )));
+          setStatus('Message sent through Firebase chat');
+        } catch (error) {
+          let queued = null;
+          try {
+            queued = enqueueDirectMessage(typeof window === 'undefined' ? null : window.localStorage, authenticatedFirebaseUser.uid, {
+              senderUid: authenticatedFirebaseUser.uid,
+              contactId: replyContactId,
+              chatId: targetChatId,
+              messageId,
+              text: outgoingText,
+            });
+          } catch {
+            queued = null;
+          }
+          setMessages((items) => items.map((message) => (
+            message.id === messageId
+              ? { ...message, status: queued ? 'queued' : 'failed', liveActivity: queued ? 'Queued for Firebase retry' : (error?.code === 'chat/write-timeout' ? 'Waiting for network confirmation' : 'Firebase send failed'), transport: queued ? 'firestore-queued' : 'firestore-failed' }
+              : message
+          )));
+          setStatus(queued
+            ? 'Message queued and will retry when Firebase reconnects'
+            : (error?.code === 'chat/write-timeout' ? 'Message is waiting for Firebase network confirmation' : `Message failed: ${error?.message || 'try again'}`));
+        } finally {
+          setComposerSending(false);
+        }
+        return true;
+      }
     }
     await addEncryptedMessage(outgoingText, 'outgoing', { contactId: replyContactId || 'signova-ai' });
     setChatDraft('');

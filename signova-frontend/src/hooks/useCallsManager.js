@@ -396,14 +396,21 @@ export default function useCallsManager({
   async function getCallIceConfiguration() {
     if (SIGNOVA_CALL_TEST_MODE) return { iceServers: [], turnConfigured: false, iceTransportPolicy: 'all' };
     try {
-      const config = await fetchJson('/api/calls/ice-config');
+      const config = await Promise.race([
+        fetchJson('/api/calls/ice-config'),
+        new Promise((_, reject) => window.setTimeout(() => reject(new Error('ICE config timeout')), 2500)),
+      ]);
       const requireTurn = process.env.REACT_APP_SIGNOVA_FORCE_RELAY === 'true';
       const validated = validateCallIceConfiguration(config, { requireTurn });
       if (!validated.turnConfigured) setStatus?.('Call is using STUN only; TURN must be configured for reliable production calls.');
       return validated;
     } catch {
       return {
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }],
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+        ],
         turnConfigured: false,
         iceTransportPolicy: 'all',
       };
@@ -521,15 +528,35 @@ export default function useCallsManager({
     let calleeUid = activeTargetContactRef.current?.firebaseUid || selectedChatContact?.firebaseUid || '';
     if (!calleeUid && firestoreDb) {
       const target = activeTargetContactRef.current || selectedChatContact;
-      const lookupUsername = target?.username ? (target.username.startsWith('@') ? target.username : `@${target.username}`) : '';
-      if (lookupUsername) {
+      const rawUsername = String(target?.username || '').trim().toLowerCase();
+      const usernameCandidates = rawUsername
+        ? [rawUsername.startsWith('@') ? rawUsername : `@${rawUsername}`, rawUsername.replace(/^@+/, '')]
+        : [];
+      for (const lookupUsername of usernameCandidates) {
+        if (!lookupUsername) continue;
         try {
           const snap = await getDoc(doc(firestoreDb, 'publicUserIdentities', lookupUsername));
           if (snap.exists() && snap.data()?.uid) {
             calleeUid = String(snap.data().uid);
+            break;
           }
         } catch {
-          // fallback to direct
+          // try next candidate
+        }
+      }
+      if (!calleeUid && target?.number) {
+        const phoneDigits = String(target.number).replace(/\D/g, '');
+        const phoneKeys = phoneDigits.length >= 7 ? [phoneDigits, phoneDigits.slice(-10)] : [];
+        for (const pKey of phoneKeys) {
+          try {
+            const snap = await getDoc(doc(firestoreDb, 'publicPhoneIdentities', pKey));
+            if (snap.exists() && snap.data()?.uid) {
+              calleeUid = String(snap.data().uid);
+              break;
+            }
+          } catch {
+            // ignore
+          }
         }
       }
     }
@@ -580,11 +607,45 @@ export default function useCallsManager({
 
   async function acceptIncomingCall() {
     stopCallAudio();
-    const room = incomingCall;
+    let room = incomingCall;
     const localUid = authenticatedFirebaseUser?.uid;
-    if (!room || !room.offer || !localUid || !firestoreDb) {
-      setStatus?.('The caller is still preparing the secure connection. Try again in a moment.');
+    if (!room || !localUid || !firestoreDb) {
+      setStatus?.('No active incoming call or Firebase session.');
       return;
+    }
+    if (!room.offer) {
+      setCallStatus('Waiting for caller offer…');
+      room = await new Promise((resolve) => {
+        let settled = false;
+        let unsub = () => undefined;
+        const timer = window.setTimeout(() => {
+          if (!settled) {
+            settled = true;
+            unsub();
+            resolve(null);
+          }
+        }, 5000);
+        unsub = watchCallRoom(firestoreDb, room.id, (latest) => {
+          if (latest?.offer && !settled) {
+            settled = true;
+            window.clearTimeout(timer);
+            unsub();
+            resolve(latest);
+          }
+        }, () => {
+          if (!settled) {
+            settled = true;
+            window.clearTimeout(timer);
+            unsub();
+            resolve(null);
+          }
+        });
+      });
+      if (!room?.offer) {
+        setStatus?.('The caller is still preparing the secure connection. Try again in a moment.');
+        setCallStatus('Call connection unavailable');
+        return;
+      }
     }
     setCallStatus('Accepting incoming call…');
     clearCallTimers();
