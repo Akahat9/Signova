@@ -56,3 +56,19 @@ test('contact and meet cards route actions according to message direction', () =
   fireEvent.click(screen.getByRole('button', { name: 'Calendar' }));
   expect(callbacks.onSaveMeetDetail).toHaveBeenCalledWith('calendar');
 });
+
+test('voice message card renders scrubbable waveform and 1x/1.5x/2x speed controls', () => {
+  render(<SpecialMessageCard {...callbacks} audioSpeed={1} message={{
+    attachmentType: 'audio',
+    attachmentData: {
+      title: 'Voice note 00:12',
+      url: 'https://example.com/voice.webm',
+      durationSeconds: 12,
+      waveformPeaks: [0.3, 0.7, 0.5, 0.9],
+    },
+  }} />);
+  expect(screen.getByText('Voice Message')).toBeInTheDocument();
+  expect(screen.getByRole('slider', { name: 'Seek voice message' })).toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: '1.5x' }));
+  expect(callbacks.onAudioSpeedChange).toHaveBeenCalledWith(1.5);
+});

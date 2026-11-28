@@ -87,33 +87,100 @@ export default function SpecialMessageCard({
     );
   }
   if (type === 'audio') {
+    const peaks = Array.isArray(data.waveformPeaks) && data.waveformPeaks.length
+      ? data.waveformPeaks
+      : [0.32, 0.55, 0.42, 0.78, 0.64, 0.35, 0.82, 0.9, 0.48, 0.68, 0.52, 0.38, 0.74, 0.85, 0.56, 0.42, 0.66, 0.78, 0.44, 0.62, 0.36, 0.54, 0.42, 0.28];
+    const effectiveDuration = audioDuration || Number(data.durationSeconds || 0);
+    const handleSeekWaveform = (event) => {
+      const audio = audioRef.current;
+      if (!audio || !effectiveDuration) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / Math.max(1, rect.width)));
+      audio.currentTime = ratio * effectiveDuration;
+      setAudioCurrentTime(audio.currentTime);
+    };
     return (
       <div className="specialMessageCard specialAudioCard">
-        <Icon type="audio" />
-        <div>
-          <span>Music / Audio Note</span><strong>{data.title || 'Audio note'}</strong>
-          {data.url ? (
-            <div className="audioListenPanel">
-              <button type="button" className="audioPlayButton" onClick={toggleAudioPlayback} aria-label={audioPlaying ? 'Pause voice note' : 'Play voice note'}>{audioPlaying ? 'Ⅱ' : '▶'}</button>
-              <div className="audioWavePanel"><span style={{ '--audio-progress': `${audioProgress}%` }} /><small>{audioClock(audioCurrentTime)} / {audioClock(audioDuration || Number(data.durationSeconds || 0))}</small></div>
-              <audio ref={audioRef} src={data.url} preload="metadata" onLoadedMetadata={(event) => setAudioDuration(event.currentTarget.duration || 0)} onTimeUpdate={(event) => setAudioCurrentTime(event.currentTarget.currentTime || 0)} onPlay={() => setAudioPlaying(true)} onPause={() => setAudioPlaying(false)} onEnded={() => { setAudioPlaying(false); setAudioCurrentTime(0); }} />
-            </div>
-          ) : <small className="audioMissingNotice">Audio unavailable - record or upload again</small>}
-          <div className="audioSignTranslationPanel" style={{ marginTop: '6px', padding: '6px 8px', background: 'rgba(2, 132, 199, 0.08)', borderRadius: '8px', border: '1px solid rgba(2, 132, 199, 0.2)' }}>
-            <span style={{ fontSize: '9px', fontWeight: '800', color: '#0284c7', display: 'flex', alignItems: 'center', gap: '4px', textTransform: 'uppercase' }}>
-              🤟 Audio-to-Sign Gloss
-            </span>
-            <strong style={{ fontSize: '11px', display: 'block', color: 'inherit', marginTop: '2px' }}>
-              {data.signGloss || 'VOICE MESSAGE · READY FOR SIGN CONVERSION'}
-            </strong>
-          </div>
-          {uploadPanel}
+        <div className="voiceCardHeaderRow">
+          <span>Voice Message</span>
           <div className="audioSpeedControls">
-            <button type="button" className={audioSpeed === 1 ? 'activeAudioSpeed' : ''} onClick={() => onAudioSpeedChange(1)}>1x</button>
-            <button type="button" className={audioSpeed === 2 ? 'activeAudioSpeed' : ''} onClick={() => onAudioSpeedChange(2)}>2x</button>
-            <button type="button" onClick={() => onAudioSpeedChange('custom')}>Custom</button>
+            {[1, 1.5, 2].map((rate) => (
+              <button
+                key={rate}
+                type="button"
+                className={Number(audioSpeed) === rate ? 'activeAudioSpeed' : ''}
+                onClick={() => onAudioSpeedChange(rate)}
+              >
+                {rate}x
+              </button>
+            ))}
           </div>
         </div>
+        {data.url ? (
+          <div className="audioListenPanel">
+            <button
+              type="button"
+              className="audioPlayButton"
+              onClick={toggleAudioPlayback}
+              aria-label={audioPlaying ? 'Pause voice note' : 'Play voice note'}
+            >
+              {audioPlaying ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <rect x="6" y="4" width="4" height="16" rx="1" />
+                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                </svg>
+              ) : (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <polygon points="6 4 20 12 6 20 6 4" />
+                </svg>
+              )}
+            </button>
+            <div className="audioWaveContainer">
+              <div
+                className="audioWaveformBars"
+                role="slider"
+                tabIndex={0}
+                aria-label="Seek voice message"
+                aria-valuemin={0}
+                aria-valuemax={Math.round(effectiveDuration)}
+                aria-valuenow={Math.round(audioCurrentTime)}
+                onClick={handleSeekWaveform}
+              >
+                {peaks.map((peak, index) => {
+                  const barPct = ((index + 1) / peaks.length) * 100;
+                  const played = audioProgress >= barPct;
+                  return (
+                    <i
+                      key={index}
+                      className={played ? 'playedWaveBar' : ''}
+                      style={{ '--bar-h': `${Math.round(Math.max(0.18, Math.min(1, Number(peak) || 0.4)) * 100)}%` }}
+                    />
+                  );
+                })}
+              </div>
+              <small className="audioDurationClock">
+                {audioClock(audioCurrentTime)} / {audioClock(effectiveDuration)}
+              </small>
+            </div>
+            <audio
+              ref={audioRef}
+              src={data.url}
+              preload="metadata"
+              onLoadedMetadata={(event) => setAudioDuration(event.currentTarget.duration || 0)}
+              onTimeUpdate={(event) => setAudioCurrentTime(event.currentTarget.currentTime || 0)}
+              onPlay={() => setAudioPlaying(true)}
+              onPause={() => setAudioPlaying(false)}
+              onEnded={() => { setAudioPlaying(false); setAudioCurrentTime(0); }}
+            />
+          </div>
+        ) : <small className="audioMissingNotice">Audio unavailable - record or upload again</small>}
+        {data.signGloss ? (
+          <div className="audioSignTranslationPanel">
+            <span>🤟 Audio-to-Sign Gloss</span>
+            <strong>{data.signGloss}</strong>
+          </div>
+        ) : null}
+        {uploadPanel}
       </div>
     );
   }

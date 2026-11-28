@@ -164,6 +164,7 @@ export default function ChatView(props) {
     handleAttachmentAction,
     setComposerPickerOpen,
     voiceNote,
+    voiceWaveform,
     toggleVoicePause,
     startVoiceNote,
     formatVoiceTime,
@@ -176,6 +177,7 @@ export default function ChatView(props) {
     attachRemoteCallVideo,
     setChatCallScreen,
     openPanel,
+    chatE2EECapability,
   } = props;
 
   if (activePanel !== 'chats') {
@@ -225,7 +227,7 @@ export default function ChatView(props) {
             </div>
           </button>
           <div className="headerActions">
-            <EncryptionStatusNotice capability={conversationE2EE} />
+            <EncryptionStatusNotice capability={chatE2EECapability || conversationE2EE} />
             {activeCallLog?.contactId === selectedChatContact?.id ? (
               <span className="chatHeaderCallStatus">
                 <b>{callExperience.includes('voice') ? 'Voice call' : 'Video call'}</b>
@@ -266,16 +268,6 @@ export default function ChatView(props) {
             >
               <HeaderSearchIcon />
               <span className="visuallyHidden">Search</span>
-            </button>
-            <button
-              type="button"
-              className={`chatCallGlassButton premiumHeaderButton chatLockIconButton ${selectedChatFlags.locked ? 'activeChatLock' : ''}`}
-              onClick={() => handleHeaderChatAction('locked')}
-              aria-label={selectedChatFlags.locked ? 'Unlock private chat' : 'Lock private chat'}
-              title={selectedChatFlags.locked ? 'Unlock private chat' : 'Lock private chat'}
-            >
-              <Attach3DIcon type="lock" />
-              <span className="visuallyHidden">{selectedChatFlags.locked ? 'Unlock private chat' : 'Lock private chat'}</span>
             </button>
             <div className="chatHeaderMenuWrap">
               <button
@@ -500,23 +492,20 @@ export default function ChatView(props) {
                 ) : null}
                 {isOutgoing ? (
                   <small className="outgoingReceiptLine">
-                    <span className="outgoingActivityTicker">
-                      <em>{message.encrypted ? 'Local session protected' : 'Not protected'}</em>
-                      <em>{message.status || 'sent'}</em>
-                      <em>{message.sentAt || message.time}</em>
-                    </span>
-                    <span className="outgoingSeenState">
-                      <b className={message.seenGlow ? 'receiptTicks readReceiptTicks' : 'receiptTicks'}>{messageReceiptLabel(message)}</b>
-                      <strong>{settings.privacy.readReceipts && message.readAt ? `Seen ${message.readAt}` : 'Not seen'}</strong>
+                    <span className="msgMetaTime">{message.sentAt || message.time}</span>
+                    <span
+                      className={`outgoingSeenState ${message.seenGlow || message.status === 'read' ? 'isRead' : ''}`}
+                      title={settings.privacy.readReceipts && message.readAt ? `Seen ${message.readAt}` : (message.status || 'Sent')}
+                      aria-label={settings.privacy.readReceipts && message.readAt ? `Seen ${message.readAt}` : (message.status || 'Sent')}
+                    >
+                      <b className={message.seenGlow ? 'receiptTicks readReceiptTicks' : 'receiptTicks'}>
+                        {messageReceiptLabel(message)}
+                      </b>
                     </span>
                   </small>
                 ) : (
                   <small className="messageLiveActivity">
-                    <span className="incomingActivityTicker">
-                      <em>{message.encrypted ? 'Local session protected' : 'Not protected'}</em>
-                      <em>{message.liveActivity || message.status || 'Live activity ready'}</em>
-                      <em>{message.time}</em>
-                    </span>
+                    <span className="msgMetaTime">{message.time}</span>
                   </small>
                 )}
                 {message.reactions?.length ? <em className="messageReactionLine">{message.reactions.join(' ')}</em> : null}
@@ -738,9 +727,13 @@ export default function ChatView(props) {
             <div className="voiceNoteComposerBar" aria-label="Voice note recording">
               <span className={voiceNote.paused ? 'pausedVoiceDot' : 'recordingVoiceDot'} />
               <strong>{formatVoiceTime(voiceNote.seconds)}</strong>
-              <small>{voiceNote.paused ? 'Paused' : 'Recording'}</small>
+              <div className="voiceLiveWaveform" aria-hidden="true">
+                {(voiceWaveform || []).map((level, idx) => (
+                  <i key={idx} style={{ '--bar-h': `${Math.round(Math.max(0.18, Math.min(1, level)) * 100)}%` }} />
+                ))}
+              </div>
               <button type="button" onClick={toggleVoicePause}>{voiceNote.paused ? 'Resume' : 'Pause'}</button>
-              <button type="button" onClick={addVoiceNote}>Add</button>
+              <button type="button" className="voiceSendButton" onClick={addVoiceNote}>Send</button>
               <button type="button" className="voiceDeleteButton" onClick={deleteVoiceNote}>Delete</button>
             </div>
           ) : (

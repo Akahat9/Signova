@@ -3943,3 +3943,263 @@ html[data-signova-theme="dark"] .snvToastContent p {
   content-visibility: auto;
   contain-intrinsic-size: 0 76px;
 }
+
+/* =====================================================================
+   Modern Message Bubbles, Horizontal Toolbar & Voice Note Player
+   ===================================================================== */
+.messageBubble {
+  border-radius: 18px !important;
+  padding: 10px 14px 8px !important;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+}
+
+.outgoingBubble {
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%) !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-bottom-right-radius: 6px !important;
+}
+
+.incomingBubble {
+  background: #ffffff !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  border-bottom-left-radius: 6px !important;
+}
+
+body.signovaPremiumDarkPage .outgoingBubble,
+.premiumDarkMode .outgoingBubble {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.34), rgba(99, 102, 241, 0.22)) !important;
+  border-color: rgba(129, 140, 248, 0.34) !important;
+}
+
+body.signovaPremiumDarkPage .incomingBubble,
+.premiumDarkMode .incomingBubble {
+  background: rgba(30, 41, 59, 0.92) !important;
+  border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.outgoingReceiptLine,
+.messageLiveActivity {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 6px !important;
+  margin-top: 4px !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  color: #64748b !important;
+}
+
+.msgMetaTime {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.outgoingSeenState {
+  display: inline-flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.outgoingSeenState .receiptTicks {
+  font-size: 11.5px !important;
+  font-weight: 800 !important;
+  color: #64748b !important;
+}
+
+.outgoingSeenState.isRead .receiptTicks,
+.outgoingSeenState .readReceiptTicks {
+  color: #6366f1 !important;
+}
+
+/* Horizontal Floating Action Toolbar (never clips vertically) */
+.messageToolWindow {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 4px !important;
+  width: max-content !important;
+  max-width: calc(100vw - 32px) !important;
+  height: auto !important;
+  padding: 5px 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border: 1px solid rgba(148, 163, 184, 0.28) !important;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16) !important;
+  backdrop-filter: blur(16px) !important;
+  top: -46px !important;
+  bottom: auto !important;
+  z-index: 500 !important;
+}
+
+.outgoingBubble .messageToolWindow {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.incomingBubble .messageToolWindow {
+  left: 0 !important;
+  right: auto !important;
+}
+
+body.signovaPremiumDarkPage .messageToolWindow,
+.premiumDarkMode .messageToolWindow {
+  background: rgba(15, 23, 42, 0.96) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+.messageToolWindow button {
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  border-radius: 999px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+/* Voice Note Composer & Scrubbable Waveform Player */
+.voiceNoteComposerBar {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  flex: 1 1 auto !important;
+  padding: 6px 12px !important;
+  border-radius: 14px !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+  border: 1px solid rgba(99, 102, 241, 0.24) !important;
+}
+
+.voiceLiveWaveform {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2.5px !important;
+  flex: 1 1 auto !important;
+  height: 26px !important;
+  min-width: 72px !important;
+}
+
+.voiceLiveWaveform i {
+  display: block !important;
+  flex: 1 1 0 !important;
+  height: var(--bar-h, 40%) !important;
+  min-height: 4px !important;
+  border-radius: 999px !important;
+  background: #6366f1 !important;
+  transition: height 90ms ease !important;
+}
+
+.voiceSendButton {
+  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  padding: 6px 12px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+}
+
+.specialAudioCard {
+  display: grid !important;
+  gap: 8px !important;
+  min-width: 248px !important;
+}
+
+.voiceCardHeaderRow {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+}
+
+.voiceCardHeaderRow > span {
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  color: #4f46e5 !important;
+}
+
+.audioListenPanel {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.audioPlayButton {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+  color: #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+}
+
+.audioWaveContainer {
+  flex: 1 1 auto !important;
+  display: grid !important;
+  gap: 4px !important;
+}
+
+.audioWaveformBars {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2.5px !important;
+  height: 28px !important;
+  cursor: pointer !important;
+}
+
+.audioWaveformBars i {
+  display: block !important;
+  flex: 1 1 0 !important;
+  height: var(--bar-h, 45%) !important;
+  min-height: 4px !important;
+  border-radius: 999px !important;
+  background: rgba(99, 102, 241, 0.25) !important;
+  transition: background-color 120ms ease !important;
+}
+
+.audioWaveformBars i.playedWaveBar {
+  background: #4f46e5 !important;
+}
+
+.audioDurationClock {
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+}
+
+.audioSignTranslationPanel {
+  margin-top: 2px !important;
+  padding: 6px 8px !important;
+  background: rgba(99, 102, 241, 0.08) !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+.audioSignTranslationPanel span {
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  color: #4f46e5 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  text-transform: uppercase !important;
+}
+
+.audioSignTranslationPanel strong {
+  font-size: 11px !important;
+  display: block !important;
+  margin-top: 2px !important;
+}

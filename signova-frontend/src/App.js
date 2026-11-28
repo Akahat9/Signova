@@ -53,7 +53,14 @@ import './mobileNotSupported.css';
 import useAppViewport from './hooks/useAppViewport';
 import useCallsManager from './hooks/useCallsManager';
 import useChatManager from './hooks/useChatManager';
-import { conversationE2EE } from './securityCapabilities';
+import useVoiceNoteRecorder, { audioExtensionForMime } from './hooks/useVoiceNoteRecorder';
+import { conversationE2EE, resolveConversationE2EEState } from './securityCapabilities';
+import {
+  decryptRealtimeText,
+  encryptRealtimeText,
+  ensureLocalDeviceIdentity,
+  resolvePeerE2EESession,
+} from './security/e2eeSessionService';
 import CommunityView from './components/CommunityView';
 import ChatView from './components/ChatView';
 import ConversationHistorySidebar from './components/ConversationHistorySidebar';
@@ -363,9 +370,6 @@ function App() {
   const directAttachmentRetryFilesRef = useRef(new Map());
   const sendLongPressRef = useRef(null);
   const sendLongPressTriggeredRef = useRef(false);
-  const voiceRecorderRef = useRef(null);
-  const voiceRecorderChunksRef = useRef([]);
-  const voiceRecorderStreamRef = useRef(null);
   const pageFlipAudioContextRef = useRef(null);
   const profileQrScanInputRef = useRef(null);
   const desktopCallWindowStartedRef = useRef(false);
@@ -463,7 +467,20 @@ function App() {
   const [composerPickerTab, setComposerPickerTab] = useState('emoji');
   const [scheduleComposerOpen, setScheduleComposerOpen] = useState(false);
   const [scheduleForm, setScheduleForm] = useState({ date: '', time: '', note: '' });
-  const [voiceNote, setVoiceNote] = useState({ active: false, paused: false, seconds: 0 });
+  const {
+    voiceNote,
+    voiceWaveform,
+    startVoiceNote,
+    toggleVoicePause,
+    deleteVoiceNote,
+    stopAndCollectVoiceNote,
+  } = useVoiceNoteRecorder({
+    setStatus: (msg) => setStatus(msg),
+    onBeforeStart: () => {
+      setComposerPickerOpen(false);
+      setScheduleComposerOpen(false);
+    },
+  });
   const [driveItems, setDriveItems] = useState([]);
   const [contacts, setContacts] = useState(DEFAULT_SESSION_CONTACTS);
   const [mobileChatListOpen, setMobileChatListOpen] = useState(() => (
@@ -611,6 +628,9 @@ function App() {
     },
   ]);
   const [activeRealtimeChat, setActiveRealtimeChat] = useState({ contactId: '', chatId: '', status: 'local', error: '' });
+  const [activeE2EESession, setActiveE2EESession] = useState(null);
+  const activeE2EESessionRef = useRef(null);
+  activeE2EESessionRef.current = activeE2EESession;
   const [chatPresenceByUid, setChatPresenceByUid] = useState({});
   const [persistenceReady, setPersistenceReady] = useState(false);
   const [encryptionStatus, setEncryptionStatus] = useState('Creating local session key');
@@ -2063,9 +2083,16 @@ function App() {
     const unsubscribers = [];
     let latestReceiptMap = new Map();
     setActiveRealtimeChat({ contactId, chatId: '', status: 'connecting', error: '' });
-    ensureDirectChat({ firestore: firestoreDb, currentUser, contactUid })
-      .then(({ chatId }) => {
+    setActiveE2EESession(null);
+    let sessionForChat = null;
+    ensureLocalDeviceIdentity(firestoreDb, currentUser.uid)
+      .then((localIdentity) => ensureDirectChat({ firestore: firestoreDb, currentUser, contactUid }).then((res) => ({ ...res, localIdentity })))
+      .then(async ({ chatId, localIdentity }) => {
         if (cancelled) return;
+        sessionForChat = await resolvePeerE2EESession(firestoreDb, localIdentity, contactUid, chatId).catch(() => null);
+        if (!cancelled) {
+          setActiveE2EESession(sessionForChat);
+        }
         const acknowledgeVisibleIncomingMessages = (remoteMessages = []) => {
           remoteMessages
             .filter((message) => message.direction === 'incoming' && message.transport === 'firestore' && !message.deleted)
@@ -2088,12 +2115,19 @@ function App() {
           chatId,
           currentUid: currentUser.uid,
           contactId,
-          onMessages: (remoteMessages) => {
+          onMessages: async (remoteMessages) => {
             if (cancelled) return;
             acknowledgeVisibleIncomingMessages(remoteMessages);
             resolveDirectAttachmentUrls(remoteMessages);
+            const activeSession = sessionForChat || activeE2EESessionRef.current;
+            const decryptedMessages = await Promise.all(remoteMessages.map(async (msg) => {
+              if (!msg?.text || !String(msg.text).startsWith('__e2ee_v1__:')) return msg;
+              const decrypted = await decryptRealtimeText(activeSession, msg.text);
+              return { ...msg, text: decrypted.text, encrypted: decrypted.encrypted };
+            }));
+            if (cancelled) return;
             setMessages((items) => applyDirectMessageReceipts(
-              mergeRealtimeConversationMessages(items, contactId, remoteMessages),
+              mergeRealtimeConversationMessages(items, contactId, decryptedMessages),
               latestReceiptMap,
             ));
           },
@@ -2300,14 +2334,6 @@ function App() {
   useEffect(() => {
     signsByLabelRef.current = signsByLabel;
   }, [signsByLabel]);
-
-  useEffect(() => {
-    if (!voiceNote.active || voiceNote.paused) return undefined;
-    const timer = window.setInterval(() => {
-      setVoiceNote((current) => ({ ...current, seconds: current.seconds + 1 }));
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [voiceNote.active, voiceNote.paused]);
 
   useEffect(() => {
     if (!communityGroupVoice.active) return undefined;
@@ -2762,15 +2788,23 @@ function App() {
         }]);
         setChatDraft('');
         try {
+          const e2eePayload = await encryptRealtimeText(activeE2EESessionRef.current, targetChatId, messageId, outgoingText);
           await sendDirectTextMessage({
             firestore: firestoreDb,
             chatId: targetChatId,
             senderUid: authenticatedFirebaseUser.uid,
-            text: outgoingText,
+            text: e2eePayload.text,
             messageId,
           });
           setMessages((items) => items.map((message) => (
-            message.id === messageId ? { ...message, status: 'sent', liveActivity: 'Sent through Firebase chat' } : message
+            message.id === messageId
+              ? {
+                ...message,
+                status: 'sent',
+                encrypted: e2eePayload.encrypted,
+                liveActivity: e2eePayload.encrypted ? 'Sent with Signova E2EE' : 'Sent through Firebase chat',
+              }
+              : message
           )));
           setStatus('Message sent through Firebase chat');
         } catch (error) {
@@ -2828,89 +2862,47 @@ function App() {
     return `${mins}:${secs}`;
   }
 
-  async function startVoiceNote() {
-    setComposerPickerOpen(false);
-    setScheduleComposerOpen(false);
-    if (!navigator.mediaDevices?.getUserMedia || typeof window.MediaRecorder === 'undefined') {
-      setStatus('Voice recording is not supported in this browser.');
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
-      voiceRecorderChunksRef.current = [];
-      voiceRecorderStreamRef.current = stream;
-      voiceRecorderRef.current = recorder;
-      recorder.ondataavailable = (event) => {
-        if (event.data?.size) voiceRecorderChunksRef.current.push(event.data);
-      };
-      recorder.start(250);
-    } catch (error) {
-      setStatus('Mic permission is needed to record a voice note.');
-      return;
-    }
-    setVoiceNote({ active: true, paused: false, seconds: 0 });
-    setStatus('Voice note recording started');
-  }
-
-  function toggleVoicePause() {
-    setVoiceNote((current) => {
-      const nextPaused = !current.paused;
-      const recorder = voiceRecorderRef.current;
-      if (recorder?.state === 'recording' && nextPaused) recorder.pause();
-      if (recorder?.state === 'paused' && !nextPaused) recorder.resume();
-      return { ...current, paused: nextPaused };
-    });
-  }
-
-  function deleteVoiceNote() {
-    if (voiceRecorderRef.current && voiceRecorderRef.current.state !== 'inactive') {
-      voiceRecorderRef.current.onstop = null;
-      voiceRecorderRef.current.stop();
-    }
-    voiceRecorderStreamRef.current?.getTracks().forEach((track) => track.stop());
-    voiceRecorderRef.current = null;
-    voiceRecorderChunksRef.current = [];
-    voiceRecorderStreamRef.current = null;
-    setVoiceNote({ active: false, paused: false, seconds: 0 });
-    setStatus('Voice note deleted');
-  }
-
-  function addVoiceNote() {
-    const duration = formatVoiceTime(voiceNote.seconds);
-    const finishVoiceNote = () => {
-      const mimeType = voiceRecorderChunksRef.current[0]?.type || 'audio/webm';
-      const blob = new Blob(voiceRecorderChunksRef.current, { type: mimeType });
-      const url = attachmentUrlRegistryRef.current.track(URL.createObjectURL(blob));
-      addEncryptedMessage(`Music / Audio Note: Voice note ${duration}`, 'outgoing', {
-        attachmentType: 'audio',
-        attachmentData: {
-          title: `Voice note ${duration}`,
-          url,
-          fileType: mimeType,
-          size: duration,
-          durationSeconds: voiceNote.seconds,
-          signGloss: `VOICE NOTE (${duration}) · READY FOR SIGN CONVERSION`,
-        },
-      });
-      voiceRecorderStreamRef.current?.getTracks().forEach((track) => track.stop());
-      voiceRecorderRef.current = null;
-      voiceRecorderChunksRef.current = [];
-      voiceRecorderStreamRef.current = null;
-      setVoiceNote({ active: false, paused: false, seconds: 0 });
-      setStatus('Voice note added to chat and ready to play');
-    };
-
-    const recorder = voiceRecorderRef.current;
-    if (recorder && recorder.state !== 'inactive') {
-      recorder.onstop = finishVoiceNote;
-      recorder.requestData?.();
-      recorder.stop();
-    } else if (voiceRecorderChunksRef.current.length) {
-      finishVoiceNote();
-    } else {
+  async function addVoiceNote() {
+    const collected = await stopAndCollectVoiceNote();
+    if (!collected?.blob) {
       setStatus('No voice audio was recorded.');
+      return;
     }
+    const { blob, mimeType, durationSeconds, waveformPeaks } = collected;
+    const duration = formatVoiceTime(durationSeconds);
+    const ext = audioExtensionForMime(mimeType);
+    const voiceFile = new File([blob], `voice-note-${Date.now()}.${ext}`, { type: mimeType });
+
+    if (
+      activeRealtimeChat.status === 'ready'
+      && activeRealtimeChat.contactId === selectedChatId
+      && activeRealtimeChat.chatId
+      && authenticatedFirebaseUser?.uid
+      && firebaseStorage
+    ) {
+      try {
+        await sendRealtimeAttachmentMessage(voiceFile);
+        setStatus('Voice note sent through Firebase chat');
+        return;
+      } catch (error) {
+        setStatus(error?.message || 'Voice upload failed, saved locally');
+      }
+    }
+
+    const url = attachmentUrlRegistryRef.current.track(URL.createObjectURL(blob));
+    addEncryptedMessage(`Voice Message (${duration})`, 'outgoing', {
+      attachmentType: 'audio',
+      attachmentData: {
+        title: `Voice note ${duration}`,
+        url,
+        fileType: mimeType,
+        size: duration,
+        durationSeconds,
+        waveformPeaks,
+        signGloss: `VOICE NOTE (${duration}) · READY FOR SIGN CONVERSION`,
+      },
+    });
+    setStatus('Voice note added to chat and ready to play');
   }
 
   function startSendLongPress() {
@@ -7219,6 +7211,7 @@ function App() {
             handleAttachmentAction={handleAttachmentAction}
             setComposerPickerOpen={setComposerPickerOpen}
             voiceNote={voiceNote}
+            voiceWaveform={voiceWaveform}
             toggleVoicePause={toggleVoicePause}
             startVoiceNote={startVoiceNote}
             formatVoiceTime={formatVoiceTime}
@@ -7231,6 +7224,7 @@ function App() {
             attachRemoteCallVideo={attachRemoteCallVideo}
             setChatCallScreen={setChatCallScreen}
             openPanel={openPanel}
+            chatE2EECapability={resolveConversationE2EEState(activeE2EESession)}
           />
         )}
       </main>
