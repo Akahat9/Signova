@@ -141,6 +141,7 @@ export default function useCallsManager({
   const activeTargetContactRef = useRef(null);
   const callConnectedAtRef = useRef(0);
   const acceptingCallRef = useRef(false);
+  const iceConfigCacheRef = useRef({ value: null, at: 0 });
 
   // Elapsed timer effect - counts strictly once WebRTC connects
   useEffect(() => {
@@ -401,17 +402,21 @@ export default function useCallsManager({
 
   async function getCallIceConfiguration() {
     if (SIGNOVA_CALL_TEST_MODE) return { iceServers: [], turnConfigured: false, iceTransportPolicy: 'all' };
+    if (iceConfigCacheRef.current.value && Date.now() - iceConfigCacheRef.current.at < 60_000) {
+      return iceConfigCacheRef.current.value;
+    }
     try {
       const config = await Promise.race([
         fetchJson('/api/calls/ice-config'),
-        new Promise((_, reject) => window.setTimeout(() => reject(new Error('ICE config timeout')), 2500)),
+        new Promise((_, reject) => window.setTimeout(() => reject(new Error('ICE config timeout')), 1200)),
       ]);
       const requireTurn = process.env.REACT_APP_SIGNOVA_FORCE_RELAY === 'true';
       const validated = validateCallIceConfiguration(config, { requireTurn });
       if (!validated.turnConfigured) setStatus?.('Call is using STUN only; TURN must be configured for reliable production calls.');
+      iceConfigCacheRef.current = { value: validated, at: Date.now() };
       return validated;
     } catch {
-      return {
+      const fallback = {
         iceServers: [
           { urls: 'stun:stun.l.google.com:19302' },
           { urls: 'stun:stun1.l.google.com:19302' },
@@ -420,6 +425,8 @@ export default function useCallsManager({
         turnConfigured: false,
         iceTransportPolicy: 'all',
       };
+      iceConfigCacheRef.current = { value: fallback, at: Date.now() };
+      return fallback;
     }
   }
 
@@ -657,8 +664,13 @@ export default function useCallsManager({
         }
       }, () => setCallStatus('Call room signaling unavailable')));
 
+      setIncomingCall(null);
+      setActivePanel?.('chats');
+      setMobileChatListOpen?.(false);
+      setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
+      setCallStatus('Connecting to caller…');
+
       if (!room.offer) {
-        setCallStatus('Waiting for caller offer…');
         room = await new Promise((resolve) => {
           let settled = false;
           let unsub = () => undefined;
@@ -668,7 +680,7 @@ export default function useCallsManager({
               unsub();
               resolve(null);
             }
-          }, 5000);
+          }, 15000);
           unsub = watchCallRoom(firestoreDb, room.id, (latest) => {
             if (settled) return;
             if (latest && isTerminalCallStatus(latest.status)) {
@@ -697,8 +709,10 @@ export default function useCallsManager({
         });
         if (abortedByRemote) return;
         if (!room?.offer) {
-          setStatus?.('The caller is still preparing the secure connection. Try again in a moment.');
+          setStatus?.('The caller took too long to prepare the connection. Try again.');
           setCallStatus('Call connection unavailable');
+          setChatCallScreen(null);
+          completeActiveConversationLog?.();
           clearCallSignalingSubscriptions();
           activeCallRoomIdRef.current = '';
           activeCallRemoteUidRef.current = '';
@@ -706,10 +720,6 @@ export default function useCallsManager({
         }
       }
 
-      setIncomingCall(null);
-      setActivePanel?.('chats');
-      setMobileChatListOpen?.(false);
-      setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
       setCallStatus('Accepting incoming call…');
       clearCallTimers();
       if (!streamRef.current) {

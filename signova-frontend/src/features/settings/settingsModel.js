@@ -46,7 +46,7 @@ const SETTINGS_STRING_LIMITS = Object.freeze({ 'account.profilePhoto': 2 * 1024 
 export function createDefaultSettings(confidenceThreshold = 0.55) {
   return {
     account: { name: 'Signova User', firstName: 'Signova', lastName: 'User', username: '@signova.user', email: '', phone: '', city: '', country: 'India', preferredLanguage: 'English', about: 'I am learning Indian Sign Language for daily communication.', subscription: 'Free learning plan', proStatus: 'trial', proPlan: 'Signova Pro Trial', proTrialMonths: 2, proStartedAt: '', proExpiresAt: '', studentVerified: false, studentIdFileName: '', studentInstitution: '', profilePhoto: '', profilePhotoPath: '', phoneVerified: true, emailVerified: true, twoFactor: false, connectedDevices: 'Web, Android ready', userType: 'Sign Language Learner', preferredSignLanguage: 'ISL', signSkillLevel: 'Beginner', supportNotes: '', emergencyContact: '', healthNotes: '', avatarInitials: 'SU', avatarTone: 'cyan', avatarMode: '3d', avatarMood: 'calm', avatarAccessory: 'none' },
-    camera: { facingMode: 'user', resolution: '1080p', fps: 30 },
+    camera: { facingMode: 'user', resolution: '1080p', fps: 60 },
     microphone: { inputDevice: 'default', noiseSuppression: true },
     translation: { enabled: true, mode: 'sentence', language: 'English', outputType: 'textVoice', confidenceThreshold },
     lighting: { autoLowLight: true, ringLight: false, brightness: 62, aiEnhancement: true },

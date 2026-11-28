@@ -47,7 +47,23 @@ export function createPeerConnectionSession({
     }
   };
 
-  localStream.getTracks().forEach((track) => peer.addTrack(track, localStream));
+  localStream.getTracks().forEach((track) => {
+    const sender = peer.addTrack(track, localStream);
+    if (track.kind === 'video' && typeof sender?.getParameters === 'function' && typeof sender?.setParameters === 'function') {
+      try {
+        const params = sender.getParameters() || {};
+        const encodings = Array.isArray(params.encodings) && params.encodings.length ? params.encodings : [{}];
+        params.encodings = encodings.map((encoding) => ({
+          ...encoding,
+          maxFramerate: 60,
+          maxBitrate: Math.max(Number(encoding.maxBitrate || 0), 2_500_000),
+        }));
+        Promise.resolve(sender.setParameters(params)).catch(() => undefined);
+      } catch {
+        // Browser does not allow modifying sender encoding parameters
+      }
+    }
+  });
   if (caller) onDataChannel(peer.createDataChannel(dataChannelLabel, { ordered: true }), 'local');
 
   const unsubscribeCandidates = subscribeCandidates(

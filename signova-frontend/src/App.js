@@ -1857,9 +1857,18 @@ function App() {
 
         let resolvedSettings = settingsSnapshotRef.current;
         const workspaceSettings = savedPreferences.find((item) => item.id === SIGNOVA_SETTINGS_WORKSPACE_ID);
-        if (workspaceSettings) {
+        let localRecord = null;
+        if (typeof window !== 'undefined') {
+          try {
+            const rawLocal = window.localStorage.getItem(SIGNOVA_SETTINGS_STORAGE_KEY);
+            if (rawLocal) localRecord = JSON.parse(rawLocal);
+          } catch {}
+        }
+        const workspaceUpdatedAt = Number(workspaceSettings?.updatedAt || 0);
+        const localUpdatedAt = Number(localRecord?.updatedAt || 0);
+        if (workspaceSettings && (!localRecord?.settings || workspaceUpdatedAt >= localUpdatedAt)) {
           resolvedSettings = resolveWorkspaceSettings(resolvedSettings, workspaceSettings, MIN_ACCEPT_CONFIDENCE);
-        } else if (session.mode === 'local' && typeof window !== 'undefined' && window.localStorage.getItem(SIGNOVA_SETTINGS_STORAGE_KEY)) {
+        } else if (localRecord?.settings) {
           const legacySettings = loadPersistedSettings(window.localStorage, MIN_ACCEPT_CONFIDENCE);
           resolvedSettings = resolveWorkspaceSettings(
             resolvedSettings,
@@ -1867,7 +1876,6 @@ function App() {
             MIN_ACCEPT_CONFIDENCE,
           );
           saveUserDoc('userPreferences', buildSettingsWorkspaceRecord(resolvedSettings, MIN_ACCEPT_CONFIDENCE))
-            .then(() => window.localStorage.removeItem(SIGNOVA_SETTINGS_STORAGE_KEY))
             .catch(() => {
               // Keep the local backup; startup must not block on migration.
             });
@@ -5881,13 +5889,28 @@ function App() {
   }
 
   function updateSetting(group, key, value) {
-    setSettings((current) => ({
-      ...current,
-      [group]: {
-        ...current[group],
-        [key]: value,
-      },
-    }));
+    setSettings((current) => {
+      const next = {
+        ...current,
+        [group]: {
+          ...current[group],
+          [key]: value,
+        },
+      };
+      if (typeof window !== 'undefined') {
+        try {
+          const workspaceRecord = buildSettingsWorkspaceRecord(next, MIN_ACCEPT_CONFIDENCE);
+          window.localStorage.setItem(SIGNOVA_SETTINGS_STORAGE_KEY, JSON.stringify({
+            version: 2,
+            updatedAt: Date.now(),
+            settings: workspaceRecord.settings,
+          }));
+        } catch {
+          // ignore localStorage quota errors
+        }
+      }
+      return next;
+    });
     const readableKey = String(key).replace(/([A-Z])/g, ' $1').replace(/^./, (char) => char.toUpperCase());
     setStatus(`${readableKey} updated`);
   }
