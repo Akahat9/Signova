@@ -66,6 +66,7 @@ export default function useCallsManager({
   const [callStatus, setCallStatus] = useState('WebRTC ready');
   const [callNetworkQuality, setCallNetworkQuality] = useState({ label: 'Waiting', rttMs: 0, packetLoss: 0, bitrateKbps: 0 });
   const [incomingCall, setIncomingCall] = useState(null);
+  const [acceptingIncomingCall, setAcceptingIncomingCall] = useState(false);
   const [callExperience, setCallExperience] = useState('videoSignChat');
   const [callElapsedSeconds, setCallElapsedSeconds] = useState(0);
   const [chatCallScreen, setChatCallScreen] = useState(null);
@@ -139,6 +140,7 @@ export default function useCallsManager({
 
   const activeTargetContactRef = useRef(null);
   const callConnectedAtRef = useRef(0);
+  const acceptingCallRef = useRef(false);
 
   // Elapsed timer effect - counts strictly once WebRTC connects
   useEffect(() => {
@@ -372,6 +374,10 @@ export default function useCallsManager({
           setCallSignTelemetry((current) => ({ ...current, rttMs: rtt }));
           return;
         }
+        if (payload?.type === 'signova-call-hangup') {
+          handleRemoteTerminalCall('ended');
+          return;
+        }
         applyRemoteCaptionPayload(payload);
       } catch {
         setRemoteCaption(String(event.data || 'Remote sign received'));
@@ -481,6 +487,9 @@ export default function useCallsManager({
           stopCallStats();
           stopCallAudio();
           callConnectedAtRef.current = 0;
+          if (activeCallRoomIdRef.current) {
+            handleRemoteTerminalCall('ended');
+          }
         }
       },
     });
@@ -578,13 +587,13 @@ export default function useCallsManager({
     setCaptionChannelStatus('Opening caption sync...');
 
     const roomId = await createCallRoom(firestoreDb, { callerUid, calleeUid, mediaType: chatCallScreen === 'voice' ? 'voice' : 'video' });
-    const localPeer = createSignovaPeer({
-      ...await getCallIceConfiguration(), localStream, roomId, localUid: callerUid, remoteUid: calleeUid, caller: true,
-    });
+    activeCallRoomIdRef.current = roomId;
+    activeCallRemoteUidRef.current = calleeUid;
+    let localPeer = null;
     let pendingAnswerSdp = '';
     callSignalingUnsubscribersRef.current.push(watchCallRoom(firestoreDb, roomId, (room) => {
       if (!room) return;
-      if (room.answer && room.answer.sdp !== localPeer.currentRemoteDescription?.sdp && room.answer.sdp !== pendingAnswerSdp) {
+      if (localPeer && room.answer && room.answer.sdp !== localPeer.currentRemoteDescription?.sdp && room.answer.sdp !== pendingAnswerSdp) {
         pendingAnswerSdp = room.answer.sdp;
         localPeer.setRemoteDescription(room.answer)
           .catch(() => setCallStatus('Remote answer was invalid'))
@@ -592,8 +601,15 @@ export default function useCallsManager({
       }
       if (isTerminalCallStatus(room.status)) handleRemoteTerminalCall(room.status);
     }, () => setCallStatus('Call room signaling unavailable')));
+    const iceConfig = await getCallIceConfiguration();
+    if (activeCallRoomIdRef.current !== roomId) return;
+    localPeer = createSignovaPeer({
+      ...iceConfig, localStream, roomId, localUid: callerUid, remoteUid: calleeUid, caller: true,
+    });
     const offer = await localPeer.createOffer();
+    if (activeCallRoomIdRef.current !== roomId) return;
     await localPeer.setLocalDescription(offer);
+    if (activeCallRoomIdRef.current !== roomId) return;
     await publishCallOffer(firestoreDb, roomId, offer);
     playOutgoingRingback();
     setCallStatus('Calling verified Signova contact…');
@@ -606,6 +622,7 @@ export default function useCallsManager({
   }
 
   async function acceptIncomingCall() {
+    if (acceptingCallRef.current) return;
     stopCallAudio();
     let room = incomingCall;
     const localUid = authenticatedFirebaseUser?.uid;
@@ -613,96 +630,150 @@ export default function useCallsManager({
       setStatus?.('No active incoming call or Firebase session.');
       return;
     }
-    if (!room.offer) {
-      setCallStatus('Waiting for caller offer…');
-      room = await new Promise((resolve) => {
-        let settled = false;
-        let unsub = () => undefined;
-        const timer = window.setTimeout(() => {
-          if (!settled) {
-            settled = true;
-            unsub();
-            resolve(null);
+    acceptingCallRef.current = true;
+    setAcceptingIncomingCall(true);
+    try {
+      activeCallRoomIdRef.current = room.id;
+      activeCallRemoteUidRef.current = room.callerUid || '';
+      clearCallSignalingSubscriptions();
+      let activePeer = null;
+      let abortedByRemote = false;
+      callSignalingUnsubscribersRef.current.push(watchCallRoom(firestoreDb, room.id, async (nextRoom) => {
+        if (!nextRoom) return;
+        if (isTerminalCallStatus(nextRoom.status)) {
+          abortedByRemote = true;
+          handleRemoteTerminalCall(nextRoom.status);
+          return;
+        }
+        if (activePeer && nextRoom.status === 'reconnecting' && nextRoom.offer && nextRoom.offer.sdp !== activePeer.currentRemoteDescription?.sdp) {
+          try {
+            await activePeer.setRemoteDescription(nextRoom.offer);
+            const restartAnswer = await activePeer.createAnswer();
+            await activePeer.setLocalDescription(restartAnswer);
+            await publishCallAnswer(firestoreDb, room.id, restartAnswer);
+          } catch {
+            setCallStatus('Reconnect negotiation failed');
           }
-        }, 5000);
-        unsub = watchCallRoom(firestoreDb, room.id, (latest) => {
-          if (latest?.offer && !settled) {
-            settled = true;
-            window.clearTimeout(timer);
-            unsub();
-            resolve(latest);
-          }
-        }, () => {
-          if (!settled) {
-            settled = true;
-            window.clearTimeout(timer);
-            unsub();
-            resolve(null);
-          }
+        }
+      }, () => setCallStatus('Call room signaling unavailable')));
+
+      if (!room.offer) {
+        setCallStatus('Waiting for caller offer…');
+        room = await new Promise((resolve) => {
+          let settled = false;
+          let unsub = () => undefined;
+          const timer = window.setTimeout(() => {
+            if (!settled) {
+              settled = true;
+              unsub();
+              resolve(null);
+            }
+          }, 5000);
+          unsub = watchCallRoom(firestoreDb, room.id, (latest) => {
+            if (settled) return;
+            if (latest && isTerminalCallStatus(latest.status)) {
+              settled = true;
+              window.clearTimeout(timer);
+              unsub();
+              abortedByRemote = true;
+              handleRemoteTerminalCall(latest.status);
+              resolve(null);
+              return;
+            }
+            if (latest?.offer) {
+              settled = true;
+              window.clearTimeout(timer);
+              unsub();
+              resolve(latest);
+            }
+          }, () => {
+            if (!settled) {
+              settled = true;
+              window.clearTimeout(timer);
+              unsub();
+              resolve(null);
+            }
+          });
         });
-      });
-      if (!room?.offer) {
-        setStatus?.('The caller is still preparing the secure connection. Try again in a moment.');
-        setCallStatus('Call connection unavailable');
+        if (abortedByRemote) return;
+        if (!room?.offer) {
+          setStatus?.('The caller is still preparing the secure connection. Try again in a moment.');
+          setCallStatus('Call connection unavailable');
+          clearCallSignalingSubscriptions();
+          activeCallRoomIdRef.current = '';
+          activeCallRemoteUidRef.current = '';
+          return;
+        }
+      }
+
+      setCallStatus('Accepting incoming call…');
+      clearCallTimers();
+      if (!streamRef.current) {
+        if (room.mediaType === 'video') {
+          const cameraStarted = await startCamera?.();
+          if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
+          if (!cameraStarted) {
+            setCallStatus('Camera permission is required to accept this video call');
+            setStatus?.('Camera permission is required to accept this video call.');
+            clearCallSignalingSubscriptions();
+            activeCallRoomIdRef.current = '';
+            activeCallRemoteUidRef.current = '';
+            return;
+          }
+        } else {
+          try {
+            streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+            setMicEnabled?.(true);
+          } catch {
+            setCallStatus('Microphone permission is required to accept this voice call');
+            setStatus?.('Microphone permission is required to accept this voice call.');
+            clearCallSignalingSubscriptions();
+            activeCallRoomIdRef.current = '';
+            activeCallRemoteUidRef.current = '';
+            return;
+          }
+        }
+      }
+      if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
+      const localStream = streamRef.current || videoRef.current?.srcObject;
+      if (!localStream) {
+        setCallStatus('Microphone or camera stream is unavailable');
+        clearCallSignalingSubscriptions();
+        activeCallRoomIdRef.current = '';
+        activeCallRemoteUidRef.current = '';
         return;
       }
+      peerRefs.current.forEach((peer) => peer.close());
+      const iceConfig = await getCallIceConfiguration();
+      if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
+      const peer = createSignovaPeer({
+        ...iceConfig,
+        localStream,
+        roomId: room.id,
+        localUid,
+        remoteUid: room.callerUid,
+        caller: false,
+      });
+      activePeer = peer;
+      await peer.setRemoteDescription(room.offer);
+      if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
+      const answer = await peer.createAnswer();
+      await peer.setLocalDescription(answer);
+      await publishCallAnswer(firestoreDb, room.id, answer);
+      setIncomingCall(null);
+      setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
+      startConversationLog?.(room.mediaType === 'voice' ? 'voice-sign-chat' : 'video-sign-chat', room.callerUid);
+      setCallStatus('Connecting WebRTC…');
+    } catch (error) {
+      setCallStatus(`Accepting call failed: ${error?.message || 'connection error'}`);
+      setStatus?.('Could not connect incoming call. Please try again.');
+      clearCallSignalingSubscriptions();
+      activeCallRoomIdRef.current = '';
+      activeCallRemoteUidRef.current = '';
+    } finally {
+      acceptingCallRef.current = false;
+      setAcceptingIncomingCall(false);
     }
-    setCallStatus('Accepting incoming call…');
-    clearCallTimers();
-    setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
-    if (!streamRef.current) {
-      if (room.mediaType === 'video') {
-        const cameraStarted = await startCamera?.();
-        if (!cameraStarted) {
-          setCallStatus('Camera permission is required to accept this video call');
-          return;
-        }
-      } else {
-        try {
-          streamRef.current = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-          setMicEnabled?.(true);
-        } catch {
-          setCallStatus('Microphone permission is required to accept this voice call');
-          return;
-        }
-      }
-    }
-    const localStream = streamRef.current || videoRef.current?.srcObject;
-    if (!localStream) {
-      setCallStatus('Microphone or camera stream is unavailable');
-      return;
-    }
-    peerRefs.current.forEach((peer) => peer.close());
-    clearCallSignalingSubscriptions();
-    const peer = createSignovaPeer({
-      ...await getCallIceConfiguration(),
-      localStream,
-      roomId: room.id,
-      localUid,
-      remoteUid: room.callerUid,
-      caller: false,
-    });
-    await peer.setRemoteDescription(room.offer);
-    const answer = await peer.createAnswer();
-    await peer.setLocalDescription(answer);
-    await publishCallAnswer(firestoreDb, room.id, answer);
-    callSignalingUnsubscribersRef.current.push(watchCallRoom(firestoreDb, room.id, async (nextRoom) => {
-      if (!nextRoom) return;
-      if (nextRoom.status === 'reconnecting' && nextRoom.offer && nextRoom.offer.sdp !== peer.currentRemoteDescription?.sdp) {
-        try {
-          await peer.setRemoteDescription(nextRoom.offer);
-          const restartAnswer = await peer.createAnswer();
-          await peer.setLocalDescription(restartAnswer);
-          await publishCallAnswer(firestoreDb, room.id, restartAnswer);
-        } catch {
-          setCallStatus('Reconnect negotiation failed');
-        }
-      }
-      if (isTerminalCallStatus(nextRoom.status)) handleRemoteTerminalCall(nextRoom.status);
-    }, () => setCallStatus('Call room signaling unavailable')));
-    setIncomingCall(null);
-    startConversationLog?.(room.mediaType === 'voice' ? 'voice-sign-chat' : 'video-sign-chat', room.callerUid);
-    setCallStatus('Connecting WebRTC…');
   }
 
   async function rejectIncomingCall() {
@@ -717,7 +788,7 @@ export default function useCallsManager({
 
   // Auto WebRTC call initiation effect
   useEffect(() => {
-    if (!['video', 'voice'].includes(chatCallScreen) || peerRefs.current.length) return undefined;
+    if (!['video', 'voice'].includes(chatCallScreen) || peerRefs.current.length || acceptingCallRef.current || activeCallRoomIdRef.current) return undefined;
     if (chatCallScreen === 'video' && (!cameraEnabled || !streamRef.current)) return undefined;
     const timer = window.setTimeout(() => {
       startWebRtcPreviewRef.current?.().catch((error) => {
@@ -767,10 +838,18 @@ export default function useCallsManager({
   async function endCallSession(event) {
     event?.stopPropagation();
     completeActiveConversationLog?.();
-    if (activeCallRoomIdRef.current && firestoreDb) {
-      await setCallRoomStatus(firestoreDb, activeCallRoomIdRef.current, 'ended').catch(() => undefined);
+    const roomIdToEnd = activeCallRoomIdRef.current;
+    if (captionChannelRef.current?.readyState === 'open') {
+      try {
+        captionChannelRef.current.send(JSON.stringify({ type: 'signova-call-hangup', sentAt: Date.now() }));
+      } catch {
+        // DataChannel may already be closing; Firestore update handles fallback
+      }
     }
-    resetWebRtcPreview();
+    const statusUpdatePromise = roomIdToEnd && firestoreDb
+      ? Promise.resolve(setCallRoomStatus(firestoreDb, roomIdToEnd, 'ended')).catch(() => undefined)
+      : Promise.resolve();
+    resetWebRtcPreview('Call ended');
     stopCamera?.();
     setSecureCallStatus?.('Call ended');
     setCallStatus('Call ended');
@@ -787,6 +866,7 @@ export default function useCallsManager({
     if (desktopCallWindowMode && window.signovaDesktop?.close) {
       window.signovaDesktop.close();
     }
+    await statusUpdatePromise;
   }
 
   function formatCallTimer(totalSeconds) {
@@ -965,6 +1045,7 @@ export default function useCallsManager({
     setCallNetworkQuality,
     incomingCall,
     setIncomingCall,
+    acceptingIncomingCall,
     callExperience,
     setCallExperience,
     callElapsedSeconds,

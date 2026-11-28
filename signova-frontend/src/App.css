@@ -28384,7 +28384,8 @@ body.signovaCreateSignPage .communityAvatar img {
 
 .incomingSignovaCall {
   position: fixed;
-  z-index: 1200;
+  z-index: 12000;
+  pointer-events: auto;
   top: 16px;
   left: 50%;
   width: min(440px, calc(100vw - 28px));
@@ -28405,7 +28406,7 @@ body.signovaCreateSignPage .communityAvatar img {
 .incomingSignovaCall small { color: #64748b; font-size: 10px; font-weight: 800; }
 .incomingSignovaCall strong { color: #172f49; font-size: 13px; }
 .incomingCallPulse { width: 12px; height: 12px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.13); animation: incomingCallPulse 1.4s ease-in-out infinite; }
-.incomingSignovaCall button { border: 0; border-radius: 11px; padding: 9px 11px; font-size: 10px; font-weight: 900; }
+.incomingSignovaCall button { border: 0; border-radius: 11px; padding: 9px 11px; font-size: 10px; font-weight: 900; cursor: pointer; }
 .incomingSignovaCall .rejectIncomingCall { background: #fee2e2; color: #b91c1c; }
 .incomingSignovaCall .acceptIncomingCall { background: linear-gradient(135deg, #16a34a, #0891b2); color: #fff; }
 .incomingSignovaCall .acceptIncomingCall:disabled { cursor: wait; opacity: 0.55; }

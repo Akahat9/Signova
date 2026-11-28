@@ -1,12 +1,12 @@
 import './App.css';
 import './mobileDesktop.css';
 import './desktopPageFixes.css';
-import './uiPerformanceFixes.css';
 import './appShellAuthority.css';
 import './premiumDarkSystem.css';
 import './signovaDesignSystem.css';
 import './mobileAdaptive.css';
 import './scrollbarAuthority.css';
+import './uiPerformanceFixes.css';
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import QRCode from 'qrcode';
@@ -47,7 +47,6 @@ import {
   getCallHistoryPresentation,
   SignovaOpeningAnimation,
 } from './components/AppPresentation';
-import SettingsView from './components/settings/SettingsView';
 import MobileNotSupportedView from './components/MobileNotSupportedView';
 import useMobileDeviceBlock from './hooks/useMobileDeviceBlock';
 import './mobileNotSupported.css';
@@ -57,20 +56,7 @@ import useChatManager from './hooks/useChatManager';
 import { conversationE2EE } from './securityCapabilities';
 import CommunityView from './components/CommunityView';
 import ChatView from './components/ChatView';
-import LibraryView from './components/LibraryView';
 import ConversationHistorySidebar from './components/ConversationHistorySidebar';
-import ConversationInfoView from './components/ConversationInfoView';
-import TranslateToolsPanel from './components/TranslateToolsPanel';
-import ProfileView from './components/ProfileView';
-import ContactsView from './components/ContactsView';
-import CommunityCreateSignView from './components/CommunityCreateSignView';
-import ProgressDashboardView from './components/ProgressDashboardView';
-import CommunityGroupsView from './components/CommunityGroupsView';
-import AddContactModal from './components/modals/AddContactModal';
-import CommunityGatewayModal from './components/modals/CommunityGatewayModal';
-import ContactProfileModal from './components/modals/ContactProfileModal';
-import CreateGroupModal from './components/modals/CreateGroupModal';
-import ChatLockPasswordModal from './components/modals/ChatLockPasswordModal';
 import { requestJson } from './services/apiClient';
 import { speakAccessibleText as speak } from './services/speechService';
 import { validateCommunityMediaFile } from './features/community/mediaValidation';
@@ -154,6 +140,20 @@ import {
 
 const Signova3DAvatar = lazy(() => import('./Signova3DAvatar'));
 const LearnStudio = lazy(() => import('./LearnStudio'));
+const SettingsView = lazy(() => import('./components/settings/SettingsView'));
+const LibraryView = lazy(() => import('./components/LibraryView'));
+const ConversationInfoView = lazy(() => import('./components/ConversationInfoView'));
+const TranslateToolsPanel = lazy(() => import('./components/TranslateToolsPanel'));
+const ProfileView = lazy(() => import('./components/ProfileView'));
+const ContactsView = lazy(() => import('./components/ContactsView'));
+const CommunityCreateSignView = lazy(() => import('./components/CommunityCreateSignView'));
+const ProgressDashboardView = lazy(() => import('./components/ProgressDashboardView'));
+const CommunityGroupsView = lazy(() => import('./components/CommunityGroupsView'));
+const AddContactModal = lazy(() => import('./components/modals/AddContactModal'));
+const CommunityGatewayModal = lazy(() => import('./components/modals/CommunityGatewayModal'));
+const ContactProfileModal = lazy(() => import('./components/modals/ContactProfileModal'));
+const CreateGroupModal = lazy(() => import('./components/modals/CreateGroupModal'));
+const ChatLockPasswordModal = lazy(() => import('./components/modals/ChatLockPasswordModal'));
 
 const LOCAL_API_URL = 'http://127.0.0.1:5000';
 const CONFIGURED_API_URL = String(process.env.REACT_APP_SIGNOVA_API_URL || '').trim().replace(/\/+$/, '');
@@ -1184,10 +1184,10 @@ function App() {
     setCallStatus,
     callNetworkQuality,
     incomingCall,
+    acceptingIncomingCall,
     callExperience,
     setCallExperience,
     callElapsedSeconds,
-    setCallElapsedSeconds,
     chatCallScreen,
     setChatCallScreen,
     chatCallMinimized,
@@ -3809,7 +3809,10 @@ function App() {
     }
 
     checkConnection();
-    const interval = window.setInterval(checkConnection, 12000);
+    const interval = window.setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
+      checkConnection();
+    }, 12000);
     return () => {
       cancelled = true;
       window.clearInterval(interval);
@@ -6389,18 +6392,6 @@ function App() {
     return () => window.clearInterval(timer);
   }, [authVerificationCooldownUntil]);
 
-  useEffect(() => {
-    if (!chatCallScreen) {
-      setCallElapsedSeconds(0);
-      return undefined;
-    }
-    const startedAt = Date.now();
-    const timer = window.setInterval(() => {
-      setCallElapsedSeconds(Math.floor((Date.now() - startedAt) / 1000));
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [callExperience, chatCallScreen, setCallElapsedSeconds]);
-
   if (isMobileBlocked) {
     return <MobileNotSupportedView onProceedAnyway={proceedAnyway} />;
   }
@@ -6776,19 +6767,35 @@ function App() {
         </aside>
       )}
       {!persistenceReady && !networkOnline && <AppStartupSkeleton />}
-      {incomingCall && (
+      {incomingCall && (typeof document !== 'undefined' ? createPortal(
         <section className="incomingSignovaCall" aria-label="Incoming Signova call" aria-live="assertive">
           <span className="incomingCallPulse" aria-hidden="true" />
           <div>
             <small>Incoming {incomingCall.mediaType === 'voice' ? 'voice' : 'video'} call</small>
             <strong>Verified Signova contact</strong>
           </div>
-          <button type="button" className="rejectIncomingCall" onClick={rejectIncomingCall}>Decline</button>
-          <button type="button" className="acceptIncomingCall" onClick={acceptIncomingCall} disabled={!incomingCall.offer}>Accept</button>
+          <button type="button" className="rejectIncomingCall" onClick={rejectIncomingCall} disabled={acceptingIncomingCall}>Decline</button>
+          <button type="button" className="acceptIncomingCall" onClick={acceptIncomingCall} disabled={acceptingIncomingCall}>
+            {acceptingIncomingCall ? 'Connecting…' : 'Accept'}
+          </button>
+        </section>,
+        document.body,
+      ) : (
+        <section className="incomingSignovaCall" aria-label="Incoming Signova call" aria-live="assertive">
+          <span className="incomingCallPulse" aria-hidden="true" />
+          <div>
+            <small>Incoming {incomingCall.mediaType === 'voice' ? 'voice' : 'video'} call</small>
+            <strong>Verified Signova contact</strong>
+          </div>
+          <button type="button" className="rejectIncomingCall" onClick={rejectIncomingCall} disabled={acceptingIncomingCall}>Decline</button>
+          <button type="button" className="acceptIncomingCall" onClick={acceptIncomingCall} disabled={acceptingIncomingCall}>
+            {acceptingIncomingCall ? 'Connecting…' : 'Accept'}
+          </button>
         </section>
-      )}
+      ))}
     
-      <AppNavigationRail
+      <Suspense fallback={null}>
+        <AppNavigationRail
         activePanel={activePanel}
         accountAvatarInitials={accountAvatarInitials}
         encryptionStatus={encryptionStatus}
@@ -8057,6 +8064,7 @@ function App() {
         submitPasswordModal={submitPasswordModal}
         onUnlockBiometric={unlockWithBiometric}
       />
+      </Suspense>
 
     </div>
   );

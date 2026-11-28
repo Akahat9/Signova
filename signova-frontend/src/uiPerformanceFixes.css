@@ -3935,3 +3935,11 @@ body.signovaPremiumDarkPage .snvToastContent p,
 html[data-signova-theme="dark"] .snvToastContent p {
   color: #94a3b8 !important;
 }
+
+/* Rendering & scroll performance: skip offscreen layout/paint for long lists */
+.chatListItem,
+.communityPostCard,
+.conversationHistoryRow {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 76px;
+}
