@@ -4455,7 +4455,23 @@ function App() {
 
   function handleRailLogoClick() {
     window.clearTimeout(railLogoClickTimerRef.current);
-    playRailTribute();
+    railLogoClickTimerRef.current = window.setTimeout(() => {
+      playRailTribute();
+    }, 220);
+  }
+
+  function handleRailLogoDoubleClick() {
+    window.clearTimeout(railLogoClickTimerRef.current);
+    setRailTributeActive(false);
+    playFullSignovaIntro();
+    window.setTimeout(() => {
+      try {
+        window.sessionStorage.setItem('signova_intro_seen', '1');
+      } catch {
+        // ignore storage errors
+      }
+      window.location.reload();
+    }, 3150);
   }
 
   function handleCommunityRailTap() {
@@ -6798,6 +6814,7 @@ function App() {
         navItems={NAV_ITEMS}
         onCommunityOpen={handleCommunityRailTap}
         onLogoClick={handleRailLogoClick}
+        onLogoDoubleClick={handleRailLogoDoubleClick}
         onOpenPanel={openPanel}
         profilePhoto={settings?.account?.profilePhoto}
         railIcon={RailIcon}

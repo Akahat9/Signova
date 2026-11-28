@@ -11,6 +11,7 @@ export default function AppNavigationRail({
   navItems,
   onCommunityOpen,
   onLogoClick,
+  onLogoDoubleClick,
   onOpenPanel,
   profilePhoto,
   railIcon: RailIcon,
@@ -19,7 +20,13 @@ export default function AppNavigationRail({
 }) {
   return (
     <aside className={railTributeActive ? 'appRail railLogoTributeMode' : 'appRail'} aria-label="Signova app navigation">
-      <button type="button" className="railLogoButton" onClick={onLogoClick} aria-label="Play Signova tribute animation">
+      <button
+        type="button"
+        className="railLogoButton"
+        onClick={onLogoClick}
+        onDoubleClick={onLogoDoubleClick}
+        aria-label="Play Signova tribute animation or double-click to replay intro and refresh"
+      >
         <img className="railLogo" src="/app-logo.png" alt="Signova" />
       </button>
       <div className={railTributeActive ? 'railLogoTribute activeRailLogoTribute' : 'railLogoTribute'} aria-hidden="true">
