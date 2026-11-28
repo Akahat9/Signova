@@ -706,6 +706,10 @@ export default function useCallsManager({
         }
       }
 
+      setIncomingCall(null);
+      setActivePanel?.('chats');
+      setMobileChatListOpen?.(false);
+      setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
       setCallStatus('Accepting incoming call…');
       clearCallTimers();
       if (!streamRef.current) {
@@ -715,6 +719,8 @@ export default function useCallsManager({
           if (!cameraStarted) {
             setCallStatus('Camera permission is required to accept this video call');
             setStatus?.('Camera permission is required to accept this video call.');
+            setChatCallScreen(null);
+            completeActiveConversationLog?.();
             clearCallSignalingSubscriptions();
             activeCallRoomIdRef.current = '';
             activeCallRemoteUidRef.current = '';
@@ -727,6 +733,8 @@ export default function useCallsManager({
           } catch {
             setCallStatus('Microphone permission is required to accept this voice call');
             setStatus?.('Microphone permission is required to accept this voice call.');
+            setChatCallScreen(null);
+            completeActiveConversationLog?.();
             clearCallSignalingSubscriptions();
             activeCallRoomIdRef.current = '';
             activeCallRemoteUidRef.current = '';
@@ -738,6 +746,8 @@ export default function useCallsManager({
       const localStream = streamRef.current || videoRef.current?.srcObject;
       if (!localStream) {
         setCallStatus('Microphone or camera stream is unavailable');
+        setChatCallScreen(null);
+        completeActiveConversationLog?.();
         clearCallSignalingSubscriptions();
         activeCallRoomIdRef.current = '';
         activeCallRemoteUidRef.current = '';
@@ -760,13 +770,13 @@ export default function useCallsManager({
       const answer = await peer.createAnswer();
       await peer.setLocalDescription(answer);
       await publishCallAnswer(firestoreDb, room.id, answer);
-      setIncomingCall(null);
-      setChatCallScreen(room.mediaType === 'voice' ? 'voice' : 'video');
       startConversationLog?.(room.mediaType === 'voice' ? 'voice-sign-chat' : 'video-sign-chat', room.callerUid);
       setCallStatus('Connecting WebRTC…');
     } catch (error) {
       setCallStatus(`Accepting call failed: ${error?.message || 'connection error'}`);
       setStatus?.('Could not connect incoming call. Please try again.');
+      setChatCallScreen(null);
+      completeActiveConversationLog?.();
       clearCallSignalingSubscriptions();
       activeCallRoomIdRef.current = '';
       activeCallRemoteUidRef.current = '';
@@ -778,9 +788,14 @@ export default function useCallsManager({
 
   async function rejectIncomingCall() {
     stopCallAudio();
-    if (!incomingCall?.id || !firestoreDb) return;
-    await setCallRoomStatus(firestoreDb, incomingCall.id, 'rejected').catch(() => undefined);
+    const roomId = incomingCall?.id;
     setIncomingCall(null);
+    completeActiveConversationLog?.();
+    setChatCallScreen(null);
+    setCallStatus('Call rejected');
+    if (roomId && firestoreDb) {
+      await Promise.resolve(setCallRoomStatus(firestoreDb, roomId, 'rejected')).catch(() => undefined);
+    }
     setStatus?.('Incoming call rejected.');
   }
 
@@ -824,6 +839,7 @@ export default function useCallsManager({
 
   function handleRemoteTerminalCall(status) {
     const label = status === 'ended' ? 'Call ended' : `Call ${status}`;
+    completeActiveConversationLog?.();
     resetWebRtcPreview(label);
     stopCamera?.();
     setIncomingCall(null);

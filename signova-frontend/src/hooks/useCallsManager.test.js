@@ -116,5 +116,31 @@ describe('useCallsManager', () => {
     expect(result.current.chatCallScreen).toBeNull();
     expect(result.current.incomingCall).toBeNull();
     expect(result.current.callStatus).toBe('Call ended');
+    expect(defaultProps.completeActiveConversationLog).toHaveBeenCalled();
+  });
+
+  test('rejectIncomingCall clears incoming call, completes active log, and sets rejected status', async () => {
+    const { setCallRoomStatus } = require('../services/callSignaling');
+    setCallRoomStatus.mockResolvedValue(undefined);
+    const completeLog = jest.fn();
+    const mockDb = { name: 'mock-db' };
+    const { result } = renderHook(() => useCallsManager({
+      ...defaultProps,
+      firestoreDb: mockDb,
+      completeActiveConversationLog: completeLog,
+    }));
+
+    act(() => {
+      result.current.setIncomingCall({ id: 'room-789', callerUid: 'user-2', mediaType: 'video' });
+    });
+
+    await act(async () => {
+      await result.current.rejectIncomingCall();
+    });
+
+    expect(setCallRoomStatus).toHaveBeenCalledWith(mockDb, 'room-789', 'rejected');
+    expect(result.current.incomingCall).toBeNull();
+    expect(result.current.chatCallScreen).toBeNull();
+    expect(completeLog).toHaveBeenCalled();
   });
 });
