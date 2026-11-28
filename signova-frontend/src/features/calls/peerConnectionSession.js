@@ -27,6 +27,32 @@ export function createPeerConnectionSession({
 
   const peer = new Peer({ iceServers, iceTransportPolicy });
   const fallbackRemoteStream = typeof MediaStream !== 'undefined' ? new MediaStream() : null;
+  const pendingCandidates = [];
+
+  async function flushPendingCandidates() {
+    if (!peer.remoteDescription) return;
+    while (pendingCandidates.length) {
+      const next = pendingCandidates.shift();
+      await Promise.resolve(peer.addIceCandidate(next)).catch(onRemoteCandidateError);
+    }
+  }
+
+  if (typeof peer.setRemoteDescription === 'function') {
+    const originalSetRemoteDescription = peer.setRemoteDescription.bind(peer);
+    peer.setRemoteDescription = async (description) => {
+      const result = await originalSetRemoteDescription(description);
+      if (!peer.remoteDescription) {
+        try {
+          peer.remoteDescription = description;
+        } catch {
+          // ignore read-only remoteDescription in native RTCPeerConnection
+        }
+      }
+      await flushPendingCandidates();
+      return result;
+    };
+  }
+
   peer.onicecandidate = ({ candidate } = {}) => {
     if (!candidate) return;
     Promise.resolve(publishCandidate(candidate)).catch(onLocalCandidateError);
@@ -74,7 +100,13 @@ export function createPeerConnectionSession({
   if (caller) onDataChannel(peer.createDataChannel(dataChannelLabel, { ordered: true }), 'local');
 
   const unsubscribeCandidates = subscribeCandidates(
-    (candidate) => Promise.resolve(peer.addIceCandidate(candidate)).catch(onRemoteCandidateError),
+    (candidate) => {
+      if (typeof peer.setRemoteDescription === 'function' && !peer.remoteDescription) {
+        pendingCandidates.push(candidate);
+        return Promise.resolve();
+      }
+      return Promise.resolve(peer.addIceCandidate(candidate)).catch(onRemoteCandidateError);
+    },
     onCandidateSubscriptionError,
   );
 

@@ -53,11 +53,38 @@ test('wires configuration, local tracks, caller channel, and remote candidate su
   const localCandidate = { candidate: 'local' };
   session.peer.onicecandidate({ candidate: localCandidate });
   expect(onLocalCandidate).toHaveBeenCalledWith(localCandidate);
+  session.peer.remoteDescription = { type: 'offer', sdp: 'v=0' };
   emitRemoteCandidate({ candidate: 'remote' });
   await flushPromises();
   expect(session.peer.addedCandidates).toEqual([{ candidate: 'remote' }]);
   session.unsubscribeCandidates();
   expect(unsubscribe).toHaveBeenCalledTimes(1);
+});
+
+test('queues remote ICE candidates until setRemoteDescription completes', async () => {
+  let emitRemoteCandidate;
+  class SdpPeerConnection extends FakePeerConnection {
+    setRemoteDescription(desc) {
+      this.remoteDescription = desc;
+      return Promise.resolve();
+    }
+  }
+  const { peer } = createPeerConnectionSession({
+    PeerConnection: SdpPeerConnection,
+    localStream: { getTracks: () => [] },
+    onLocalCandidate: jest.fn(),
+    subscribeRemoteCandidates: (onCandidate) => {
+      emitRemoteCandidate = onCandidate;
+      return () => undefined;
+    },
+  });
+
+  emitRemoteCandidate({ candidate: 'early-candidate' });
+  await flushPromises();
+  expect(peer.addedCandidates).toEqual([]);
+
+  await peer.setRemoteDescription({ type: 'offer', sdp: 'v=0' });
+  expect(peer.addedCandidates).toEqual([{ candidate: 'early-candidate' }]);
 });
 
 test('forwards remote streams, remote channels, and connection states', () => {
