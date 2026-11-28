@@ -2120,7 +2120,14 @@ function App() {
             acknowledgeVisibleIncomingMessages(remoteMessages);
             resolveDirectAttachmentUrls(remoteMessages);
             const activeSession = sessionForChat || activeE2EESessionRef.current;
-            const decryptedMessages = await Promise.all(remoteMessages.map(async (msg) => {
+            let clearedAt = 0;
+            try {
+              clearedAt = Number(window.localStorage?.getItem(`signova:chatClearedAt:${contactId}`) || 0);
+            } catch {}
+            const visibleRemoteMessages = clearedAt > 0
+              ? remoteMessages.filter((msg) => Number(msg?.createdAt || 0) > clearedAt)
+              : remoteMessages;
+            const decryptedMessages = await Promise.all(visibleRemoteMessages.map(async (msg) => {
               if (!msg?.text || !String(msg.text).startsWith('__e2ee_v1__:')) return msg;
               const decrypted = await decryptRealtimeText(activeSession, msg.text);
               return { ...msg, text: decrypted.text, encrypted: decrypted.encrypted };

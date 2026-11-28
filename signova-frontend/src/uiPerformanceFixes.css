@@ -3947,6 +3947,11 @@ html[data-signova-theme="dark"] .snvToastContent p {
 /* =====================================================================
    Modern Message Bubbles, Horizontal Toolbar & Voice Note Player
    ===================================================================== */
+.messageThread {
+  padding-bottom: 112px !important;
+  scroll-padding-bottom: 112px !important;
+}
+
 .messageBubble {
   border-radius: 18px !important;
   padding: 10px 14px 8px !important;

@@ -314,25 +314,40 @@ export default function useChatManager({
 
   const applyContactChatAction = useCallback((contactId, action) => {
     if (!contactId) return false;
+    const clearedStorageKey = `signova:chatClearedAt:${contactId}`;
     if (action === 'delete') {
+      try {
+        window.localStorage?.setItem(clearedStorageKey, String(Date.now()));
+      } catch {}
       setContacts?.((items) => items.filter((item) => item.id !== contactId));
       deleteUserDoc('contacts', contactId).catch(() => {});
+      deleteUserDoc('conversations', contactId).catch(() => {});
       setMessages?.((items) => {
         const removed = messagesForContact(items, contactId);
         attachmentUrlRegistryRef.current?.releaseMessages?.(removed);
         return clearConversationMessages(items, contactId);
+      });
+      setChatFlags((current) => {
+        if (!current[contactId]) return current;
+        const next = { ...current };
+        delete next[contactId];
+        return next;
       });
       setSelectedChatId((current) => (current === contactId ? null : current));
       setStatus?.('Chat deleted');
       return true;
     }
     if (action === 'clear') {
+      try {
+        window.localStorage?.setItem(clearedStorageKey, String(Date.now()));
+      } catch {}
+      deleteUserDoc('conversations', contactId).catch(() => {});
       setMessages?.((items) => {
         const removed = messagesForContact(items, contactId).filter((item) => item.id !== 'welcome');
         attachmentUrlRegistryRef.current?.releaseMessages?.(removed);
         return clearConversationMessages(items, contactId, { preserveIds: contactId === 'signova-ai' ? ['welcome'] : [] });
       });
-      setStatus?.('Chat cleared locally');
+      setStatus?.('Chat cleared');
       return true;
     }
     if (action === 'password') {

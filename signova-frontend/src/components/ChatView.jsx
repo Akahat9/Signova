@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import EncryptionStatusNotice from './EncryptionStatusNotice';
 import CallWorkspace from './CallWorkspace';
 import { Attach3DIcon } from './SignovaIcons';
@@ -179,6 +179,15 @@ export default function ChatView(props) {
     openPanel,
     chatE2EECapability,
   } = props;
+
+  const messageThreadRef = useRef(null);
+  const lastMessageId = visibleChatMessages?.[visibleChatMessages.length - 1]?.id || '';
+
+  useEffect(() => {
+    const el = messageThreadRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [selectedChatContact?.id, visibleChatMessages?.length, lastMessageId]);
 
   if (activePanel !== 'chats') {
     return null;
@@ -432,7 +441,7 @@ export default function ChatView(props) {
           </section>
         ) : (
         <>
-        <section className="messageThread" aria-label="Signova chat">
+        <section ref={messageThreadRef} className="messageThread" aria-label="Signova chat">
           {visibleChatMessages.map((message) => {
             const isOutgoing = message.direction === 'outgoing';
             const selected = selectedMessageIds.includes(message.id);
