@@ -26,12 +26,19 @@ export function createPeerConnectionSession({
   if (!localStream?.getTracks) throw new Error('A local media stream is required');
 
   const peer = new Peer({ iceServers, iceTransportPolicy });
+  const fallbackRemoteStream = typeof MediaStream !== 'undefined' ? new MediaStream() : null;
   peer.onicecandidate = ({ candidate } = {}) => {
     if (!candidate) return;
     Promise.resolve(publishCandidate(candidate)).catch(onLocalCandidateError);
   };
   peer.ontrack = (event = {}) => {
-    const remoteStream = event.streams?.[0];
+    let remoteStream = event.streams?.[0] || fallbackRemoteStream;
+    if (remoteStream && event.track && typeof remoteStream.getTracks === 'function') {
+      const hasTrack = remoteStream.getTracks().some((t) => t.id === event.track.id);
+      if (!hasTrack && typeof remoteStream.addTrack === 'function') {
+        remoteStream.addTrack(event.track);
+      }
+    }
     if (remoteStream) onRemoteStream(remoteStream, event);
   };
   peer.ondatachannel = ({ channel } = {}) => {

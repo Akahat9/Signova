@@ -35,6 +35,7 @@ export default function CallWorkspace({
   selectedChatContact,
   remoteMediaState,
   attachRemoteCallVideo,
+  attachRemoteCallAudio,
   remoteCaption,
   liveSign,
   currentSignReference,
@@ -361,6 +362,7 @@ export default function CallWorkspace({
       style={chatCallMinimized ? { '--chat-call-x': `${chatCallPosition.x}px`, '--chat-call-y': `${chatCallPosition.y}px` } : undefined}
       onPointerDown={startChatCallMove}
     >
+      <audio ref={attachRemoteCallAudio} autoPlay playsInline style={{ display: 'none' }} />
       <header className="unifiedCallHeader">
         <div className="unifiedCallBrand"><img src="/app-logo.png" alt="" /><span><strong>Signova</strong><small>Every Gesture, A Voice.</small></span></div>
         <div className="unifiedCallTitle">
@@ -450,7 +452,7 @@ export default function CallWorkspace({
                   </div>
                 )
               ) : remoteMediaState.camera ? (
-                <video className="unifiedLocalCallVideo unifiedRemoteCallVideo" autoPlay playsInline ref={attachRemoteCallVideo} />
+                <video className="unifiedLocalCallVideo unifiedRemoteCallVideo" autoPlay playsInline muted ref={attachRemoteCallVideo} />
               ) : (
                 <div className="unifiedLargeCameraOffFallback partnerLargeCameraOffFallback">
                   <ContactAvatar contact={selectedChatContact || { name: 'Partner', avatarChoice: 'initial' }} className="unifiedLargeProfileAvatar" />
@@ -464,7 +466,7 @@ export default function CallWorkspace({
             {chatCallScreen === 'video' && (
               <button type="button" className="unifiedPartnerPreview" onClick={() => setChatCallFocus((focus) => focus === 'local' ? 'remote' : 'local')} aria-label={chatCallFocus === 'local' ? 'Show partner full screen' : 'Show your camera full screen'}>
                 {chatCallFocus === 'local' ? (
-                  remoteMediaState.camera ? <video ref={attachRemoteCallVideo} autoPlay playsInline /> : (
+                  remoteMediaState.camera ? <video ref={attachRemoteCallVideo} autoPlay playsInline muted /> : (
                     <span className="unifiedLargePreviewCameraOff">
                       <ContactAvatar contact={selectedChatContact || { name: 'Partner', avatarChoice: 'initial' }} className="unifiedLargePreviewProfileAvatar" />
                     </span>

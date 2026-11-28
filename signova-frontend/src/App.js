@@ -1249,6 +1249,7 @@ function App() {
     formatCallTimer,
     startChatCallMove,
     attachRemoteCallVideo,
+    attachRemoteCallAudio,
     attachLocalTrackingVideo,
     startMeetingMode,
     revealCallControls,
@@ -7269,6 +7270,7 @@ function App() {
             stopSendLongPress={stopSendLongPress}
             handleSendIconClick={handleSendIconClick}
             attachRemoteCallVideo={attachRemoteCallVideo}
+            attachRemoteCallAudio={attachRemoteCallAudio}
             setChatCallScreen={setChatCallScreen}
             openPanel={openPanel}
             chatE2EECapability={resolveConversationE2EEState(activeE2EESession)}

@@ -17,6 +17,7 @@ import {
   deriveLocalMediaState,
   getLiveMediaTrackKinds,
 } from '../features/calls/callMediaProtocol';
+import { attachMicrophoneTrack } from '../features/camera/cameraMediaService';
 import { createPeerConnectionSession } from '../features/calls/peerConnectionSession';
 import { formatConfidence } from '../features/learning/signPresentation';
 import {
@@ -99,6 +100,7 @@ export default function useCallsManager({
 
   // Call Refs
   const remoteStreamRef = useRef(null);
+  const remoteAudioRef = useRef(null);
   const peerRefs = useRef([]);
   const activeCallRoomIdRef = useRef('');
   const activeCallRemoteUidRef = useRef('');
@@ -448,7 +450,18 @@ export default function useCallsManager({
           camera: trackKinds.includes('video'),
           mic: trackKinds.includes('audio'),
         }));
-        if (remoteVideoRef.current) remoteVideoRef.current.srcObject = remoteStream;
+        if (remoteVideoRef.current) {
+          if (remoteVideoRef.current.srcObject !== remoteStream) {
+            remoteVideoRef.current.srcObject = remoteStream;
+          }
+          remoteVideoRef.current.play?.().catch(() => {});
+        }
+        if (remoteAudioRef.current) {
+          if (remoteAudioRef.current.srcObject !== remoteStream) {
+            remoteAudioRef.current.srcObject = remoteStream;
+          }
+          remoteAudioRef.current.play?.().catch(() => {});
+        }
       },
       onDataChannel: (channel) => {
         if (channel.label === 'signova-caption-sync') configureCaptionChannel(channel);
@@ -508,6 +521,18 @@ export default function useCallsManager({
     return peer;
   }
 
+  async function ensureCallMicrophoneTrack(localStream) {
+    if (!localStream || localStream.getAudioTracks?.().length > 0) {
+      if (localStream?.getAudioTracks?.().length > 0) setMicEnabled?.(true);
+      return;
+    }
+    if (!navigator.mediaDevices?.getUserMedia) return;
+    const micResult = await attachMicrophoneTrack(navigator.mediaDevices, localStream, settings?.microphone).catch(() => ({ added: false }));
+    if (micResult?.added) {
+      setMicEnabled?.(true);
+    }
+  }
+
   async function startWebRtcPreview() {
     if (activeCallRoomIdRef.current || peerRefs.current.length) {
       setCallStatus('A call is already active or connecting');
@@ -539,6 +564,7 @@ export default function useCallsManager({
       setCallStatus('Start camera first');
       return;
     }
+    await ensureCallMicrophoneTrack(localStream);
 
     const callerUid = authenticatedFirebaseUser?.uid;
     let calleeUid = activeTargetContactRef.current?.firebaseUid || selectedChatContact?.firebaseUid || '';
@@ -763,6 +789,8 @@ export default function useCallsManager({
         activeCallRemoteUidRef.current = '';
         return;
       }
+      await ensureCallMicrophoneTrack(localStream);
+      if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
       peerRefs.current.forEach((peer) => peer.close());
       const iceConfig = await getCallIceConfiguration();
       if (abortedByRemote || activeCallRoomIdRef.current !== room.id) return;
@@ -985,8 +1013,20 @@ export default function useCallsManager({
 
   function attachRemoteCallVideo(node) {
     remoteVideoRef.current = node;
-    if (node && remoteStreamRef.current && node.srcObject !== remoteStreamRef.current) {
-      node.srcObject = remoteStreamRef.current;
+    if (node && remoteStreamRef.current) {
+      if (node.srcObject !== remoteStreamRef.current) {
+        node.srcObject = remoteStreamRef.current;
+      }
+      node.play?.().catch(() => {});
+    }
+  }
+
+  function attachRemoteCallAudio(node) {
+    remoteAudioRef.current = node;
+    if (node && remoteStreamRef.current) {
+      if (node.srcObject !== remoteStreamRef.current) {
+        node.srcObject = remoteStreamRef.current;
+      }
       node.play?.().catch(() => {});
     }
   }
@@ -1127,6 +1167,7 @@ export default function useCallsManager({
     formatCallTimer,
     startChatCallMove,
     attachRemoteCallVideo,
+    attachRemoteCallAudio,
     attachLocalTrackingVideo,
     startMeetingMode,
     revealCallControls,

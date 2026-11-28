@@ -175,6 +175,7 @@ export default function ChatView(props) {
     stopSendLongPress,
     handleSendIconClick,
     attachRemoteCallVideo,
+    attachRemoteCallAudio,
     setChatCallScreen,
     openPanel,
     chatE2EECapability,
@@ -385,6 +386,7 @@ export default function ChatView(props) {
           selectedChatContact={selectedChatContact}
           remoteMediaState={remoteMediaState}
           attachRemoteCallVideo={attachRemoteCallVideo}
+          attachRemoteCallAudio={attachRemoteCallAudio}
           remoteCaption={remoteCaption}
           liveSign={liveSign}
           currentSignReference={currentSignReference}
