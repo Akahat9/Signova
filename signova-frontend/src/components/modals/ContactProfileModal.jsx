@@ -532,8 +532,34 @@ export default function ContactProfileModal({
             </div>
           )}
 
+          {/* LOCKED STATE GUARD FOR MEDIA / FILES / ACTIVITY */}
+          {activeTab !== 'about' && selectedChatFlags.locked ? (
+            <div className="modernProfileTabBody">
+              <section className="modernSectionCard" style={{ textAlign: 'center', padding: '42px 24px' }}>
+                <div style={{ fontSize: '36px', marginBottom: '12px' }}>🔒</div>
+                <h3 style={{ margin: '0 0 8px', fontSize: '16px', fontWeight: 700 }}>
+                  {displayName} is locked on this device
+                </h3>
+                <p style={{ margin: '0 auto 16px', maxWidth: '340px', fontSize: '13px', color: '#64748b' }}>
+                  Messages, shared media, documents, and call/activity history are hidden until you unlock this conversation.
+                </p>
+                <button
+                  type="button"
+                  className="modernPrimaryAddBtn"
+                  style={{ width: 'auto', margin: '0 auto', padding: '10px 20px' }}
+                  onClick={() => {
+                    onClose();
+                    handleHeaderChatAction?.('locked');
+                  }}
+                >
+                  Unlock to View
+                </button>
+              </section>
+            </div>
+          ) : null}
+
           {/* TAB 2: MEDIA (All Categories: All, Photos, Videos, Documents, Links, Audio) */}
-          {activeTab === 'media' && (
+          {activeTab === 'media' && !selectedChatFlags.locked && (
             <div className="modernProfileTabBody">
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
@@ -601,7 +627,7 @@ export default function ContactProfileModal({
           )}
 
           {/* TAB 3: FILES (Documents, PDFs & Downloads) */}
-          {activeTab === 'files' && (
+          {activeTab === 'files' && !selectedChatFlags.locked && (
             <div className="modernProfileTabBody">
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">
@@ -648,7 +674,7 @@ export default function ContactProfileModal({
           )}
 
           {/* TAB 4: ACTIVITY / CALLS */}
-          {activeTab === 'activity' && (
+          {activeTab === 'activity' && !selectedChatFlags.locked && (
             <div className="modernProfileTabBody">
               <section className="modernSectionCard">
                 <div className="modernSectionHeader">

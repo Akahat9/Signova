@@ -36983,3 +36983,653 @@ html body.signovaSettingsPage .settingsAccountPrimaryActions::after {
 .premiumDarkMode .qrScanOrDivider::after {
   background: rgba(255, 255, 255, 0.1) !important;
 }
+
+/* ==========================================================================
+   REDESIGNED CREATE GROUP & CHAT LOCK MODALS (Target Design Parity)
+   ========================================================================== */
+.modernCreateGroupCard,
+.modernChatLockCard {
+  width: min(94vw, 450px) !important;
+  max-height: 92vh !important;
+  background: #ffffff !important;
+  border-radius: 26px !important;
+  box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(226, 232, 240, 0.9) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  animation: modalScaleIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.modernCreateGroupHeader,
+.modernChatLockHeader {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 18px 22px 14px !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.modernGroupTitleRow,
+.modernChatLockTitleGroup {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.modernGroupIconBadge,
+.modernLockIconBadge {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 12px !important;
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.modernGroupTitleRow h3,
+.modernChatLockTitleGroup h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.modernGroupTitleRow p,
+.modernChatLockTitleGroup p {
+  margin: 2px 0 0 !important;
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+/* Create Group Body */
+.modernCreateGroupBody {
+  padding: 16px 22px 20px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.modernCreateGroupBody::-webkit-scrollbar {
+  display: none !important;
+}
+
+.modernGroupAvatarPickerWrap {
+  display: flex !important;
+  justify-content: center !important;
+  padding: 2px 0 !important;
+}
+
+.modernGroupAvatarCircle {
+  position: relative !important;
+  width: 78px !important;
+  height: 78px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(124, 58, 237, 0.25) !important;
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%) !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  padding: 0 !important;
+  transition: transform 0.16s ease, box-shadow 0.16s ease !important;
+}
+
+.modernGroupAvatarCircle:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.2) !important;
+}
+
+.modernGroupAvatarPreview {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+}
+
+.modernGroupAvatarEditPill {
+  position: absolute !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 24px !important;
+  height: 24px !important;
+  border-radius: 50% !important;
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.modernGroupFieldBlock {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+}
+
+.modernGroupFieldBlock label {
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #1e293b !important;
+}
+
+.reqStar {
+  color: #ef4444 !important;
+}
+
+.optLabel {
+  color: #94a3b8 !important;
+  font-weight: 500 !important;
+}
+
+.modernCountedInputWrap,
+.modernCountedTextareaWrap {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.modernGroupTextInput,
+.modernGroupTextarea {
+  width: 100% !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  padding: 9px 50px 9px 12px !important;
+  font-size: 13.5px !important;
+  color: #0f172a !important;
+  outline: none !important;
+  font-family: inherit !important;
+}
+
+.modernGroupTextarea {
+  resize: none !important;
+  padding-bottom: 20px !important;
+}
+
+.modernGroupTextInput:focus,
+.modernGroupTextarea:focus {
+  border-color: #7c3aed !important;
+  background: #ffffff !important;
+}
+
+.modernCharCount {
+  position: absolute !important;
+  right: 12px !important;
+  bottom: 9px !important;
+  font-size: 11px !important;
+  color: #94a3b8 !important;
+  pointer-events: none !important;
+}
+
+.modernGroupSettingsSection,
+.modernGroupMembersSection {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.modernGroupSettingsSection h4,
+.modernGroupMembersSection h4 {
+  margin: 0 !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.modernGroupSettingItem {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+  padding: 8px 10px !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  border: 1px solid #f1f5f9 !important;
+}
+
+.settingItemLeft {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  min-width: 0 !important;
+}
+
+.settingItemIcon {
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 9px !important;
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.settingItemLeft strong {
+  display: block !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+.settingItemLeft small {
+  display: block !important;
+  font-size: 11px !important;
+  color: #64748b !important;
+}
+
+.modernGroupSelectPill {
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: #1e293b !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 6px 10px !important;
+  cursor: pointer !important;
+  outline: none !important;
+  flex-shrink: 0 !important;
+}
+
+.modernMemberSearchBox {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 8px 12px !important;
+  border-radius: 12px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  color: #64748b !important;
+}
+
+.modernMemberSearchBox input {
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  flex: 1 !important;
+  font-size: 13px !important;
+  color: #0f172a !important;
+}
+
+.modernMemberAvatarRow {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  padding: 2px 0 !important;
+}
+
+.modernMemberChipBtn {
+  position: relative !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  border: 2px solid transparent !important;
+  padding: 0 !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease, border-color 0.15s ease !important;
+}
+
+.modernMemberChipBtn.selected {
+  border-color: #7c3aed !important;
+  transform: scale(1.06) !important;
+}
+
+.modernMemberChipBtn .avatar {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.memberSelectedTick {
+  position: absolute !important;
+  bottom: -2px !important;
+  right: -2px !important;
+  width: 15px !important;
+  height: 15px !important;
+  border-radius: 50% !important;
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  font-size: 9px !important;
+  font-weight: 800 !important;
+  display: grid !important;
+  place-items: center !important;
+  border: 1.5px solid #ffffff !important;
+}
+
+.modernMemberAddManualBtn {
+  padding: 6px 12px !important;
+  border-radius: 999px !important;
+  border: 1px dashed #7c3aed !important;
+  background: rgba(124, 58, 237, 0.08) !important;
+  color: #7c3aed !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.modernCreateGroupFooter {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  padding-top: 6px !important;
+}
+
+.modernGroupCancelBtn {
+  padding: 10px 18px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.modernGroupSubmitBtn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3) !important;
+}
+
+/* Chat Lock Card Body */
+.modernChatLockBody {
+  padding: 16px 22px 22px !important;
+  overflow-y: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.modernChatLockBody::-webkit-scrollbar {
+  display: none !important;
+}
+
+.modernLockShieldHero {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 6px 0 !important;
+}
+
+.modernLockShieldGlow {
+  position: absolute !important;
+  width: 96px !important;
+  height: 96px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%) !important;
+}
+
+.modernLockShieldShape {
+  position: relative !important;
+  width: 68px !important;
+  height: 76px !important;
+  border-radius: 20px 20px 34px 34px !important;
+  background: linear-gradient(145deg, #f3e8ff 0%, #ddd6fe 100%) !important;
+  border: 1.5px solid rgba(124, 58, 237, 0.25) !important;
+  display: grid !important;
+  place-items: center !important;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.16) !important;
+}
+
+.modernDeviceUnlockBanner {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 14px !important;
+  border-radius: 14px !important;
+  background: #f8fafc !important;
+  border: 1px solid #f1f5f9 !important;
+}
+
+.deviceFingerprintIcon {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 10px !important;
+  background: rgba(124, 58, 237, 0.1) !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.modernDeviceUnlockBanner strong {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.modernDeviceUnlockBanner small {
+  display: block !important;
+  font-size: 11.5px !important;
+  color: #64748b !important;
+}
+
+.modernLockMethodsSection {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.modernMethodsHeading {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.modernLockMethodsGrid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 10px !important;
+}
+
+.modernMethodTile {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 12px !important;
+  border-radius: 14px !important;
+  border: 1.5px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  cursor: pointer !important;
+  text-align: left !important;
+  transition: all 0.16s ease !important;
+}
+
+.modernMethodTile.selected {
+  border-color: rgba(124, 58, 237, 0.45) !important;
+  background: rgba(124, 58, 237, 0.06) !important;
+}
+
+.methodTileIcon {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  color: #7c3aed !important;
+  display: grid !important;
+  place-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.methodTileText strong {
+  display: block !important;
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.methodTileText small {
+  display: block !important;
+  font-size: 11px !important;
+  color: #64748b !important;
+}
+
+.methodCheckPill {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  background: #7c3aed !important;
+  color: #ffffff !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+.modernChatLockPinForm {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+.modernChatLockPinForm label {
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  color: #0f172a !important;
+}
+
+.modernPinInputWrapper {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.modernPinInputWrapper input {
+  width: 100% !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  padding: 10px 42px 10px 14px !important;
+  font-size: 14px !important;
+  color: #0f172a !important;
+  outline: none !important;
+  letter-spacing: 1px !important;
+}
+
+.modernPinInputWrapper input:focus {
+  border-color: #7c3aed !important;
+  background: #ffffff !important;
+}
+
+.modernPinEyeBtn {
+  position: absolute !important;
+  right: 10px !important;
+  border: none !important;
+  background: transparent !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 4px !important;
+}
+
+.modernChatLockNotice {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 8px !important;
+  padding: 10px 12px !important;
+  border-radius: 12px !important;
+  background: #f8fafc !important;
+  border: 1px solid #f1f5f9 !important;
+  font-size: 11.5px !important;
+  color: #64748b !important;
+  line-height: 1.4 !important;
+}
+
+.noticeInfoIcon {
+  color: #7c3aed !important;
+  font-weight: 700 !important;
+}
+
+.modernEnableChatLockBtn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  padding: 13px 18px !important;
+  border-radius: 14px !important;
+  border: none !important;
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.32) !important;
+  transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+}
+
+.modernEnableChatLockBtn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.42) !important;
+}
+
+/* Dark Mode Overrides */
+.premiumDarkMode .modernCreateGroupCard,
+.premiumDarkMode .modernChatLockCard {
+  background: #0f172a !important;
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+}
+
+.premiumDarkMode .modernCreateGroupHeader,
+.premiumDarkMode .modernChatLockHeader {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.premiumDarkMode .modernGroupTitleRow h3,
+.premiumDarkMode .modernChatLockTitleGroup h3,
+.premiumDarkMode .modernGroupFieldBlock label,
+.premiumDarkMode .modernGroupSettingsSection h4,
+.premiumDarkMode .modernGroupMembersSection h4,
+.premiumDarkMode .settingItemLeft strong,
+.premiumDarkMode .modernDeviceUnlockBanner strong,
+.premiumDarkMode .modernMethodsHeading,
+.premiumDarkMode .methodTileText strong,
+.premiumDarkMode .modernChatLockPinForm label {
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .modernGroupTextInput,
+.premiumDarkMode .modernGroupTextarea,
+.premiumDarkMode .modernGroupSettingItem,
+.premiumDarkMode .modernGroupSelectPill,
+.premiumDarkMode .modernMemberSearchBox,
+.premiumDarkMode .modernDeviceUnlockBanner,
+.premiumDarkMode .modernMethodTile,
+.premiumDarkMode .modernPinInputWrapper input,
+.premiumDarkMode .modernChatLockNotice,
+.premiumDarkMode .modernGroupCancelBtn {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .modernMemberSearchBox input {
+  color: #f8fafc !important;
+}
+
+.premiumDarkMode .methodTileIcon {
+  background: #0f172a !important;
+}

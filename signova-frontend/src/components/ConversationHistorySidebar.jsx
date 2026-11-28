@@ -38,6 +38,7 @@ export default function ConversationHistorySidebar({
   selectedConversationId,
   setSelectedConversationId,
   setMobileChatListOpen,
+  chatFlags = {},
 }) {
   return (
     <>
@@ -87,6 +88,7 @@ export default function ConversationHistorySidebar({
       </div>
       <div className="chatList conversationHistoryList">
         {conversationHistoryContacts.length ? conversationHistoryContacts.map((contact) => {
+          const isLocked = Boolean(chatFlags[contact.id]?.locked);
           const presentation = getCallHistoryPresentation(contact.lastCall?.type);
           const isVideo = presentation.tone === 'video';
           return (
@@ -107,11 +109,13 @@ export default function ConversationHistorySidebar({
                 <div className="sidebarContactTopLine">
                   <strong className="sidebarContactName">{contact.name}</strong>
                   <span className="sidebarLastCallTime">
-                    {contact.lastCall ? (contact.lastCall.endedLabel || contact.lastCall.startedLabel || 'Recent') : 'Ready'}
+                    {isLocked ? '🔒 Locked' : (contact.lastCall ? (contact.lastCall.endedLabel || contact.lastCall.startedLabel || 'Recent') : 'Ready')}
                   </span>
                 </div>
                 <div className="sidebarCallDetail">
-                  {contact.lastCall ? (
+                  {isLocked ? (
+                    <span className="sidebarNoCallLabel">🔒 Call history hidden</span>
+                  ) : contact.lastCall ? (
                     <>
                       <span className={isVideo ? 'sidebarCallTypeIcon videoIcon' : 'sidebarCallTypeIcon voiceIcon'}>
                         {isVideo ? <VideoMiniIcon /> : <VoiceMiniIcon />}
@@ -127,10 +131,10 @@ export default function ConversationHistorySidebar({
                 <div className="sidebarContactFooter">
                   <span className={contact.status === 'online' ? 'sidebarStatusBadge online' : 'sidebarStatusBadge offline'}>
                     <i />
-                    {contact.status === 'online' ? 'Online' : 'Offline'}
+                    {isLocked ? 'Locked' : (contact.status === 'online' ? 'Online' : 'Offline')}
                   </span>
                   <span className="callCountPill">
-                    {contact.calls.length} call{contact.calls.length === 1 ? '' : 's'}
+                    {isLocked ? 'Locked' : `${contact.calls.length} call${contact.calls.length === 1 ? '' : 's'}`}
                   </span>
                 </div>
               </div>

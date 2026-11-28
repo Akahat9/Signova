@@ -69,6 +69,8 @@ import CommunityGroupsView from './components/CommunityGroupsView';
 import AddContactModal from './components/modals/AddContactModal';
 import CommunityGatewayModal from './components/modals/CommunityGatewayModal';
 import ContactProfileModal from './components/modals/ContactProfileModal';
+import CreateGroupModal from './components/modals/CreateGroupModal';
+import ChatLockPasswordModal from './components/modals/ChatLockPasswordModal';
 import { requestJson } from './services/apiClient';
 import { speakAccessibleText as speak } from './services/speechService';
 import { validateCommunityMediaFile } from './features/community/mediaValidation';
@@ -1113,6 +1115,7 @@ function App() {
     startChatLongPress,
     clearChatLongPress,
     openPasswordModal,
+    unlockWithBiometric,
     submitPasswordModal,
     handleChatAction,
     handleHeaderChatAction,
@@ -5111,6 +5114,7 @@ function App() {
       number: 'Signova Group',
       username,
       avatarChoice: 'signova',
+      profileImage: groupForm.avatarUrl || '',
       showUsername: true,
       showNumber: false,
     }, ...items]);
@@ -5124,6 +5128,8 @@ function App() {
         purpose: groupForm.purpose,
         description: groupForm.description,
         privacy: groupForm.privacy,
+        adminPermissions: groupForm.adminPermissions || 'all',
+        disappearingMessages: groupForm.disappearingMessages || 'off',
         members,
         allowMeetings: groupForm.allowMeetings,
         enableAudiencePolls: groupForm.enableAudiencePolls,
@@ -6811,6 +6817,7 @@ function App() {
             selectedConversationId={selectedConversationId}
             setSelectedConversationId={setSelectedConversationId}
             setMobileChatListOpen={setMobileChatListOpen}
+            chatFlags={chatFlags}
           />
         ) : (
           <>
@@ -6969,7 +6976,14 @@ function App() {
                 <small className="chatListMetaActivity">
                   {contact.showUsername !== false ? <b>{contact.username}</b> : null}
                   {contact.showNumber ? <><i aria-hidden="true">·</i><b>{contact.number}</b></> : null}
-                  {!isChatOpen && activityStatus ? (
+                  {flags.locked ? (
+                    <>
+                      {(contact.showUsername !== false || contact.showNumber) ? <i aria-hidden="true">·</i> : null}
+                      <span className="headerActivityTicker" aria-label="Locked conversation notification hidden">
+                        <em>🔒 Notifications hidden</em>
+                      </span>
+                    </>
+                  ) : !isChatOpen && activityStatus ? (
                     <>
                       {(contact.showUsername !== false || contact.showNumber) ? <i aria-hidden="true">·</i> : null}
                       <span className="headerActivityTicker" aria-label={activityStatus}>
@@ -7878,100 +7892,15 @@ function App() {
         setStatus={setStatus}
       />
 
-      {groupModalOpen && (
-        <div className="contactMiniOverlay" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setGroupModalOpen(false);
-        }}>
-          <section className="contactMiniModal groupCreateModal" role="dialog" aria-modal="true" aria-label="Create Signova group">
-            <button type="button" className="contactMiniClose" onClick={() => setGroupModalOpen(false)} aria-label="Close group creation">×</button>
-            <div className="modalBrandHeader">
-              <Attach3DIcon type="contact" />
-              <div>
-                <span>{groupCreationContext === 'community' ? 'Create Community Group' : 'Create Chat Group'}</span>
-                <strong>{groupCreationContext === 'community' ? 'Community learning space' : 'Private conversation group'}</strong>
-                <small>{groupCreationContext === 'community' ? 'Discovery, learning, moderation, and members' : 'Private messaging preview for selected contacts'}</small>
-              </div>
-            </div>
-            <form className="contactForm groupCreateForm" onSubmit={createSignovaGroup}>
-              <input className="signSearch" value={groupForm.name} onChange={(event) => setGroupForm({ ...groupForm, name: event.target.value })} placeholder="Group name" />
-              <div className="miniFormGrid">
-                <label className="settingField">
-                  <span>Purpose</span>
-                  <select value={groupForm.purpose} onChange={(event) => setGroupForm({ ...groupForm, purpose: event.target.value })}>
-                    <option>Sign language learning</option>
-                    <option>Classroom</option>
-                    <option>Family support</option>
-                    <option>Interpreter team</option>
-                    <option>Community discussion</option>
-                    <option>Event planning</option>
-                  </select>
-                </label>
-                <label className="settingField">
-                  <span>Category</span>
-                  <select value={groupForm.category} onChange={(event) => setGroupForm({ ...groupForm, category: event.target.value })}>
-                    <option value="learning">Learning</option>
-                    <option value="classroom">Classroom</option>
-                    <option value="family">Family</option>
-                    <option value="work">Work</option>
-                    <option value="community">Community</option>
-                    <option value="event">Event</option>
-                  </select>
-                </label>
-              </div>
-              <textarea className="signSearch" value={groupForm.description} onChange={(event) => setGroupForm({ ...groupForm, description: event.target.value })} placeholder="Short group description" />
-              <input className="signSearch" value={groupForm.members} onChange={(event) => setGroupForm({ ...groupForm, members: event.target.value })} placeholder="@usernames or numbers, comma separated" />
-              <label className="settingField">
-                <span>Privacy</span>
-                <select value={groupForm.privacy} onChange={(event) => setGroupForm({ ...groupForm, privacy: event.target.value })}>
-                  <option value="private">Private invite-only</option>
-                  <option value="approval">Join with admin approval</option>
-                  <option value="public">Public community group</option>
-                </select>
-              </label>
-              <div className="groupFeatureGrid">
-                <label><input type="checkbox" checked={groupForm.allowMeetings} onChange={(event) => setGroupForm({ ...groupForm, allowMeetings: event.target.checked })} /> Meetings</label>
-                <label><input type="checkbox" checked={groupForm.enableAudiencePolls} onChange={(event) => setGroupForm({ ...groupForm, enableAudiencePolls: event.target.checked })} /> Audience polls</label>
-                <label><input type="checkbox" checked={groupForm.enableMediaDrive} onChange={(event) => setGroupForm({ ...groupForm, enableMediaDrive: event.target.checked })} /> Media drive</label>
-                <label><input type="checkbox" checked={groupForm.adminApproval} onChange={(event) => setGroupForm({ ...groupForm, adminApproval: event.target.checked })} /> Admin approval</label>
-                <label><input type="checkbox" checked={groupForm.autoCaptions} onChange={(event) => setGroupForm({ ...groupForm, autoCaptions: event.target.checked })} /> Meeting captions</label>
-                <label title="Group E2EE is not implemented yet"><input type="checkbox" checked={false} disabled /> Group E2EE unavailable</label>
-              </div>
-              {groupCreationContext === 'community' && (
-                <div className="miniFormGrid communityGroupAdvancedCreate">
-                  <label className="settingField">
-                    <span>Who can post</span>
-                    <select value={groupForm.postingPermission} onChange={(event) => setGroupForm({ ...groupForm, postingPermission: event.target.value })}>
-                      <option value="members">All members</option>
-                      <option value="approved">Approved members</option>
-                      <option value="admins">Admins only</option>
-                    </select>
-                  </label>
-                  <label className="settingField">
-                    <span>Member list</span>
-                    <select value={groupForm.memberListVisibility} onChange={(event) => setGroupForm({ ...groupForm, memberListVisibility: event.target.value })}>
-                      <option value="members">Members can view</option>
-                      <option value="admins">Admins only</option>
-                      <option value="public">Public</option>
-                    </select>
-                  </label>
-                  <label className="settingField">
-                    <span>Notifications</span>
-                    <select value={groupForm.notifications} onChange={(event) => setGroupForm({ ...groupForm, notifications: event.target.value })}>
-                      <option value="important">Important updates</option>
-                      <option value="all">All activity</option>
-                      <option value="mentions">Mentions only</option>
-                    </select>
-                  </label>
-                </div>
-              )}
-              <div className="categoryComposerActions">
-                <button type="button" onClick={() => setGroupModalOpen(false)}>Cancel</button>
-                <button type="submit" className="primaryCategoryButton">Create group</button>
-              </div>
-            </form>
-          </section>
-        </div>
-      )}
+      <CreateGroupModal
+        groupModalOpen={groupModalOpen}
+        setGroupModalOpen={setGroupModalOpen}
+        groupCreationContext={groupCreationContext}
+        groupForm={groupForm}
+        setGroupForm={setGroupForm}
+        createSignovaGroup={createSignovaGroup}
+        contacts={contacts}
+      />
 
       {contactInfoOpen && selectedChatContact && (
         <ContactProfileModal
@@ -8120,60 +8049,14 @@ function App() {
         </div>
       )}
 
-      {passwordModal.open && (
-        <div className="contactMiniOverlay" role="presentation" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setPasswordModal({ open: false, contactId: null, mode: 'create', value: '', error: '', methods: { face: false, fingerprint: false, pin: true } });
-        }}>
-          <section className="contactMiniModal passwordMiniModal" role="dialog" aria-modal="true" aria-label={passwordModal.mode === 'unlock' ? 'Unlock chat' : 'Create chat password'}>
-            <button type="button" className="contactMiniClose" onClick={() => setPasswordModal({ open: false, contactId: null, mode: 'create', value: '', error: '', methods: { face: false, fingerprint: false, pin: true } })} aria-label="Close password window">×</button>
-            <div className="modalBrandHeader">
-              <span className="modalLogo3d lockLogo3d"><img src="/app-logo.png" alt="" /></span>
-              <div>
-                <span>{passwordModal.mode === 'unlock' ? 'Unlock Chat' : 'Chat Lock'}</span>
-                <strong>{contacts.find((contact) => contact.id === passwordModal.contactId)?.name || 'Private chat'}</strong>
-                <small>{passwordModal.mode === 'unlock' ? 'Enter the local chat password.' : 'Create a local chat password for this device.'}</small>
-              </div>
-            </div>
-            <div className="chatLockMethods" aria-label="Chat lock methods">
-              {[
-                ['face', 'Face lock', 'Unavailable — biometric verification is not connected'],
-                ['fingerprint', 'Fingerprint', 'Unavailable — biometric verification is not connected'],
-                ['pin', 'Password / PIN', 'Available local app-lock method'],
-              ].map(([key, title, detail]) => (
-                <label className="chatLockMethod" key={key}>
-                  <input
-                    type="checkbox"
-                    checked={key === 'pin'}
-                    readOnly
-                    disabled
-                  />
-                  <span>
-                    <strong>{title}</strong>
-                    <small>{detail}</small>
-                  </span>
-                </label>
-              ))}
-            </div>
-            <small id="chat-lock-security-note">Local chat lock hides this conversation in Signova. It does not encrypt stored or transmitted messages.</small>
-            <form className="contactForm" onSubmit={submitPasswordModal}>
-              <input
-                className="signSearch"
-                type="password"
-                value={passwordModal.value}
-                onChange={(event) => setPasswordModal((modal) => ({ ...modal, value: event.target.value, error: '' }))}
-                placeholder={passwordModal.mode === 'unlock' ? 'Enter PIN/password' : 'Create chat PIN/password'}
-                minLength={passwordModal.mode === 'unlock' ? 1 : 6}
-                maxLength={128}
-                autoComplete={passwordModal.mode === 'unlock' ? 'current-password' : 'new-password'}
-                aria-describedby="chat-lock-security-note"
-                required
-              />
-              {passwordModal.error && <small className="passwordError">{passwordModal.error}</small>}
-              <button type="submit">{passwordModal.mode === 'unlock' ? 'Unlock chat' : 'Enable chat lock'}</button>
-            </form>
-          </section>
-        </div>
-      )}
+      <ChatLockPasswordModal
+        passwordModal={passwordModal}
+        setPasswordModal={setPasswordModal}
+        contacts={contacts}
+        chatFlags={chatFlags}
+        submitPasswordModal={submitPasswordModal}
+        onUnlockBiometric={unlockWithBiometric}
+      />
 
     </div>
   );
